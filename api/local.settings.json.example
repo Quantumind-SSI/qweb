@@ -1,0 +1,21 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+
+    "//": "Copy to api/local.settings.json (gitignored) and fill in.",
+    "//1": "Storage: az storage account show-connection-string -n <account> -g rg-quantumindssi-web",
+    "AZURE_STORAGE_CONNECTION_STRING": "",
+
+    "//2": "ACS: az communication list-key -n acs-quantumindssi -g rg-quantumindssi-web",
+    "ACS_CONNECTION_STRING": "",
+    "ACS_SENDER": "DoNotReply@<guid>.azurecomm.net",
+    "NOTIFY_EMAIL": "admin@quantumindssi.com",
+
+    "//3": "Athenoir chat proxy (api/src/functions/chat.js). Server-side only.",
+    "ATHENOIR_ENDPOINT": "",
+    "ATHENOIR_API_KEY": "",
+    "ATHENOIR_MODEL": "unsloth/Llama-3.2-3B-Instruct"
+  }
+}

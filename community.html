@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quantuminds Community | QuantumindSSI</title>
+  <meta name="description" content="Join Quantuminds - the community for all forms of intelligence across QuantumindSSI's 13 pillars. Connect, learn, and build the future of sovereign AI.">
+  <link rel="canonical" href="https://quantumindssi.com/community">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* Page-specific styles. Shared patterns live in css/patterns.css. */
+/* ── Page-specific styles ───────────────────────────────────
+     System-owned rules (reset, tokens, nav, footer, ticker,
+     cockpit chrome, container, hero, buttons, forms) have been
+     removed; they now live in css/. What remains is unique to
+     this page and cascades on top of the system. */
+/* Page-specific styles */
+        
+        
+        
+        /* Hero */
+        
+        
+        
+        
+        
+        /* Cockpit Panel */
+        .cockpit-panel {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .cockpit-panel:hover {
+            border-color: var(--accent-a45);
+            box-shadow: 0 8px 32px var(--accent-a16);
+        }
+        .cockpit-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.5;
+        }
+        
+        /* Section Headers */
+        
+        
+        
+        
+        /* 13 Pillars Grid */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 64px;
+        }
+        .pillar-card {
+            background: var(--accent-a08);
+            border: 1px solid var(--accent-a28);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .pillar-card:hover {
+            background: var(--accent-a16);
+            border-color: var(--accent-a45);
+            transform: translateY(-4px);
+        }
+        .pillar-number {
+            font-family: var(--font-mono);
+            font-size: var(--fs-h2);
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .pillar-name {
+            font-size: var(--fs-small);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .pillar-desc {
+            font-size: var(--fs-tiny);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* Community Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--accent-a08);
+            border: 1px solid var(--accent-a28);
+            border-radius: 12px;
+        }
+        .stat-number {
+            font-size: var(--fs-h1);
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 80px 0;
+        }
+        .cta-section h2 {
+            font-size: var(--fs-h2);
+            margin-bottom: 16px;
+        }
+        .cta-section p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 32px;
+        }
+        
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+        .btn-outline:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+        
+        /* Font Fragment Mono */
+        .font-fragment {
+            font-family: var(--font-mono);
+        }
+        
+        /* Grid Overlay - PCB/Circuit Aesthetic */
+        
+        
+        /* Node Connection Lines */
+        
+        
+        /* Hero background radial overlay */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, var(--accent-a08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, var(--accent-a08) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Glow Orbs (page-local size/position overrides) */
+        
+        
+        
+        
+        /* Footer */
+        
+        
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .pillars-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            
+            .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+        @media (max-width: 480px) {
+            .pillars-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr; }
+        }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>VICTRON · HEIMDALL ROBOTICS</span>
+      <span class="ticker__item"><b>13 CORE PILLARS</b><span class="ticker__dot">&middot;</span>260 PRODUCTS</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+      <span class="ticker__item"><b>QUANTUM RESISTANT</b><span class="ticker__dot">&middot;</span>POST-QUANTUM CRYPTOGRAPHY</span>
+      <span class="ticker__item"><b>LONDON HQ</b><span class="ticker__dot">&middot;</span>QUANTUMINDS COMMUNITY ONLINE</span>
+      <span class="ticker__item"><b>JOIN THE COMMUNITY</b><span class="ticker__dot">&middot;</span>13 PILLARS · ALL FORMS OF INTELLIGENCE QUANTUMINDSSI VICTRON · HEIMDALL ROBOTICS</span>
+      <span class="ticker__item"><b>JOIN THE COMMUNITY</b><span class="ticker__dot">&middot;</span>13 PILLARS · ALL FORMS OF INTELLIGENCE</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+<!-- Ticker -->
+    
+
+    <!-- Navigation -->
+    
+    
+    <!-- Clock Bar -->
+    
+
+    <!-- Background Image Carousel -->
+    
+
+    <!-- Tech Grid Background -->
+    
+    
+    <!-- Scan Line -->
+    
+
+    <main class="site-main" id="main">
+        <section class="hero">
+            <!-- Grid Overlay and Node Lines -->
+            <div class="grid-overlay"></div>
+            <div class="node-lines"></div>
+            
+            <!-- Animated Glow Orbs -->
+            
+            
+            
+            <div class="container" style="position: relative; z-index: 2;">
+                <div class="hero-badge">13 Pillars · 260 Products · One Community</div>
+                <h1>Welcome to Quantuminds</h1>
+                <p>A global community of researchers, engineers, and builders exploring every form of intelligence across QuantumindSSI's 13 core pillars. From quantum-resilient cryptography to conscious AI systems.</p>
+                <a href="#join" class="btn">Join the Community</a>
+                <a href="#pillars" class="btn btn-outline">Explore Pillars</a>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-number">13</div>
+                    <div class="stat-label">Core Pillars</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">260</div>
+                    <div class="stat-label">Research Products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Forms of Intelligence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100</div>
+                    <div class="stat-label">Year Vision</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pillars" class="container">
+            <div class="section-header">
+                <div class="font-fragment" style="color: var(--accent); font-size: var(--fs-tiny); letter-spacing: 2px; margin-bottom: 16px;">THE FOUNDATION</div>
+                <h2>13 Pillars of Intelligence</h2>
+                <p>Our community spans all thirteen research pillars, each representing a distinct domain of intelligence exploration.</p>
+            </div>
+            
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-number">01</div>
+                    <div class="pillar-name">VLA Foundation</div>
+                    <div class="pillar-desc">Vision-Language-Action grounding for physical AI</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">02</div>
+                    <div class="pillar-name">Neuro-Symbolic Reasoning</div>
+                    <div class="pillar-desc">Hybrid neural-symbolic cognition with causal chains</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">03</div>
+                    <div class="pillar-name">Quantum-Resilient Intelligence</div>
+                    <div class="pillar-desc">ML-KEM, Dilithium, PQC boot chain</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">04</div>
+                    <div class="pillar-name">Embodied Physical Intelligence</div>
+                    <div class="pillar-desc">Intelligence crystallised in silicon. Victron & Heimdall</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">05</div>
+                    <div class="pillar-name">Multi-Domain Synthesis</div>
+                    <div class="pillar-desc">Cross-domain intelligence fusion on one node</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">06</div>
+                    <div class="pillar-name">Agentic Autonomy</div>
+                    <div class="pillar-desc">Goal-directed agents under uncertainty, no uplink</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">07</div>
+                    <div class="pillar-name">Digital Twin Synchronicity</div>
+                    <div class="pillar-desc">Causal world models mirroring physical assets</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">08</div>
+                    <div class="pillar-name">Sovereign AI Cloud</div>
+                    <div class="pillar-desc">National AI nodes. FHE inference, zero hyperscaler</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">09</div>
+                    <div class="pillar-name">Bio-Inspired Robotics</div>
+                    <div class="pillar-desc">Neuromorphic architectures from biological optimisation</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">10</div>
+                    <div class="pillar-name">Ethical Verifiable Autonomy</div>
+                    <div class="pillar-desc">Hardware-enforced ethics; bounded, logged, verifiable</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">11</div>
+                    <div class="pillar-name">Frontier Research Synthesis</div>
+                    <div class="pillar-desc">On-device sovereign research; local LLM, zero API</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">12</div>
+                    <div class="pillar-name">Digital Recycling</div>
+                    <div class="pillar-desc">AI-optimised material circularity closes the loop</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">13</div>
+                    <div class="pillar-name">Green Energy Intelligence</div>
+                    <div class="pillar-desc">AI-driven energy optimisation for sovereign hardware</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="cockpit-panel">
+                <div class="font-fragment" style="color: var(--accent); font-size: var(--fs-tiny); letter-spacing: 2px; margin-bottom: 24px;">COMMUNITY MISSION</div>
+                <h2 style="font-size: var(--fs-h3); margin-bottom: 16px;">Intelligence is the Only Moat That Compounds</h2>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+                    Quantuminds brings together researchers, practitioners, and enthusiasts who believe that the future of intelligence is not singular but multifaceted. Across our 13 pillars, we explore everything from quantum-resistant algorithms to conscious machine architectures. Whether you're building neural networks or studying the philosophy of mind, there's a place for you here.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent);">Research</div>
+                        <p style="font-size: var(--fs-small); color: var(--text-secondary);">Access cutting-edge papers, datasets, and experimental frameworks across all 13 pillars.</p>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent);">Collaborate</div>
+                        <p style="font-size: var(--fs-small); color: var(--text-secondary);">Connect with fellow researchers and engineers working on intersecting domains.</p>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent);">Build</div>
+                        <p style="font-size: var(--fs-small); color: var(--text-secondary);">Get hands-on with our 260+ research products and open-source tools.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="join" class="cta-section">
+            <div class="container">
+                <h2>Join Quantuminds Today</h2>
+                <p>Be part of the community shaping the future of intelligence across all its forms.</p>
+                <div class="cockpit-panel" style="max-width: 500px; margin: 0 auto;">
+                    <div class="modal-status" role="status" aria-live="polite" id="community-status" style="font-family:var(--mono);font-size: var(--fs-micro);letter-spacing:0.08em;margin-bottom:4px;"></div>
+                    <form id="community-form" novalidate style="display: flex; flex-direction: column; gap: 16px;">
+                        <!-- Honeypot: humans never see or reach this field; the API
+                             silently discards any submission that fills it. -->
+                        <div class="visually-hidden" aria-hidden="true">
+                            <label for="community-hp">Company website</label>
+                            <input type="text" id="community-hp" name="company_website" tabindex="-1" autocomplete="off">
+                        </div>
+                        <label for="join-email" style="font-family: var(--mono); font-size: var(--fs-micro); letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);">Email Address</label>
+                        <input type="email" id="join-email" name="email" required placeholder="your@email.com" style="padding: 14px 20px; background: var(--accent-a08); border: 1px solid var(--accent-a28); border-radius: var(--radius-lg); color: var(--text-primary); font-size: var(--fs-body);">
+                        <label for="join-pillar" style="font-family: var(--mono); font-size: var(--fs-micro); letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);">Primary Interest</label>
+                        <select id="join-pillar" name="pillar" style="padding: 14px 20px; background: var(--accent-a08); border: 1px solid var(--accent-a28); border-radius: var(--radius-lg); color: var(--text-primary); font-size: var(--fs-body);">
+                            <option value="">Select your primary interest...</option>
+                            <option value="quantum-crypto">Quantum-Resilient Cryptography</option>
+                            <option value="conscious-ai">Conscious AI Systems</option>
+                            <option value="robotics">Physical AI Robotics</option>
+                            <option value="fbc">Frequency-Based Cognition</option>
+                            <option value="neuro-symbolic">Neuro-Symbolic AI</option>
+                            <option value="sovereign">Sovereign Computing</option>
+                            <option value="distributed">Distributed Intelligence</option>
+                            <option value="causal">Causal Reasoning</option>
+                            <option value="multimodal">Multi-Modal Intelligence</option>
+                            <option value="security">Adaptive Security</option>
+                            <option value="knowledge">Knowledge Systems</option>
+                            <option value="hardware">Intelligent Hardware</option>
+                            <option value="collective">Collective Intelligence</option>
+                        </select>
+                        <button type="submit" id="community-submit" class="btn" style="border: none; cursor: pointer; font-size: var(--fs-body);">Join Quantuminds</button>
+                    </form>
+                </div>
+                <p style="font-size: var(--fs-small); color: var(--text-secondary); margin-top: 24px;">Free to join. No spam. Unsubscribe anytime.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- OPEN SOURCE SECTION -->
+    <section style="padding: 80px 36px;">
+        <div style="max-width: 1100px; margin: 0 auto;">
+
+            <!-- Section header -->
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 48px;">
+                <div class="rule-line"></div>
+                <div class="kicker">QUANTUMIND PRODUCT &amp; TECHNOLOGY PORTFOLIO</div>
+                <div class="rule-line"></div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 56px;">
+                <h2 style="font-size: var(--fs-h2); font-weight: 700; color: var(--text-primary); margin-bottom: 14px; letter-spacing: -0.5px;">Products built across the stack</h2>
+                <p style="font-size: var(--fs-body); color: var(--text-muted); max-width: 580px; margin: 0 auto; line-height: 1.8;">Quantumind products and technical systems across memory, finance, consumer software, cyber operations, secure connectivity, and model engineering. Public destinations are linked directly; private development systems are labelled clearly.</p>
+            </div>
+
+            <!-- QuantumindSSI Org repos -->
+            <div style="font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 2px; color: var(--accent-a45); margin-bottom: 20px; text-transform: uppercase;">QuantumindSSI Organisation</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 48px;">
+
+                <!-- Bifrost -->
+                <a href="https://github.com/QuantumindSSI/Bifrost" target="_blank" style="text-decoration: none; display: block; background: var(--accent-a04); border: 1px solid var(--accent-a28); border-radius: 14px; padding: 28px; transition: all 0.2s;" rel="noopener noreferrer">
+                    <div class="split mb-3">
+                        <div class="kicker">NEURAL ARCHITECTURE · PYTHON</div>
+                        <div class="text-label">QuantumindSSI/Bifrost ↗</div>
+                    </div>
+                    <h3 class="subhead subhead--lg mb-2">Bifrost</h3>
+                    <p class="copy copy--relaxed mb-4">Spectral-first neural architecture representing information as complex spectra with phase-coherence routing. Captures structural relationships discarded by standard scalar activations. Core to the Bifrost cognition research programme.</p>
+                    <div class="cluster cluster--sm">
+                        <span style="font-family: var(--font-mono); font-size: var(--fs-micro); padding: 3px 8px; background: var(--accent-a16); border: 1px solid var(--accent-a28); border-radius: var(--radius-sm); color: var(--accent);">Phase-Coherence Routing</span>
+                        <span style="font-family: var(--font-mono); font-size: var(--fs-micro); padding: 3px 8px; background: var(--accent-a16); border: 1px solid var(--accent-a28); border-radius: var(--radius-sm); color: var(--accent);">Complex SSM</span>
+                        <span style="font-family: var(--font-mono); font-size: var(--fs-micro); padding: 3px 8px; background: var(--accent-a16); border: 1px solid var(--accent-a28); border-radius: var(--radius-sm); color: var(--accent);">Multi-Modal</span>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- Quantumind product stack -->
+            <div style="font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 2px; color: var(--accent-a45); margin-bottom: 20px; text-transform: uppercase;">Quantumind Product Stack</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+
+                <!-- Lummenna -->
+                <a class="panel--accent" href="https://www.lummenna.com/" target="_blank" rel="noopener noreferrer">
+                    <div class="split mb-3">
+                        <div class="kicker">AGENT MEMORY &middot; IN DEVELOPMENT</div>
+                        <div class="text-label">LUMMENNA.COM &nearr;</div>
+                    </div>
+                    <h3 class="subhead subhead--lg mb-2">Lummenna</h3>
+                    <p class="copy copy--relaxed mb-4">Local-first memory and context infrastructure for AI agents. Lummenna combines structured memory, hybrid retrieval, bounded context assembly, and an inspectable memory lifecycle.</p>
+                    <div class="cluster cluster--sm">
+                        <span class="tag">Agent Memory</span>
+                        <span class="tag">Local-First</span>
+                        <span class="tag">In Development</span>
+                    </div>
+                </a>
+
+                <!-- Yieldbot -->
+                <div class="panel--accent">
+                    <div class="split mb-3">
+                        <div class="kicker">AUTONOMOUS FINANCE &middot; IN DEVELOPMENT</div>
+                        <div class="text-label">PRIVATE</div>
+                    </div>
+                    <h3 class="subhead subhead--lg mb-2">Yieldbot</h3>
+                    <p class="copy copy--relaxed mb-4">Automated DeFi yield agent with provenance-tracked pricing, a break-even gate before every position, and explicit failure handling.</p>
+                    <div class="cluster cluster--sm">
+                        <span class="tag">DeFi</span>
+                        <span class="tag">Provenance</span>
+                        <span class="tag">In Development</span>
+                    </div>
+                </div>
+
+                <!-- Partyhause -->
+                <div class="panel--accent">
+                    <div class="split mb-3">
+                        <div class="kicker">CONSUMER PLATFORM &middot; B2C</div>
+                        <div class="text-label">PUBLIC PRODUCT</div>
+                    </div>
+                    <h3 class="subhead subhead--lg mb-2">Partyhause</h3>
+                    <p class="copy copy--relaxed mb-4">Quantumind's B2C stack for consumer-facing products, services, and digital experiences.</p>
+                    <div class="cluster cluster--sm">
+                        <span class="tag">B2C</span>
+                        <span class="tag">Consumer Stack</span>
+                        <span class="tag">Quantumind</span>
+                    </div>
+                    <div class="cluster cluster--sm mt-4">
+                        <a class="link" href="https://www.partyhause.com/" target="_blank" rel="noopener noreferrer">Visit Partyhause &nearr;</a>
+                        <a class="link" href="https://github.com/QuantmindSSI/Partyhause" target="_blank" rel="noopener noreferrer">GitHub &nearr;</a>
+                    </div>
+                </div>
+
+                <!-- Vorsyghta -->
+                <div class="panel--accent">
+                    <div class="split mb-3">
+                        <div class="kicker">CYBER OPERATIONS &middot; QUANTUMIND</div>
+                        <div class="text-label">INTERNAL</div>
+                    </div>
+                    <h3 class="subhead subhead--lg mb-2">Vorsyghta</h3>
+                    <p class="copy copy--relaxed mb-4">Quantumind's CyberOperations software for security operations and decision support.</p>
+                    <div class="cluster cluster--sm">
+                        <span class="tag">CyberOps</span>
+                        <span class="tag">Security</span>
+                        <span class="tag">Internal Platform</span>
+                    </div>
+                </div>
+
+                <!-- Haechi -->
+                <div class="panel--accent">
+                    <div class="split mb-3">
+                        <div class="kicker">PQC-AI CONNECTIVITY &middot; B2B</div>
+                        <div class="text-label">INTERNAL</div>
+                    </div>
+                    <h3 class="subhead subhead--lg mb-2">Haechi</h3>
+                    <p class="copy copy--relaxed mb-4">Quantumind's B2B secure connection layer combining post-quantum cryptography with AI systems.</p>
+                    <div class="cluster cluster--sm">
+                        <span class="tag">PQC-AI</span>
+                        <span class="tag">B2B</span>
+                        <span class="tag">Secure Connection</span>
+                    </div>
+                    <div class="cluster cluster--sm mt-4">
+                        <a class="link" href="https://www.haechi.co.uk/" target="_blank" rel="noopener noreferrer">Visit Haechi &nearr;</a>
+                    </div>
+                </div>
+
+                <!-- QuantuML -->
+                <a class="panel--accent" href="https://github.com/QuantmindSSI/QuantuML" target="_blank" rel="noopener noreferrer">
+                    <div class="split mb-3">
+                        <div class="kicker">MODEL ENGINEERING &middot; MULTI-DOMAIN</div>
+                        <div class="text-label">GITHUB &nearr;</div>
+                    </div>
+                    <h3 class="subhead subhead--lg mb-2">QuantuML</h3>
+                    <p class="copy copy--relaxed mb-4">Fine-tuning repository for sovereign multi-domain models, including PQC, cryptographic vulnerability analysis, and drug interaction prediction.</p>
+                    <div class="cluster cluster--sm">
+                        <span class="tag">Fine-Tuning</span>
+                        <span class="tag">Multi-Domain</span>
+                        <span class="tag">Sovereign Models</span>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- GitHub CTA -->
+            <div style="margin-top: 48px; text-align: center;">
+                <a href="https://github.com/QuantumindSSI" target="_blank" style="display: inline-block; padding: 13px 32px; background: var(--accent); border-radius: var(--radius-pill); color: var(--bg-void); font-weight: 700; font-size: var(--fs-small); text-decoration: none; font-family: var(--font-mono); transition: background 0.2s;" rel="noopener noreferrer">QuantumindSSI GitHub →</a>
+            </div>
+
+        </div>
+    </section>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/community.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Victron & Heimdall | QuantumindSSI</title>
+  <meta name="description" content="VICTRON edge computing platforms and HEIMDALL humanoid robots :  sovereign AI hardware from QuantumindSSI.">
+  <link rel="canonical" href="https://quantumindssi.com/products">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* ── Page-specific styles ───────────────────────────────────
+     Shared patterns live in css/patterns.css. What remains here
+     is unique to this page and cascades on top of the system. */
+
+    /* ── RULE HEAD; kicker between two hairlines ──────────── */
+    .rule-head {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+
+    /* ── LOCAL AI HERO ─────────────────────────────────────── */
+    .ai-hero {
+      background: linear-gradient(135deg, var(--accent-a08) 0%, var(--surface-a20) 100%);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--space-6);
+    }
+    .ai-hero__glow {
+      position: absolute;
+      top: -20%;
+      right: -20%;
+      width: 45%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, var(--accent-a08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ai-hero__inner { position: relative; z-index: 1; }
+    .ai-hero .stat-cell b { font-family: var(--font-mono); }
+
+    /* ── PRODUCT CARDS ─────────────────────────────────────── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-6);
+    }
+    .product-card {
+      background: var(--accent-a08);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      transition: var(--dur-fast) var(--ease-out);
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card:hover {
+      background: var(--accent-a16);
+      border-color: var(--accent-a45);
+      transform: translateY(calc(var(--space-1) * -1));
+      box-shadow: var(--shadow-md);
+    }
+    .product-tier {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: var(--space-2);
+    }
+    .product-card h2 {
+      font-size: var(--fs-h4);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+      letter-spacing: var(--ls-heading);
+    }
+    .product-subtitle {
+      font-size: var(--fs-small);
+      color: var(--text-muted);
+      margin-bottom: var(--space-5);
+    }
+    .product-price {
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--accent);
+      margin-bottom: var(--space-2);
+      font-family: var(--font-mono);
+    }
+    .product-usecase {
+      font-size: var(--fs-small);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: var(--ls-label);
+      margin-bottom: var(--space-6);
+    }
+    .product-features {
+      list-style: none;
+      margin: 0 0 var(--space-6);
+      padding: 0;
+      flex: 1;
+    }
+    .product-features li {
+      color: var(--text-secondary);
+      font-size: var(--fs-small);
+      padding: var(--space-1) 0 var(--space-1) var(--space-5);
+      position: relative;
+      border-bottom: 1px solid var(--accent-a08);
+    }
+    .product-features li:last-child { border-bottom: none; }
+    .product-features li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: var(--fs-tiny);
+    }
+    .product-card img {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-4);
+    }
+    .product-card.featured {
+      border-color: var(--accent-a45);
+      background: var(--accent-a08);
+    }
+
+    /* ── CTA BANNER ────────────────────────────────────────── */
+    .cta-banner {
+      margin: var(--space-12) auto var(--space-16);
+      max-width: var(--container-width, var(--container-xl));
+      padding: var(--space-12) var(--space-10);
+      background: var(--accent-a08);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+    .cta-banner h2 {
+      font-size: var(--fs-h2);
+      margin-bottom: var(--space-3);
+      color: var(--text-primary);
+    }
+    .cta-banner p {
+      color: var(--text-muted);
+      margin-bottom: var(--space-6);
+      max-width: var(--container-text);
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>VICTRON · HEIMDALL ROBOTICS · LOCAL AI</span>
+      <span class="ticker__item"><b>13 CORE PILLARS</b><span class="ticker__dot">&middot;</span>260 PRODUCTS</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+      <span class="ticker__item"><b>LOCAL AI INSTANCE</b><span class="ticker__dot">&middot;</span>MAC MINI · AMD · NVIDIA SUPERCOMPUTING</span>
+      <span class="ticker__item"><b>QUANTUM RESISTANT</b><span class="ticker__dot">&middot;</span>POST-QUANTUM CRYPTOGRAPHY</span>
+      <span class="ticker__item"><b>LONDON HQ</b><span class="ticker__dot">&middot;</span>ONLINE</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+  <main class="site-main" id="main">
+    <div class="page-header">
+      <div class="grid-overlay"></div>
+      <div class="container">
+        <h1>Victron &amp; Heimdall</h1>
+        <p>Two product lines. One intelligence core. <strong>Victron</strong> is our sovereign edge computing platform. <strong>Heimdall</strong> is our humanoid robot; powered by Victron's supercomputing brain.</p>
+      </div>
+    </div>
+
+    <!-- Software platforms and product stacks -->
+    <section class="section" aria-label="Software platforms and product stacks">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">SOFTWARE &middot; PRODUCT AND TECHNOLOGY STACKS</div>
+          <div class="rule-line"></div>
+        </div>
+
+        <div class="panel panel--accent">
+          <div class="stack mb-6">
+            <div class="kicker">OFFICIAL COMPANY GITHUB &middot; GITHUB.COM/QUANTUMINDSSI/BIFROST</div>
+            <h2 class="fs-h3">Bifrost. Core Platform</h2>
+            <p class="copy copy--relaxed">The official QuantumindSSI repository. Contains the core platform, documentation, and deployment tooling for Victron, Local AI, and Heimdall systems.</p>
+          </div>
+          <div class="cluster">
+            <a href="https://github.com/QuantumindSSI/Bifrost" target="_blank" rel="noopener" class="btn btn--primary">View on GitHub &rarr;</a>
+          </div>
+        </div>
+
+        <div class="panel panel--accent mt-6">
+          <div class="stack mb-8">
+            <div class="text-label">QUANTUMIND PRODUCT &amp; TECHNOLOGY PORTFOLIO</div>
+            <h2 class="fs-h3">Software products across the stack</h2>
+            <p class="copy copy--relaxed">Six focused systems spanning agent memory, autonomous finance, consumer experiences, cyber operations, secure B2B connectivity, and multi-domain model engineering.</p>
+          </div>
+          <div class="grid grid--auto grid--tight">
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">AGENT MEMORY &middot; IN DEVELOPMENT</div>
+              <h3 class="subhead mb-1">Lummenna</h3>
+              <div class="copy mb-3">Local-first memory and context infrastructure for AI agents, with structured memory, hybrid retrieval, and bounded context assembly.</div>
+              <a class="link" href="https://www.lummenna.com/" target="_blank" rel="noopener noreferrer">&rarr; Visit Lummenna</a>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">AUTONOMOUS FINANCE &middot; IN DEVELOPMENT</div>
+              <h3 class="subhead mb-1">Yieldbot</h3>
+              <div class="copy mb-3">Automated DeFi yield agent with provenance-tracked pricing, break-even gating, and explicit failure handling.</div>
+              <span class="text-label">Private development</span>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">CONSUMER PLATFORM &middot; B2C</div>
+              <h3 class="subhead mb-1">Partyhause</h3>
+              <div class="copy mb-3">Quantumind's B2C stack for consumer-facing products, services, and digital experiences.</div>
+              <div class="cluster cluster--sm">
+                <a class="link" href="https://www.partyhause.com/" target="_blank" rel="noopener noreferrer">&rarr; Visit Partyhause</a>
+                <a class="link" href="https://github.com/QuantmindSSI/Partyhause" target="_blank" rel="noopener noreferrer">&rarr; View Partyhause on GitHub</a>
+              </div>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">CYBER OPERATIONS &middot; INTERNAL</div>
+              <h3 class="subhead mb-1">Vorsyghta</h3>
+              <div class="copy mb-3">Quantumind's CyberOperations software for security operations and decision support.</div>
+              <span class="text-label">Internal platform</span>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">PQC-AI CONNECTIVITY &middot; B2B</div>
+              <h3 class="subhead mb-1">Haechi</h3>
+              <div class="copy mb-3">Quantumind's B2B secure connection layer combining post-quantum cryptography with AI systems.</div>
+              <a class="link" href="https://www.haechi.co.uk/" target="_blank" rel="noopener noreferrer">&rarr; Visit Haechi</a>
+              <span class="text-label">Internal repository</span>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">MODEL ENGINEERING &middot; MULTI-DOMAIN</div>
+              <h3 class="subhead mb-1">QuantuML</h3>
+              <div class="copy mb-3">Fine-tuning repository for sovereign multi-domain models, including PQC, cryptographic vulnerability analysis, and drug interaction prediction.</div>
+              <a class="link" href="https://github.com/QuantmindSSI/QuantuML" target="_blank" rel="noopener noreferrer">&rarr; View QuantuML on GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCAL AI INSTANCE Section -->
+    <section class="section" id="local-ai" aria-label="Local AI instance">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">LOCAL AI INSTANCE &middot; SOVEREIGN AI SERVICES</div>
+          <div class="rule-line"></div>
+        </div>
+
+        <div class="ai-hero">
+          <div class="ai-hero__glow" aria-hidden="true"></div>
+          <div class="ai-hero__inner">
+            <span class="badge badge--accent mb-4">NEW &middot; SOVEREIGN AI SERVICES</span>
+            <div class="grid grid--auto grid--tight">
+              <div class="stack">
+                <div class="kicker mb-3">MAC MINI &middot; AMD &middot; NVIDIA &middot; SUPERCOMPUTING</div>
+                <h2 class="fs-h2">Local AI Instance</h2>
+                <p class="copy copy--relaxed">Your AI. Your data. Your infrastructure. QuantumindSSI deploys and manages a fully sovereign AI instance for your organisation; running on dedicated hardware (Mac Mini, AMD, or NVIDIA supercomputing nodes) located on your premises or in a private facility. No shared cloud. No data leaving your control.</p>
+                <p class="copy copy--relaxed text-muted">This is the entry point into our <strong class="text-accent">Sovereign AI</strong> arm; custom-tuned models, RAG pipelines, and agentic workflows running entirely on hardware you own or lease.</p>
+                <div class="cluster">
+                  <a href="/local-ai" class="btn btn--primary">Explore Local AI &rarr;</a>
+                  <button type="button" class="btn btn--secondary" data-action="sales-open" data-sales-type="local-ai">Request Consultation</button>
+                </div>
+              </div>
+              <div class="stack">
+                <div class="panel panel--tight" data-light>
+                  <div class="stat-cell">
+                    <b class="text-accent">100%</b>
+                    <span class="readout__label">On-Premise</span>
+                  </div>
+                </div>
+                <div class="panel panel--tight" data-light>
+                  <div class="stat-cell">
+                    <b class="text-accent">0</b>
+                    <span class="readout__label">Cloud Dependency</span>
+                  </div>
+                </div>
+                <div class="panel panel--tight" data-light>
+                  <div class="stat-cell">
+                    <b class="text-accent">24/7</b>
+                    <span class="readout__label">Managed Service</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid--auto grid--tight">
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">ENTRY &middot; PERSONAL / SME</div>
+            <div class="subhead mb-1">Mac Mini Instance</div>
+            <div class="copy">Apple Silicon M4 Pro/Max. Whisper-quiet, energy-efficient local AI for small teams and individual professionals.</div>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">MID-RANGE &middot; BUSINESS</div>
+            <div class="subhead mb-1">AMD Node Instance</div>
+            <div class="copy">AMD EPYC or Ryzen AI workstations. High-throughput inference for business teams needing concurrent users.</div>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">ENTERPRISE &middot; SOVEREIGN</div>
+            <div class="subhead mb-1">NVIDIA Supercomputing</div>
+            <div class="copy">NVIDIA DGX / HGX class. Maximum throughput for enterprise, government, and critical infrastructure deployments.</div>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">FULLY MANAGED</div>
+            <div class="subhead mb-1">Sovereign AI as a Service</div>
+            <div class="copy">QSSI deploys, tunes, and maintains your AI stack. You own the data and the models. We handle everything else.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOFTWARE + HARDWARE Section -->
+    <section class="section" id="victron" aria-label="Victron integrated systems">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">SOFTWARE + HARDWARE &middot; INTEGRATED SYSTEMS</div>
+          <div class="rule-line"></div>
+        </div>
+
+        <div class="product-grid">
+
+          <div class="product-card">
+            <div class="product-tier">Entry Level</div>
+            <h2>VICTRON-BB</h2>
+            <div class="product-subtitle">Edge Node &middot; OEM Integration</div>
+            <div class="product-price">$199</div>
+            <div class="product-usecase">OEM &amp; Embedded Systems</div>
+            <ul class="product-features">
+              <li>Edge-native inference</li>
+              <li>Secure software platform</li>
+              <li>OEM integration ready</li>
+              <li>Ultra-low power profile</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card">
+            <div class="product-tier">Entry System</div>
+            <h2>VICTRON-2G-32</h2>
+            <div class="product-subtitle">Entry System &middot; IoT &amp; Sensors</div>
+            <div class="product-price">$299</div>
+            <div class="product-usecase">IoT &amp; Sensor Networks</div>
+            <ul class="product-features">
+              <li>Edge-native inference</li>
+              <li>Secure software platform</li>
+              <li>IoT sensor integration</li>
+              <li>Real-time data processing</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card">
+            <div class="product-tier">Standard</div>
+            <h2>VICTRON-4G-64</h2>
+            <div class="product-subtitle">Standard Unit &middot; Industrial</div>
+            <div class="product-price">$499</div>
+            <div class="product-usecase">Industrial Applications</div>
+            <ul class="product-features">
+              <li>Edge-native inference</li>
+              <li>Secure software platform</li>
+              <li>Industrial-grade deployment</li>
+              <li>Enterprise deployment ready</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card featured">
+            <span class="badge badge--accent">MOST POPULAR</span>
+            <div class="product-tier">Professional</div>
+            <h2>VICTRON-8G-128</h2>
+            <div class="product-subtitle">Professional &middot; Enterprise &amp; Healthcare</div>
+            <div class="product-price">$899</div>
+            <div class="product-usecase">Enterprise &amp; Healthcare</div>
+            <ul class="product-features">
+              <li>Edge-native inference</li>
+              <li>Secure software platform</li>
+              <li>Healthcare-grade compliance</li>
+              <li>Enterprise deployment ready</li>
+              <li>Post-quantum cryptography</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card">
+            <div class="product-tier">Enterprise</div>
+            <h2>VICTRON-16G-128</h2>
+            <div class="product-subtitle">Enterprise &middot; Sovereign Deployments</div>
+            <div class="product-price">$1,499</div>
+            <div class="product-usecase">Sovereign Deployments</div>
+            <ul class="product-features">
+              <li>Edge-native inference</li>
+              <li>Secure software platform</li>
+              <li>Sovereign-grade security</li>
+              <li>Enterprise deployment ready</li>
+              <li>Air-gap capable</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card">
+            <div class="product-tier">Datacenter</div>
+            <h2>VICTRON-32G-256</h2>
+            <div class="product-subtitle">Datacenter &middot; High-Performance Edge</div>
+            <div class="product-price">$2,999</div>
+            <div class="product-usecase">High-Performance Edge</div>
+            <ul class="product-features">
+              <li>Edge-native inference</li>
+              <li>Secure software platform</li>
+              <li>Datacenter-scale AI</li>
+              <li>Enterprise deployment ready</li>
+              <li>32 TOPS AI compute</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card featured">
+            <span class="badge badge--accent">FLAGSHIP</span>
+            <div class="product-tier">Integrated System</div>
+            <h2>VICTRON-AIO-32-MAX</h2>
+            <div class="product-subtitle">Integrated &middot; Critical Infrastructure</div>
+            <div class="product-price">$4,999</div>
+            <div class="product-usecase">Critical Infrastructure</div>
+            <ul class="product-features">
+              <li>All-in-one edge supercomputer</li>
+              <li>Secure software platform</li>
+              <li>Critical infrastructure grade</li>
+              <li>Full Hailo-8L vision AI acceleration</li>
+              <li>32GB RAM &middot; 256GB storage</li>
+              <li>Post-quantum cryptography</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card">
+            <img src="radxa-rock-5c.webp" alt="Radxa ROCK 5C motherboard" loading="lazy" decoding="async" width="1200" height="750">
+            <div class="product-tier">Radxa Platform</div>
+            <h2>VICTRON-RADXA-ROCK5C</h2>
+            <div class="product-subtitle">Radxa Motherboard &middot; Open Platform</div>
+            <div class="product-price">$329</div>
+            <div class="product-usecase">Maker &amp; OEM Integrations</div>
+            <ul class="product-features">
+              <li>Radxa ROCK 5C base platform</li>
+              <li>RK3588S 6 TOPS NPU</li>
+              <li>Compact open-source form factor</li>
+              <li>Victron sovereign runtime pre-loaded</li>
+              <li>Active community &amp; expansion</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+          <div class="product-card">
+            <img src="radxa-cubie-a5e.webp" alt="Radxa Cubie A5E motherboard" loading="lazy" decoding="async" width="1200" height="943">
+            <div class="product-tier">Cubie Platform</div>
+            <h2>VICTRON-RADXA-CUBIE-A5E</h2>
+            <div class="product-subtitle">Radxa Cubie &middot; Compact Edge</div>
+            <div class="product-price">$249</div>
+            <div class="product-usecase">Compact Edge &amp; IoT</div>
+            <ul class="product-features">
+              <li>Radxa Cubie A5E base platform</li>
+              <li>Efficient edge AI acceleration</li>
+              <li>Ultra-compact footprint</li>
+              <li>Victron sovereign runtime pre-loaded</li>
+              <li>Low-power 24/7 operation</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block" data-action="sales-open" data-sales-type="sales">Contact Sales</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Heimdall Robotics Section -->
+    <section class="section" id="heimdall" aria-label="Heimdall humanoid robotics">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">HEIMDALL HUMANOID ROBOTICS</div>
+          <div class="rule-line"></div>
+        </div>
+
+        <div class="panel panel--accent">
+          <div class="grid grid--auto grid--tight">
+            <div class="stack">
+              <div class="kicker mb-3">SOVEREIGN HUMANOID &middot; VICTRON-POWERED</div>
+              <h2 class="fs-h2">Heimdall</h2>
+              <p class="copy copy--relaxed">Heimdall is QuantumindSSI's humanoid robot line: the physical embodiment of the Victron intelligence platform. Each Heimdall unit runs entirely on a Victron supercomputing brain: no cloud, no external dependency, full sovereign autonomy on-board.</p>
+              <ul class="product-features">
+                <li>Victron computing brain; 32 TOPS AI compute, 32GB RAM</li>
+                <li>Bifrost Intelligence Stack; world models, not token prediction</li>
+                <li>Post-quantum encrypted communications</li>
+                <li>Fully sovereign; zero cloud dependency</li>
+                <li>Agentic OS; learns, adapts, executes autonomously</li>
+              </ul>
+              <button type="button" class="btn btn--primary btn--block" data-open="waitlist-modal-p">Join Heimdall Waitlist</button>
+            </div>
+            <div class="stack">
+              <div class="panel panel--tight" data-light>
+                <div class="stat-cell">
+                  <b class="text-accent">32</b>
+                  <span class="readout__label">TOPS AI Compute</span>
+                </div>
+              </div>
+              <div class="panel panel--tight" data-light>
+                <div class="stat-cell">
+                  <b class="text-accent">0</b>
+                  <span class="readout__label">Cloud Dependencies</span>
+                </div>
+              </div>
+              <div class="panel panel--tight" data-light>
+                <div class="stat-cell">
+                  <b class="text-accent">Bifrost</b>
+                  <span class="readout__label">Intelligence Stack</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid--auto grid--tight mt-6">
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">INDUSTRIAL</div>
+            <div class="subhead mb-1">Heimdall Industrial</div>
+            <div class="copy">Factory automation, hazardous environment operations, precision manufacturing.</div>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">DEFENCE</div>
+            <div class="subhead mb-1">Heimdall Sentinel</div>
+            <div class="copy">Sovereign defence operations; fully air-gapped, post-quantum secured.</div>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">HEALTHCARE</div>
+            <div class="subhead mb-1">Heimdall MedAssist</div>
+            <div class="copy">Clinical support, patient assistance, and on-device medical intelligence.</div>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">RESEARCH</div>
+            <div class="subhead mb-1">Heimdall Research</div>
+            <div class="copy">Laboratory and R&D automation with sovereign data handling.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h2>Ready to Deploy Sovereign AI?</h2>
+      <p>Evaluate Victron hardware or join the Heimdall waitlist. Volume procurement and pilot programs available.</p>
+      <div class="cluster cluster--center">
+        <button type="button" class="btn btn--primary btn--lg" data-action="sales-open" data-sales-type="pilot">Start Pilot Program</button>
+        <button type="button" class="btn btn--secondary btn--lg" data-action="sales-open" data-sales-type="sales">Talk to Sales</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sales Enquiry Modal -->
+  <div class="qssi-modal-overlay" id="sales-modal">
+    <div class="qssi-modal">
+      <button class="qssi-modal-close" aria-label="Close dialog" data-close="sales-modal">&times;</button>
+      <h3 id="sales-modal-title">Start Pilot Program</h3>
+      <div class="sku-badge" id="sales-modal-badge">VICTRON &middot; SOVEREIGN AI DEPLOYMENT</div>
+      <label for="sq-name" data-required>Full Name *</label>
+      <input type="text" id="sq-name" placeholder="Your full name" required autocomplete="name">
+      <label for="sq-email" data-required>Email Address *</label>
+      <input type="email" id="sq-email" placeholder="you@organisation.com" required autocomplete="email">
+      <label for="sq-org">Organisation</label>
+      <input type="text" id="sq-org" placeholder="Company or institution" autocomplete="organization">
+      <label for="sq-country">Country</label>
+      <input type="text" id="sq-country" placeholder="United Kingdom" autocomplete="country-name">
+      <label for="sq-scale">Deployment Scale</label>
+      <select id="sq-scale">
+        <option value="">Select scale…</option>
+        <option value="1-5 units">1–5 units</option>
+        <option value="6-20 units">6–20 units</option>
+        <option value="20+ units">20+ units</option>
+        <option value="national">National / Infrastructure scale</option>
+      </select>
+      <label for="sq-industry">Industry</label>
+      <select id="sq-industry">
+        <option value="">Select industry…</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Defence">Defence &amp; Security</option>
+        <option value="Finance">Finance &amp; Banking</option>
+        <option value="Industrial">Industrial &amp; Manufacturing</option>
+        <option value="Government">Government</option>
+        <option value="Research">Research &amp; Academia</option>
+        <option value="Other">Other</option>
+      </select>
+      <label for="sq-message">Message</label>
+      <textarea id="sq-message" placeholder="Describe your deployment requirements…"></textarea>
+      <button class="modal-btn" id="sq-submit">Submit Enquiry &rarr;</button>
+      <span class="modal-status" role="status" aria-live="polite" id="sq-status"></span>
+    </div>
+  </div>
+
+  <!-- Heimdall Waitlist Modal -->
+  <div class="qssi-modal-overlay" id="waitlist-modal-p">
+    <div class="qssi-modal">
+      <button class="qssi-modal-close" aria-label="Close dialog" data-close="waitlist-modal-p">&times;</button>
+      <h3>Join Heimdall Waitlist</h3>
+      <div class="sku-badge">HEIMDALL HUMANOID &middot; SOVEREIGN ROBOTICS</div>
+      <label for="wlp-name">Full Name *</label>
+      <input type="text" id="wlp-name" placeholder="Your full name" autocomplete="name">
+      <label for="wlp-email">Email Address *</label>
+      <input type="email" id="wlp-email" placeholder="you@organisation.com" autocomplete="email">
+      <label for="wlp-org">Organisation</label>
+      <input type="text" id="wlp-org" placeholder="Company or institution" autocomplete="organization">
+      <label for="wlp-country">Country</label>
+      <input type="text" id="wlp-country" placeholder="United Kingdom" autocomplete="country-name">
+      <label for="wlp-variant">Preferred Variant</label>
+      <select id="wlp-variant">
+        <option value="">Select variant&hellip;</option>
+        <option value="Industrial">Industrial</option>
+        <option value="Sentinel">Sentinel</option>
+        <option value="MedAssist">MedAssist</option>
+        <option value="Research">Research</option>
+      </select>
+      <label for="wlp-usecase">Intended Use Case</label>
+      <input type="text" id="wlp-usecase" placeholder="e.g. Hospital ward assistance">
+      <button class="modal-btn" id="wlp-submit">Join Waitlist &rarr;</button>
+      <span class="modal-status" role="status" aria-live="polite" id="wlp-status"></span>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/products.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,1801 @@
+/* ============================================================================
+   QUANTUMINDSSI — COMPONENTS
+   Navigation, footer, buttons, panels, forms, dialogs, tables, badges.
+   Depends on: tokens.css, base.css, layout.css, hud.css
+   ========================================================================= */
+
+/* ============================================================================
+   NAVIGATION
+   ========================================================================= */
+/* The HEADER is what sticks, not the nav inside it.
+
+   A sticky element can only travel within its parent's box. `.site-nav` is
+   exactly as tall as `.site-header`, so making the nav sticky would pin it to
+   a container it already fills — it would scroll away on the first gesture.
+   Sticking the header instead gives it the whole document to travel through. */
+.site-header {
+  position: sticky;
+  /* Sits directly beneath the fixed HUD top bar. On mobile --hud-bar is 0,
+     so it pins to the viewport edge. One token, no magic numbers. */
+  top: var(--hud-bar);
+  z-index: var(--z-nav);
+}
+
+.site-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  height: 62px;
+  padding-inline: var(--gutter);
+  background: color-mix(in srgb, var(--bg-void) 88%, transparent);
+  /* Frosted glass on a pseudo-element: backdrop-filter on the nav itself
+     would make it a containing block for the fixed nav-drawer, and the
+     off-canvas drawer would extend every mobile page's scroll area. */
+  isolation: isolate;
+  border-bottom: 1px solid var(--line-faint);
+}
+
+.site-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+          backdrop-filter: blur(14px) saturate(140%);
+  pointer-events: none;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-nav { background: var(--bg-void); }
+}
+
+/* A hairline of accent under the nav ties it to the HUD frame */
+.site-nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-a28) 25%, var(--accent-a28) 75%, transparent);
+  pointer-events: none;
+}
+
+/* ── BRAND ──────────────────────────────────────────────────────────────── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.brand__mark {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* The wordmark is one unit: "Quantumind" recedes, "SSI" carries the weight */
+.brand__name { color: var(--text-muted); font-weight: var(--fw-regular); }
+.brand__suffix { color: var(--text-primary); }
+
+.brand:hover .brand__name { color: var(--text-secondary); }
+
+/* ── PRIMARY LINKS ──────────────────────────────────────────────────────── */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.nav-links a {
+  position: relative;
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
+}
+
+.nav-links a:hover { color: var(--text-primary); background: var(--surface-1); }
+
+/* Desktop tabs are shallow instrument keys: they lift off the bar on
+   hover and seat back down on press. In the drawer (below 1024px) the
+   links are full-width rows — they stay flat. */
+@media (min-width: 1024px) {
+  .nav-links a {
+    transform: perspective(var(--depth-perspective)) translateZ(0);
+    transition: color var(--dur-fast) var(--ease-out),
+                background-color var(--dur-fast) var(--ease-out),
+                transform var(--dur-base) var(--ease-out),
+                box-shadow var(--dur-base) var(--ease-out);
+    will-change: transform;
+  }
+
+  .nav-links a:hover {
+    transform: perspective(var(--depth-perspective))
+               rotateX(var(--depth-tilt-sm))
+               translateY(calc(-1 * var(--depth-lift-sm)));
+    box-shadow: var(--shadow-md);
+  }
+
+  .nav-links a:active {
+    transform: perspective(var(--depth-perspective)) translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Active state is an underline bar, not a border — no layout shift */
+.nav-links a[aria-current='page'] {
+  color: var(--text-primary);
+}
+
+.nav-links a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: 2px;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ── RIGHT CLUSTER ──────────────────────────────────────────────────────── */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-shrink: 0;
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--signal-ok);
+  white-space: nowrap;
+}
+
+.nav-status::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+  animation: hud-breathe 4s var(--ease-in-out) infinite;
+}
+
+@media (max-width: 1180px) { .nav-status { display: none; } }
+
+/* ── MENU BUTTON ────────────────────────────────────────────────────────── */
+.nav-toggle {
+  display: none;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: transparent;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
+}
+
+.nav-toggle:hover { border-color: var(--accent-a45); background: var(--surface-1); }
+
+.nav-toggle__bars,
+.nav-toggle__bars::before,
+.nav-toggle__bars::after {
+  position: absolute;
+  left: 50%;
+  width: 17px;
+  height: 1.5px;
+  background: var(--text-primary);
+  border-radius: var(--radius-pill);
+  transition: transform var(--dur-base) var(--ease-out),
+              opacity var(--dur-instant) linear;
+}
+
+.nav-toggle__bars {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nav-toggle__bars::before { content: ''; transform: translate(-50%, -6px); }
+.nav-toggle__bars::after  { content: ''; transform: translate(-50%,  6px); }
+
+/* Single source of truth for the open state: [aria-expanded="true"].
+   The previous build had two conflicting class conventions (.active and
+   .open) across two duplicate rulesets, so the animation never matched
+   the geometry and the panel never actually opened. */
+.nav-toggle[aria-expanded='true'] .nav-toggle__bars {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded='true'] .nav-toggle__bars::before {
+  transform: translate(-50%, 0);
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded='true'] .nav-toggle__bars::after {
+  transform: translate(-50%, 0) rotate(-90deg);
+}
+
+/* ── MOBILE DRAWER ──────────────────────────────────────────────────────── */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+  background: rgba(6, 8, 10, 0.72);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-base) var(--ease-out),
+              visibility var(--dur-base) linear;
+}
+
+.nav-scrim[data-open='true'] { opacity: 1; visibility: visible; }
+
+@media (max-width: 1023px) {
+  .nav-toggle { display: block; }
+
+  .nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-drawer);
+    width: min(21rem, 86vw);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-6) var(--space-10);
+    background: var(--bg-base);
+    border-left: 1px solid var(--line);
+    box-shadow: var(--shadow-xl);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform var(--dur-base) var(--ease-out),
+                visibility var(--dur-base) linear;
+  }
+
+  .nav-drawer[data-open='true'] {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .nav-drawer .nav-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .nav-drawer .nav-links a {
+    padding: var(--space-4) var(--space-2);
+    border-bottom: 1px solid var(--line-faint);
+    border-radius: 0;
+    font-size: var(--fs-small);
+  }
+
+  .nav-drawer .nav-links a[aria-current='page']::after {
+    left: var(--space-2);
+    right: auto;
+    bottom: auto;
+    top: 50%;
+    width: 2px;
+    height: 14px;
+    transform: translate(-8px, -50%);
+  }
+
+  .nav-drawer .nav-status { display: flex; }
+
+  .nav-drawer .btn { width: 100%; justify-content: center; }
+
+  .nav-drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-scrim { display: none; }
+  .nav-drawer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .nav-drawer__head { display: none; }
+}
+
+/* ── SUB-NAVIGATION ─────────────────────────────────────────────────────
+   Secondary, in-context page switcher. Scrolls horizontally rather than
+   wrapping, so it holds a single line at any width.                     */
+.subnav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--line-faint);
+  background: var(--bg-base);
+  padding-inline: var(--gutter);
+}
+
+.subnav::-webkit-scrollbar { display: none; }
+
+.subnav a {
+  position: relative;
+  flex-shrink: 0;
+  padding: var(--space-4) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.subnav a:hover { color: var(--text-secondary); }
+
+/* Subnav tabs share the instrument-key lift, gentler surface */
+@media (hover: hover) and (pointer: fine) {
+  .subnav a {
+    transform: perspective(var(--depth-perspective)) translateZ(0);
+    transition: color var(--dur-fast) var(--ease-out),
+                transform var(--dur-base) var(--ease-out);
+    will-change: transform;
+  }
+
+  .subnav a:hover {
+    transform: perspective(var(--depth-perspective))
+               translateY(calc(-1 * var(--depth-lift-sm)));
+  }
+}
+
+.subnav a[aria-current='page'] { color: var(--accent); }
+
+.subnav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+.subnav__meta {
+  margin-left: auto;
+  padding-inline: var(--space-4);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) { .subnav__meta { display: none; } }
+
+/* ============================================================================
+   BUTTONS
+   ========================================================================= */
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--text-primary);
+  --btn-border: var(--line-strong);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  min-height: 42px;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius-md);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              transform var(--dur-instant) var(--ease-out);
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* Primary — solid accent. Text is --text-inverse for 8.3:1 on the fill. */
+.btn--primary {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--text-inverse);
+  --btn-border: var(--accent);
+}
+
+.btn--primary:hover {
+  --btn-bg: var(--accent-bright);
+  --btn-border: var(--accent-bright);
+}
+
+/* Secondary — outlined, fills on hover */
+.btn--secondary:hover {
+  --btn-bg: var(--surface-2);
+  --btn-border: var(--accent-a45);
+  --btn-fg: var(--accent-bright);
+}
+
+/* Ghost — text only until hovered */
+.btn--ghost {
+  --btn-border: transparent;
+  --btn-fg: var(--text-muted);
+  padding-inline: var(--space-3);
+}
+
+.btn--ghost:hover { --btn-fg: var(--text-primary); --btn-bg: var(--surface-1); }
+
+/* Accent outline — the standard CTA in body copy */
+.btn--accent {
+  --btn-border: var(--accent);
+  --btn-fg: var(--accent);
+}
+
+.btn--accent:hover {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--text-inverse);
+}
+
+.btn--sm { min-height: 34px; padding: var(--space-2) var(--space-4); }
+.btn--lg { min-height: 50px; padding: var(--space-4) var(--space-8); font-size: var(--fs-tiny); }
+.btn--block { display: flex; width: 100%; }
+
+.btn[aria-busy='true'] { pointer-events: none; opacity: 0.7; }
+
+/* Icon-only button — must still meet the 44px touch target */
+.btn-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  box-shadow: var(--shadow-sm);
+  transform: perspective(var(--depth-perspective)) translateZ(0);
+  transition: color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+  will-change: transform;
+}
+
+.btn-icon:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-a45);
+  transform: perspective(var(--depth-perspective))
+             rotateX(var(--depth-tilt-sm))
+             translateY(calc(-1 * var(--depth-lift-sm)));
+  box-shadow: var(--shadow-md);
+}
+
+.btn-icon:active {
+  transform: perspective(var(--depth-perspective)) translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+.btn-icon svg   { width: 16px; height: 16px; }
+
+/* ============================================================================
+   PANELS & CARDS
+   ========================================================================= */
+.panel {
+  position: relative;
+  background: var(--surface-1);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+}
+
+.panel--flush  { padding: 0; overflow: hidden; }
+.panel--tight  { padding: var(--space-4); }
+.panel--roomy  { padding: var(--space-8); }
+.panel--raised { background: var(--surface-2); }
+.panel--bare   { background: transparent; }
+
+/* Interactive card: lifts, brightens its border, reveals its brackets */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-6);
+  background: var(--surface-1);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-base) var(--ease-out),
+              background-color var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-out);
+}
+
+.card:hover,
+.card:focus-within {
+  background: var(--surface-2);
+  border-color: var(--accent-a28);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover, .card:focus-within { transform: none; }
+}
+
+/* A top edge that lights up on hover — reads as a status indicator */
+.card--signal::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.card--signal:hover::before,
+.card--signal:focus-within::before { opacity: 1; }
+
+.card__title {
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+}
+
+.card__body {
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  flex: 1 1 auto;
+}
+
+.card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  margin-top: auto;
+  border-top: 1px solid var(--line-faint);
+}
+
+/* Make an entire card clickable without nesting interactive elements */
+.card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* ── TILE — compact numbered grid cell ──────────────────────────────────
+   For dense index grids (the 13 pillars, capability matrices). Small,
+   uniform, and legible down to two-across on a phone.                  */
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  min-height: 5.5rem;
+  background: var(--surface-1);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
+}
+
+.tile:hover {
+  background: var(--surface-2);
+  border-color: var(--accent-a28);
+}
+
+.tile__label {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  color: var(--text-primary);
+  margin-top: auto;
+}
+
+/* The lead item in an index reads as selected */
+.tile--lead {
+  background: var(--accent-a08);
+  border-color: var(--accent-a45);
+}
+
+/* ── STAT CELL ─────────────────────────────────────────────────────────
+   Centered stat for compact readout tiles: big figure over a mono label.
+   Complements .readout (which is left-aligned) for centered contexts.  */
+.stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+.stat-cell b {
+  font-size: var(--fs-lead);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+}
+
+/* ── ICON BADGE ─────────────────────────────────────────────────────────
+   Square plate holding a stroked icon. Flat and bordered rather than
+   gradient-filled with a coloured drop shadow.                         */
+.icon-badge {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: var(--space-2);
+  flex-shrink: 0;
+  border: 1px solid var(--accent-a45);
+  border-radius: var(--radius-md);
+  background: var(--accent-a08);
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
+  transform: perspective(var(--depth-perspective)) translateZ(0);
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
+  will-change: transform;
+}
+
+/* The plate tips back and lifts when its parent surface is engaged —
+   hovering the badge itself, its card, or its link all read as one touch. */
+.icon-badge:hover,
+a:hover > .icon-badge,
+.card:hover .icon-badge,
+[data-light]:hover .icon-badge {
+  transform: perspective(var(--depth-perspective))
+             rotateX(var(--depth-tilt-sm))
+             translateY(calc(-1 * var(--depth-lift-sm)));
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.icon-badge svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.icon-badge--lg { width: 60px; height: 60px; }
+.icon-badge--lg svg { width: 28px; height: 28px; }
+
+/* Badge-scale specular — the 220px card wash would flood a 48px plate */
+.icon-badge[data-light]::after {
+  background: radial-gradient(
+    var(--light-size-sm) circle at var(--mx, 50%) var(--my, 50%),
+    var(--depth-glow),
+    transparent 70%
+  );
+}
+
+/* Reduced motion: instrument surfaces stay seated. Shadows remain as a
+   static affordance; only the movement is removed. */
+@media (prefers-reduced-motion: reduce) {
+  .icon-badge:hover,
+  a:hover > .icon-badge,
+  .card:hover .icon-badge,
+  [data-light]:hover .icon-badge,
+  .btn-icon:hover,
+  .nav-links a:hover,
+  .subnav a:hover {
+    transform: none;
+  }
+}
+
+/* ── TAG ROW ────────────────────────────────────────────────────────────── */
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.tag {
+  padding: 3px var(--space-2);
+  border: 1px solid var(--accent-a16);
+  border-radius: var(--radius-sm);
+  background: var(--accent-a08);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-normal);
+  white-space: nowrap;
+}
+
+/* ── KICKER ─────────────────────────────────────────────────────────────
+   Mono accent label above a heading. Distinct from .eyebrow in that it
+   carries no leading rule — used inside cards and panels where the rule
+   would be noise. Replaces 42 copies of the same inline style. */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.kicker--muted { color: var(--text-faint); }
+
+/* ── SUBHEAD ────────────────────────────────────────────────────────────
+   Bold label-weight line introducing a block of copy. Not a heading —
+   use a real h2/h3 when it belongs in the document outline. */
+.subhead {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  line-height: var(--lh-snug);
+}
+
+.subhead--lg { font-size: var(--fs-lead); font-weight: var(--fw-bold); }
+
+/* ── COPY ───────────────────────────────────────────────────────────────
+   Supporting paragraph inside cards and panels. */
+.copy {
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  line-height: var(--lh-normal);
+}
+
+.copy--relaxed { line-height: var(--lh-relaxed); }
+
+/* ── FLEXIBLE DIVIDER ───────────────────────────────────────────────────
+   A hairline that fills the space beside a label. */
+.rule-line {
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: var(--space-4);
+  background: var(--accent-a16);
+}
+
+/* ── ACCENT PANEL ───────────────────────────────────────────────────────
+   Tinted container used for feature blocks and link cards. */
+.panel--accent {
+  background: var(--accent-a04);
+  border: 1px solid var(--accent-a16);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+}
+
+a.panel--accent {
+  display: block;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+}
+
+a.panel--accent:hover {
+  background: var(--accent-a08);
+  border-color: var(--accent-a45);
+}
+
+/* ── INLINE CTA LINK ────────────────────────────────────────────────────── */
+.cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--accent-a45);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.cta-link:hover { color: var(--accent-bright); border-bottom-color: currentColor; }
+.cta-link svg { width: 13px; height: 13px; }
+
+/* ── PANEL HEADER — the "instrument label" strip ────────────────────────── */
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.panel__body { padding: var(--space-6); }
+
+/* ============================================================================
+   BADGES & PILLS
+   ========================================================================= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.badge--accent { color: var(--accent);      border-color: var(--accent-a45); background: var(--accent-a08); }
+.badge--ok     { color: var(--signal-ok);   border-color: var(--signal-ok);  background: var(--signal-ok-bg); }
+.badge--warn   { color: var(--signal-warn); border-color: var(--signal-warn);background: var(--signal-warn-bg); }
+.badge--crit   { color: var(--signal-crit); border-color: var(--signal-crit);background: var(--signal-crit-bg); }
+
+.badge--pill { border-radius: var(--radius-pill); padding-inline: var(--space-4); }
+
+/* Status badges pair colour with a glyph — never colour alone */
+.badge--ok::before   { content: '\25CF'; font-size: 0.7em; }
+.badge--warn::before { content: '\25B2'; font-size: 0.7em; }
+.badge--crit::before { content: '\25A0'; font-size: 0.7em; }
+
+/* ============================================================================
+   FORMS
+   ========================================================================= */
+.form { display: flex; flex-direction: column; gap: var(--space-5); }
+
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.field__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Required marker is text, not just a colour or an asterisk glyph */
+.field__label[data-required]::after {
+  content: ' *';
+  color: var(--accent);
+}
+
+.field__hint {
+  font-size: var(--fs-tiny);
+  color: var(--text-faint);
+}
+
+.field__error {
+  display: none;
+  font-size: var(--fs-tiny);
+  color: var(--signal-crit);
+}
+
+.field__error::before { content: '\26A0  '; }
+
+.field:has([aria-invalid='true']) .field__error { display: block; }
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  min-height: 44px;
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+.input:hover,
+.select:hover,
+.textarea:hover { border-color: var(--line-strong); }
+
+/* Focus keeps the global :focus-visible ring AND tints the border.
+   The previous build set outline:none here and relied on the tint alone. */
+.input:focus-visible,
+.select:focus-visible,
+.textarea:focus-visible {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.input[aria-invalid='true'],
+.select[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
+  border-color: var(--signal-crit);
+}
+
+/* Native select needs its own chevron once appearance is stripped */
+.select {
+  padding-right: var(--space-10);
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+                    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: right var(--space-5) center, right calc(var(--space-5) - 5px) center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.select option { background: var(--surface-2); color: var(--text-primary); }
+
+/* Checkbox / radio */
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  cursor: pointer;
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+}
+
+.choice input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Segmented control — replaces the ad-hoc `.config-opt.active` buttons */
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.segmented__option {
+  flex: 1 1 8rem;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  text-align: center;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.segmented__option:hover { border-color: var(--line-strong); color: var(--text-secondary); }
+
+/* State is exposed to assistive tech, not just painted */
+.segmented__option[aria-checked='true'],
+.segmented__option[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-a16);
+  color: var(--accent-bright);
+}
+
+/* ── FORM STATUS ─────────────────────────────────────────────────────────
+   Paired with role="status" in the markup so submissions are announced. */
+.form-status {
+  display: none;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-small);
+}
+
+.form-status[data-state] { display: flex; }
+
+.form-status[data-state='success'] {
+  color: var(--signal-ok);
+  border-color: var(--signal-ok);
+  background: var(--signal-ok-bg);
+}
+
+.form-status[data-state='error'] {
+  color: var(--signal-crit);
+  border-color: var(--signal-crit);
+  background: var(--signal-crit-bg);
+}
+
+.form-status[data-state='pending'] {
+  color: var(--text-muted);
+  background: var(--surface-1);
+}
+
+.form-status[data-state='success']::before { content: '\2713'; font-weight: var(--fw-bold); }
+.form-status[data-state='error']::before   { content: '\26A0'; }
+
+/* ============================================================================
+   DIALOG
+   Uses the native <dialog> element: focus trapping, Escape handling and
+   inertness of the background come from the platform.
+   ========================================================================= */
+.dialog {
+  width: min(34rem, calc(100vw - var(--space-8)));
+  max-height: min(84vh, 56rem);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-base);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+.dialog--wide { width: min(52rem, calc(100vw - var(--space-8))); }
+
+.dialog::backdrop {
+  background: rgba(6, 8, 10, 0.76);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+}
+
+.dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--line-faint);
+  background: var(--surface-1);
+}
+
+.dialog__title {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+}
+
+.dialog__subtitle {
+  margin-top: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.dialog__body {
+  padding: var(--space-6);
+  overflow-y: auto;
+  max-height: 62vh;
+  overscroll-behavior: contain;
+}
+
+.dialog__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--line-faint);
+  background: var(--surface-1);
+}
+
+/* Entry animation, skipped under reduced motion */
+.dialog[open] {
+  animation: dialog-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.99); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] { animation: none; }
+}
+
+/* ============================================================================
+   TABLES — datasheet styling
+   ========================================================================= */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-md);
+  overscroll-behavior-x: contain;
+}
+
+.table {
+  min-width: 34rem;
+  font-size: var(--fs-small);
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--line-faint);
+  vertical-align: top;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:hover { background: var(--surface-1); }
+
+.table td { color: var(--text-secondary); }
+.table th[scope='row'] { color: var(--text-primary); font-weight: var(--fw-medium); }
+
+.table--numeric td { font-variant-numeric: tabular-nums; }
+
+/* ============================================================================
+   FOOTER
+   The previous build shipped a two-line footer with zero links on all 19
+   pages, which left Privacy, Terms, Careers, FAQ and Contact with no
+   site-wide entry point.
+   ========================================================================= */
+.site-footer {
+  margin-top: var(--section-y);
+  border-top: 1px solid var(--line);
+  background: var(--bg-base);
+}
+
+.site-footer__main {
+  display: grid;
+  gap: var(--space-10);
+  grid-template-columns: minmax(0, 1fr);
+  padding-block: var(--space-16) var(--space-12);
+}
+
+@media (min-width: 640px) {
+  .site-footer__nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .site-footer__main { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); gap: var(--space-16); }
+  .site-footer__nav  { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.site-footer__nav {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.footer-col__title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: var(--space-4);
+}
+
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); }
+
+.footer-col a {
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+
+.footer-col a:hover { color: var(--accent-bright); }
+
+.site-footer__brand p {
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  max-width: 32ch;
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--line-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.site-footer__bottom a:hover { color: var(--accent); }
+
+/* ============================================================================
+   PAGE HEADER — interior pages
+   The subpage counterpart to .hero: eyebrow, display title, lede. The
+   measurement-grid texture ties it to the cockpit language without needing
+   a backdrop image. Replaces the legacy 96px-padding bordered panel that
+   was duplicated across ten pages.
+   ========================================================================= */
+.page-header {
+  position: relative;
+  padding-block: clamp(3rem, 2rem + 6vw, 6rem) clamp(2.5rem, 1.75rem + 4vw, 4.5rem);
+  border-bottom: 1px solid var(--line-faint);
+  background:
+    linear-gradient(100deg, var(--accent-a04), transparent 55%),
+    var(--bg-void);
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--accent-a04) 1px, transparent 1px),
+    linear-gradient(90deg, var(--accent-a04) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  pointer-events: none;
+}
+
+.page-header .container { position: relative; z-index: 1; }
+
+.page-header .eyebrow { margin-bottom: var(--space-4); }
+
+.page-header h1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-display);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  max-width: 24ch;
+}
+
+.page-header p {
+  font-size: var(--fs-lead);
+  color: var(--text-secondary);
+  line-height: var(--lh-relaxed);
+  max-width: 62ch;
+}
+
+/* ============================================================================
+   HERO
+   ========================================================================= */
+.hero {
+  position: relative;
+  padding-block: clamp(3.5rem, 2rem + 7vw, 8rem) var(--section-y);
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 46rem;
+}
+
+.hero--center .hero__inner { max-width: 52rem; margin-inline: auto; text-align: center; align-items: center; }
+
+.hero__title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display);
+  color: var(--text-primary);
+}
+
+.hero__title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.hero__lede {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+  max-width: 56ch;
+}
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  padding-top: var(--space-8);
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--line-faint);
+}
+
+/* ============================================================================
+   MEDIA
+   ========================================================================= */
+.figure {
+  position: relative;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-1);
+}
+
+.figure img { width: 100%; }
+
+.figure figcaption {
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--line-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ============================================================================
+   NOTICE / CALLOUT
+   ========================================================================= */
+.notice {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-left-width: 2px;
+  border-left-color: var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  font-size: var(--fs-small);
+}
+
+.notice--warn { border-left-color: var(--signal-warn); }
+.notice--crit { border-left-color: var(--signal-crit); }
+.notice__title { color: var(--text-primary); font-weight: var(--fw-semibold); display: block; margin-bottom: var(--space-1); }
+
+/* ============================================================================
+   PROGRESS / METER
+   ========================================================================= */
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.meter__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.meter__value { color: var(--accent); font-variant-numeric: tabular-nums; }
+
+.meter__track {
+  height: 3px;
+  background: var(--surface-3);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.meter__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+/* ============================================================================
+   TEXT UTILITIES
+   ========================================================================= */
+.text-primary   { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted     { color: var(--text-muted); }
+.text-faint     { color: var(--text-faint); }
+.text-accent    { color: var(--accent); }
+.text-ok        { color: var(--signal-ok); }
+.text-warn      { color: var(--signal-warn); }
+.text-crit      { color: var(--signal-crit); }
+
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+
+.text-mono {
+  font-family: var(--font-mono);
+  letter-spacing: var(--ls-label);
+}
+
+.text-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.text-lead  { font-size: var(--fs-lead); line-height: var(--lh-relaxed); color: var(--text-secondary); }
+.text-small { font-size: var(--fs-small); }
+.text-tiny  { font-size: var(--fs-tiny); }
+
+.text-nums { font-variant-numeric: tabular-nums; }
+
+/* Truncate to n lines */
+.clamp-2, .clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clamp-2 { -webkit-line-clamp: 2; }
+.clamp-3 { -webkit-line-clamp: 3; }
+
+/* ============================================================================
+   ASSISTANT WIDGET
+
+   Restored from the previous build with three defects corrected:
+     - the inference endpoint was a user-editable text input in the page,
+       pre-filled with an ephemeral trycloudflare.com dev tunnel. It now
+       comes from QSSI_CONFIG and the widget hides itself when unset.
+     - the send and toggle buttons had no accessible name.
+     - the transcript was not a live region, and the input had no label.
+   ========================================================================= */
+.assistant {
+  position: fixed;
+  right: calc(var(--hud-rail) + var(--space-4));
+  bottom: calc(var(--hud-bar) + var(--space-4));
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.assistant[hidden] { display: none; }
+
+.assistant__toggle {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--accent-a45);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+}
+
+.assistant__toggle:hover { background: var(--surface-3); border-color: var(--accent); }
+.assistant__toggle svg   { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+
+.assistant__panel {
+  display: none;
+  flex-direction: column;
+  width: min(23rem, calc(100vw - var(--space-8)));
+  height: min(30rem, 62vh);
+  background: var(--bg-base);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+.assistant[data-open='true'] .assistant__panel { display: flex; }
+
+.assistant__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line-faint);
+  background: var(--surface-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.assistant__head .hud__lamp { margin-right: var(--space-1); }
+.assistant__head span:last-child { margin-left: auto; color: var(--text-faint); }
+
+.assistant__log {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font-size: var(--fs-small);
+}
+
+.assistant__msg {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  max-width: 88%;
+  line-height: var(--lh-normal);
+}
+
+.assistant__msg--system { color: var(--text-faint); background: none; padding-inline: 0; max-width: 100%; }
+.assistant__msg--user   { align-self: flex-end; background: var(--accent-a16); color: var(--text-primary); }
+.assistant__msg--bot    { align-self: flex-start; background: var(--surface-2); color: var(--text-secondary); }
+.assistant__msg--error  { align-self: flex-start; background: var(--signal-crit-bg); color: var(--signal-crit); }
+
+.assistant__form {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-top: 1px solid var(--line-faint);
+  background: var(--surface-1);
+}
+
+.assistant__form textarea {
+  flex: 1 1 auto;
+  min-height: 42px;
+  max-height: 8rem;
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--fs-small);
+  resize: none;
+}
+
+.assistant__form textarea:focus-visible { border-color: var(--accent); }
+
+@media (max-width: 767px) {
+  .assistant { right: var(--space-4); bottom: var(--space-4); }
+  .assistant__panel { height: 60vh; }
+}
+
+/* ============================================================================
+   DEPTH & LIGHT — the 3D layer
+   Interactive surfaces tilt toward the cursor and catch a travelling
+   specular; the hero scene is a receding grid floor under a rotating
+   wireframe cube. Every magnitude comes from --depth-* tokens. All motion
+   is transform/opacity only (compositor-friendly). JS merely feeds the
+   --tilt-* / --mx / --my custom properties; without it the page is flat
+   but fully intact.
+   ========================================================================= */
+[data-tilt] {
+  transform-style: preserve-3d;
+  transform: perspective(var(--depth-perspective))
+             rotateX(var(--tilt-y, 0deg))
+             rotateY(var(--tilt-x, 0deg))
+             translateY(var(--tilt-lift, 0px));
+  transition: transform var(--dur-base) var(--ease-out);
+  will-change: transform;
+}
+
+/* While the pointer is tracking, the rAF loop owns the transform —
+   a transition would lag behind the cursor by one frame. */
+[data-tilt].is-tracking { transition: none; }
+
+[data-tilt]:hover { --tilt-lift: calc(-1 * var(--depth-lift)); }
+
+/* Cursor specular — a travelling light that never touches ink */
+[data-light] { position: relative; }
+
+[data-light]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+  background: radial-gradient(
+    var(--light-size) circle at var(--mx, 50%) var(--my, 50%),
+    var(--depth-glow),
+    transparent 70%
+  );
+}
+
+[data-light]:hover::after,
+[data-light].is-tracking::after { opacity: 1; }
+
+/* ══ HERO SCENE — perspective grid floor + wireframe cube ═══════════════ */
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: var(--depth-perspective);
+  z-index: 0;
+}
+
+.hero--3d > .container {
+  position: relative;
+  z-index: var(--z-raised);
+}
+
+.scene__floor {
+  position: absolute;
+  inset-inline: calc(var(--hud-rail) * -1);
+  bottom: 0;
+  height: 55%;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  transform: rotateX(63deg);
+  transform-origin: bottom center;
+  -webkit-mask-image: linear-gradient(to top, #000 35%, transparent 92%);
+          mask-image: linear-gradient(to top, #000 35%, transparent 92%);
+  opacity: 0.65;
+}
+
+.scene__cube {
+  position: absolute;
+  top: 16%;
+  right: 8%;
+  width: var(--cube-size);
+  height: var(--cube-size);
+  transform-style: preserve-3d;
+  animation: cube-spin 26s linear infinite;
+}
+
+.scene__cube::before {
+  content: '';
+  position: absolute;
+  inset: -45%;
+  background: radial-gradient(50% 50% at 50% 50%, var(--accent-a16), transparent 70%);
+}
+
+.scene__cube i {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--accent-a28);
+  background: var(--accent-a04);
+}
+
+.scene__cube i:nth-child(even) { background: var(--accent-a08); }
+.scene__cube i:nth-child(1) { transform: rotateY(0deg)   translateZ(calc(var(--cube-size) / 2)); }
+.scene__cube i:nth-child(2) { transform: rotateY(180deg)  translateZ(calc(var(--cube-size) / 2)); }
+.scene__cube i:nth-child(3) { transform: rotateY(90deg)   translateZ(calc(var(--cube-size) / 2)); }
+.scene__cube i:nth-child(4) { transform: rotateY(-90deg)  translateZ(calc(var(--cube-size) / 2)); }
+.scene__cube i:nth-child(5) { transform: rotateX(90deg)   translateZ(calc(var(--cube-size) / 2)); }
+.scene__cube i:nth-child(6) { transform: rotateX(-90deg)  translateZ(calc(var(--cube-size) / 2)); }
+
+@keyframes cube-spin {
+  from { transform: rotateX(-24deg) rotateY(0deg); }
+  to   { transform: rotateX(-24deg) rotateY(360deg); }
+}
+
+/* Below tablet the cube would sit behind the hero headline — the masked
+   grid floor keeps the depth cue on its own. */
+@media (max-width: 1023px) {
+  .scene__cube { display: none; }
+}
+
+@media (max-width: 767px) {
+  .scene { display: none; }
+}
+
+/* ══ ICON SYSTEM — HUD / COCKPIT / TACTICAL AESTHETIC ═════════════════════
+   All icons use currentColor stroke, 1.5–2 stroke-width, sharp angles.
+   Designed for 16px (btn), 22px (badge), 28px (badge-lg), 40px (feature).
+   Visual language: tactical symbology, avionics displays, technical schematics.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; fill: none; stroke: currentColor; }
+.icon--btn    { width: 16px; height: 16px; stroke-width: 1.8; }
+.icon--badge  { width: 22px; height: 22px; stroke-width: 1.5; }
+.icon--badge-lg { width: 28px; height: 28px; stroke-width: 1.5; }
+.icon--feature { width: 40px; height: 40px; stroke-width: 1; }
+
+/* ── Navigation / Chrome ────────────────────────────────────────────── */
+.icon-menu       { stroke-dasharray: 8 4; } /* three bars → tactical menu */
+.icon-close      { stroke-linecap: round; }  /* X → dismiss */
+.icon-chevron-r  { stroke-linecap: round; stroke-linejoin: round; }
+.icon-external   { stroke-linecap: round; stroke-linejoin: round; } /* ↗ open external */
+
+/* ── Product / Feature Glyphs ───────────────────────────────────────── */
+.icon-cpu        { } /* silicon die → Victron hardware */
+.icon-shield     { } /* sovereign / secure */
+.icon-lightning  { } /* TOPS / inference speed */
+.icon-grid-4     { } /* 2×2 cluster → distributed compute */
+.icon-layer-8    { } /* 8 horizontal bars → 8-layer stack */
+.icon-wave       { } /* oscillatory / frequency-based */
+.icon-brain      { } /* cognition / world model */
+.icon-link       { } /* phase-lock / bridging */
+.icon-recursive  { } /* recursive self-model */
+.icon-satellite  { } /* comms / zero uplink */
+.icon-key        { } /* crypto / PQC */
+.icon-terminal   { } /* CLI / sovereign deploy */
+
+/* ── Contact / Comms ────────────────────────────────────────────────── */
+.icon-mail       { } /* encrypted mail */
+.icon-phone      { } /* secure voice */
+.icon-location   { } /
+
+/* ── Status / Readout ───────────────────────────────────────────────── */
+.icon-online     { } /* ● nominal */
+.icon-warning    { } /* △ caution */
+.icon-offline    { } /* ○ standby */
+.icon-locked     { } /* 🔒 secured */
+.icon-unlocked   { } /* 🔓 open */
+
+/* ── Directional ────────────────────────────────────────────────────── */
+.icon-arrow-r    { stroke-linecap: round; stroke-linejoin: round; }
+.icon-arrow-down { stroke-linecap: round; stroke-linejoin: round; }
+.icon-download   { stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── SVG PATH REFERENCE (copy into inline <svg>) ───────────────────────
+   Usage: <svg class="icon icon--badge icon-cpu" viewBox="0 0 24 24" aria-hidden="true"><path d="…"/></svg>
+   All paths use 24×24 viewBox, centered. Stroke width handled by CSS classes above.
+
+   NAVIGATION
+   .icon-menu      → M3 6h18M3 12h18M3 18h18          (three bars, tactical)
+   .icon-close     → M18 6L6 18M6 6l12 12              (sharp X, round caps)
+   .icon-chevron-r → M9 18l6-6-6-6                     (arrow right, tactical)
+   .icon-external  → M18 6L6 18M6 6l12 12              (↗ box + arrow)
+
+   PRODUCT / FEATURE
+   .icon-cpu       → M4 4h16v16H4zM8 8h8M8 12h8M8 16h8 (die + bond pads)
+   .icon-shield    → M12 2L2 7v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7L12 2zM8 11h8M8 14h8 (shield + bars)
+   .icon-lightning → M13 2L3 14h9l-1 8 10-12h-9l1-8z   (zigzag, sharp)
+   .icon-grid-4    → M4 4h6v6H4zM14 4h6v6H14zM4 14h6v6H4zM14 14h6v6H14z (2×2 cells)
+   .icon-layer-8   → M3 4h18M3 7h18M3 10h18M3 13h18M3 16h18M3 19h18 (8 layers)
+   .icon-wave      → M3 12c3-6 9-6 12 0s9 6 12 0       (oscillatory curve)
+   .icon-brain     → M12 2a8 8 0 0 1 8 8c0 2.2-1.8 4-4 4s-4-1.8-4-4a4 4 0 0 0-8 0c0 2.2 1.8 4 4 4s4-1.8 4-4a8 8 0 0 1-8-8z (hemispheres)
+   .icon-link      → M6 12h12M10 8v8M14 8v8            (phase-lock bridge)
+   .icon-recursive → M8 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0zM16 16a4 4 0 1 1-8 0 4 4 0 0 1 8 0z (two nested squares)
+   .icon-satellite → M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83 (cross + corners)
+   .icon-key       → M15.5 6.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0zM21 21l-4-4M15 11l-3 3 (key + teeth)
+   .icon-terminal  → M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9 11h6M9 14h4 (terminal window)
+
+   CONTACT / COMMS
+   .icon-mail      → M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM4 7l8 5 8-5 (envelope)
+   .icon-phone     → M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM10 20v-4h4v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01 (handset + keypad)
+   .icon-location  → M12 2a8 8 0 0 1 8 8c0 4.4-8 10-8 10S4 14.4 4 10a8 8 0 0 1 8-8zM12 6a4 4 0 0 0 0 8 (pin)
+
+   STATUS
+   .icon-online    → M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zM12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z (ring + dot)
+   .icon-warning   → M12 2L2 20h20L12 2zM12 8v4M12 14h.01 (triangle + dot)
+   .icon-offline   → M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z (ring only)
+   .icon-locked    → M12 2a2 2 0 0 0-2 2v10a2 2 0 0 0 4 0V4a2 2 0 0 0-2-2zM6 12h12 (lock body + shackle)
+   .icon-unlocked  → M12 2a2 2 0 0 0-2 2v10a2 2 0 0 0 4 0V4a2 2 0 0 0-2-2zM6 12h12M10 12v4 (lock + gap)
+
+   DIRECTIONAL
+   .icon-arrow-r   → M5 12h14M13 5l6 7-6 7 (line + head)
+   .icon-arrow-down→ M12 5v14M5 13l7 6 7-6 (line + head)
+   .icon-download  → M12 5v14M5 13l7 6 7-6M4 19h16 (arrow + tray)
+═════════════════════════════════════════════════════════════════════════ */

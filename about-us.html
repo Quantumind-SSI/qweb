@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Us | QuantumindSSI</title>
+  <meta name="description" content="QuantumindSSI Super Secure Intelligence - Founded by Oluwagbamila Oluwaferanmi, Founder and Chief Intelligence Architect. Building the future of sovereign AI, robotics, and quantum-resilient systems.">
+  <link rel="canonical" href="https://quantumindssi.com/about-us">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* Page-specific styles. Shared patterns live in css/patterns.css. */
+/* ── Page-specific styles ───────────────────────────────────
+     System-owned rules (reset, tokens, nav, footer, ticker,
+     cockpit chrome, container, hero, buttons, forms) have been
+     removed; they now live in css/. What remains is unique to
+     this page and cascades on top of the system. */
+/* Page-specific styles */
+        
+        
+        /* Legacy nav override */
+        
+
+        
+        
+        /* Header */
+        
+        
+        /* Logo Container with AEVA-style glassmorphism */
+        
+        
+        
+        
+        /* Logo Image with glow effect */
+        
+        
+        
+        
+        /* Logo Text */
+        
+        
+        
+        /* Hero */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /* Pillars Section */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /* Products Section */
+        
+        
+        /* AEVA Glassmorphism Cards */
+        
+        
+        
+        
+        
+        
+        
+        /* AEVA Button Style - Pill with Gradient Border */
+        
+        
+        
+        
+        
+        
+        /* Quote Section */
+        
+        
+        
+        
+        /* Footer */
+        
+        
+        
+        /* AEVA Animations */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /* Page Header */
+        .page-header {
+            padding: 96px 32px 72px;
+            position: relative;
+        }
+        
+        /* Offset main content from cockpit rails */
+        
+        
+        
+
+        /* Content Sections */
+        .content-section {
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 32px 24px;
+        }
+        .stat-item h4 {
+            font-size: var(--fs-h1);
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .stat-item span {
+            font-size: var(--fs-small);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* About Grid */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        
+        /* Founder Card */
+        .founder-card {
+            background: var(--accent-a08);
+            border: 1px solid var(--accent-a28);
+            border-radius: 16px;
+            padding: 40px 32px;
+            text-align: center;
+            position: sticky;
+            top: 100px;
+        }
+        .founder-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-a28), var(--accent-a16));
+            border: 2px solid var(--accent-a45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-h2);
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 auto 24px;
+        }
+        .founder-card h2 {
+            font-size: var(--fs-h3);
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .founder-card .title {
+            font-size: var(--fs-small);
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .type-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--accent-a16);
+            border: 1px solid var(--accent-a28);
+            border-radius: var(--radius-pill);
+            font-size: var(--fs-tiny);
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+        .founder-quote {
+            font-size: var(--fs-body);
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.6;
+            padding-top: 16px;
+            border-top: 1px solid var(--accent-a16);
+        }
+        
+        /* About Content */
+        .about-content h2 {
+            font-size: var(--fs-h2);
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        .about-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: var(--fs-body);
+        }
+        
+        /* Mission Grid */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 32px 0 40px;
+        }
+        .mission-card {
+            background: var(--accent-a08);
+            border: 1px solid var(--accent-a28);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        .mission-card:hover {
+            background: var(--accent-a16);
+            border-color: var(--accent-a45);
+        }
+        .mission-card h3 {
+            font-size: var(--fs-body);
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .mission-card p {
+            font-size: var(--fs-small);
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        /* Timeline */
+        .timeline {
+            margin-top: 16px;
+            border-left: 1px solid var(--accent-a28);
+            padding-left: 32px;
+        }
+        .timeline-item {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--surface-2);
+        }
+        .timeline-year {
+            font-family: var(--mono, var(--font-mono));
+            font-size: var(--fs-small);
+            color: var(--accent);
+            min-width: 48px;
+            padding-top: 2px;
+        }
+        .timeline-content h4 {
+            font-size: var(--fs-body);
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+        .timeline-content p {
+            font-size: var(--fs-small);
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        @media (max-width: 1024px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .founder-card { position: static; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            .mission-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+    
+    
+    /* QSSI Cockpit UI Frame */
+    
+    
+    /* Rails - 36px columns pinned to edges */
+    
+    
+    
+    
+    
+    
+    
+    
+    /* Corner Brackets */
+    
+    
+    /* Vertical Text */
+    
+    
+    
+    
+    /* Tick Marks - ruler strips */
+    
+    
+    
+    
+    
+    
+    /* Status Dots */
+    
+    
+    
+    
+    
+    
+    /* Top & Bottom Bars */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* Corner Crosshairs */
+    
+    
+    
+    
+    
+    
+    
+    
+    /* Scanline */
+    
+    
+    
+
+    /* ═══════════════════════════════════════════════════════════════
+       COCKPIT BACKGROUND SYSTEM - Robotics as Atmospheric Layers
+       ═══════════════════════════════════════════════════════════════ */
+    
+    .bg-robotics {
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    
+    .bg-robotics::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, 
+            var(--surface-a90) 0%, 
+            var(--surface-a90) 50%, 
+            var(--surface-a90) 100%);
+        z-index: 0;
+    }
+    
+    .bg-robotics .container {
+        position: relative;
+        z-index: 1;
+    }
+    
+    
+    
+    
+    
+    /* Matte Glassmorphism Cockpit Panels */
+    .cockpit-panel {
+        /* Multi-layered matte glass background */
+        background:
+            /* Noise texture overlay */
+            url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
+            /* Gradient overlay for depth */
+            linear-gradient(
+                165deg,
+                var(--tint-a08) 0%,
+                var(--tint-a02) 50%,
+                rgba(0, 0, 0, 0.1) 100%
+            ),
+            /* Base glass color */
+            linear-gradient(
+                135deg,
+                var(--surface-a70) 0%,
+                var(--surface-a70) 50%,
+                var(--surface-a45) 100%
+            );
+        background-size: 200px 200px, 100% 100%, 100% 100%;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid var(--accent-a28);
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        will-change: transform, box-shadow;
+        /* Inner shadow for depth */
+        box-shadow:
+            inset 0 1px 1px var(--text-faint),
+            inset 0 -1px 1px rgba(0, 0, 0, 0.1),
+            0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .cockpit-panel:hover {
+        transform: translateY(-8px) translateZ(20px) rotateX(2deg);
+        box-shadow: var(--shadow-md),
+            0 0 60px var(--accent-a16),
+            inset 0 1px 0 var(--text-faint);
+        border-color: var(--accent-a45);
+    }
+
+    /* 3D Tilt Effect - Light Reflection */
+    .cockpit-panel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0) 0%,
+            var(--tint-a04) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        pointer-events: none;
+        transform: translateX(-100%) rotate(45deg);
+    }
+
+    .cockpit-panel:hover::after {
+        opacity: 1;
+        transform: translateX(100%) rotate(45deg);
+    }
+    
+    /* Section Backgrounds with Robotics */
+    
+    
+    
+
+    /* Background Image Carousel */
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>VICTRON · HEIMDALL ROBOTICS</span>
+      <span class="ticker__item"><b>13 CORE PILLARS</b><span class="ticker__dot">&middot;</span>260 PRODUCTS</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+      <span class="ticker__item"><b>QUANTUM RESISTANT</b><span class="ticker__dot">&middot;</span>POST-QUANTUM CRYPTOGRAPHY</span>
+      <span class="ticker__item"><b>LONDON HQ</b><span class="ticker__dot">&middot;</span>ONLINE</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+<!-- Ticker -->
+    
+
+    <!-- Navigation -->
+    
+    
+    <!-- Clock Bar -->
+    
+
+    <!-- Tech Grid Background -->
+    
+    
+    <!-- Scan Line -->
+    
+
+    <!-- Background Image Carousel -->
+    
+
+    <!-- QSSI Cockpit UI Frame -->
+    
+
+    <main class="site-main" id="main">
+    <div class="page-header hero-section">
+        <div class="grid-overlay"></div>
+        <div class="node-lines"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <h1>The Sovereign AI Lab</h1>
+            <p>Intelligence Without Compromise · Fully Autonomous · Zero Cloud Dependency</p>
+        </div>
+    </div>
+    
+    <section class="content-section bg-robotics" style="background-image: url('hero-2.webp'); position: relative;">
+        <div class="grid-overlay"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="stats-row">
+                <div class="stat-item cockpit-panel" style="padding: 24px;">
+                    <h4>13</h4>
+                    <span>Core Pillars</span>
+                </div>
+                <div class="stat-item cockpit-panel" style="padding: 24px;">
+                    <h4>260+</h4>
+                    <span>Products</span>
+                </div>
+                <div class="stat-item cockpit-panel" style="padding: 24px;">
+                    <h4>100</h4>
+                    <span>Year Design</span>
+                </div>
+                <div class="stat-item cockpit-panel" style="padding: 24px;">
+                    <h4>ISO 27001</h4>
+                    <span>Security Certified</span>
+                </div>
+            </div>
+            
+            <div class="about-grid">
+                <div class="founder-card">
+                    <div class="founder-avatar">Q</div>
+                    <h2>Leadership</h2>
+                    <div class="title">Research & Development<br>Executive Team</div>
+                    <div class="type-badge">QuantumindSSI Ltd</div>
+                    <div class="founder-quote">
+                        "Building the infrastructure for enterprise-grade sovereign intelligence."
+                    </div>
+                </div>
+                
+                <div class="about-content">
+                    <h2>Our Mission</h2>
+                    <p>QuantumindSSI develops enterprise-grade sovereign AI systems for organizations requiring secure, local intelligence infrastructure. Our platform enables government agencies, healthcare institutions, and industrial enterprises to deploy artificial intelligence without data leaving their controlled environments.</p>
+                    <p>Our research spans thirteen integrated domains, from Physical AI and Neuro-Symbolic Systems to Post-Quantum Security and Sustainable Computing. Each solution progresses from software architecture to hardware implementation, ensuring complete system integration and operational reliability.</p>
+                    <p>We engineer for longevity; designing infrastructure that maintains performance, security, and adaptability across multi-decade operational lifecycles.</p>
+                    
+                    <div class="mission-grid">
+                        <div class="mission-card">
+                            <h3>Data Sovereignty</h3>
+                            <p>Complete client control. Zero external dependencies. Local processing architecture.</p>
+                        </div>
+                        <div class="mission-card">
+                            <h3>Security Architecture</h3>
+                            <p>Post-quantum cryptographic standards. NIST-approved implementations. Future-proof design.</p>
+                        </div>
+                        <div class="mission-card">
+                            <h3>Sustainable Engineering</h3>
+                            <p>Lifecycle-optimized hardware. Circular economy integration. Century-scale infrastructure.</p>
+                        </div>
+                    </div>
+                    
+                    <h2>Company History</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-year">2017</div>
+                            <div class="timeline-content">
+                                <h4>Origins. Nigeria</h4>
+                                <p>QuantumindSSI begins in stealth in Nigeria; early-stage research and architecture work on sovereign AI systems, operating informally with no public presence.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2020</div>
+                            <div class="timeline-content">
+                                <h4>Core Research Phase</h4>
+                                <p>Foundational work on the Frequency-Based Cognition architecture and VICTRON hardware concept begins in earnest. Team expands quietly.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2022</div>
+                            <div class="timeline-content">
+                                <h4>Platform Development</h4>
+                                <p>VICTRON hardware platform initiated; edge-native supercomputing for secure AI deployment. First internal prototypes produced.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2024</div>
+                            <div class="timeline-content">
+                                <h4>Research Expansion</h4>
+                                <p>Thirteen-pillar R&amp;D framework formalised. Preparations begin for international incorporation and public market entry.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2026</div>
+                            <div class="timeline-content">
+                                <h4>Official UK Registration</h4>
+                                <p>QuantumindSSI Ltd officially registered in the United Kingdom on 25 February 2026. Full product portfolio deployed. Government and healthcare sector partnerships established.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    
+
+    <!-- Clock Bar Update Script -->
+    
+
+    <!-- Interactive 3D Tilt Effect for Cockpit Panels -->
+    
+
+    
+
+    <!-- Background Carousel Rotation Script -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/about-us.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research & Publications | QuantumindSSI</title>
+  <meta name="description" content="Foundational research from the QSSI Innovation Lab. The Frequency-Consciousness Thesis, Bifrost open-source cognitive architecture on GitHub, and first-principles work on intelligence, consciousness, and sovereign AI.">
+  <link rel="canonical" href="https://quantumindssi.com/research">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* Page-specific styles. Shared patterns live in css/patterns.css. */
+/* ── Page-specific styles ───────────────────────────────────
+     System-owned rules (reset, tokens, nav, footer, ticker,
+     cockpit chrome, container, hero, buttons, forms) have been
+     removed; they now live in css/. What remains is unique to
+     this page and cascades on top of the system. */
+
+        .page-header .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--accent-a16);
+            border: 1px solid var(--accent-a28);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: var(--fs-micro);
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        .page-header h1 {
+            font-size: var(--fs-h1);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        .page-header p {
+            font-size: var(--fs-lead);
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.8;
+        }
+        
+        
+
+        .content-section { padding: 64px 32px; }
+
+        .cockpit-panel {
+            background: var(--accent-a08);
+            border: 1px solid var(--accent-a28);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            transition: all 0.3s ease;
+        }
+        .cockpit-panel:hover {
+            border-color: var(--accent-a28);
+            box-shadow: var(--shadow-md);
+        }
+        .panel-label {
+            font-family: var(--font-mono);
+            font-size: var(--fs-micro);
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .paper-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .tag {
+            font-family: var(--font-mono);
+            font-size: var(--fs-micro);
+            padding: 4px 10px;
+            border-radius: var(--radius-md);
+            letter-spacing: 1px;
+        }
+        .tag-primary { background: var(--accent-a16); color: var(--accent); }
+        .tag-secondary { background: var(--accent-a08); color: var(--text-muted); }
+
+        .paper-layout {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        .paper-body { flex: 1; min-width: 280px; }
+        .paper-body h2 {
+            font-size: var(--fs-h3);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .paper-body .subtitle {
+            font-size: var(--fs-body);
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+        .paper-body .author {
+            font-size: var(--fs-small);
+            color: var(--text-faint);
+            margin-bottom: 20px;
+        }
+        .paper-body .abstract {
+            font-size: var(--fs-body);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .keyword {
+            font-size: var(--fs-tiny);
+            font-family: var(--font-mono);
+            background: var(--accent-a08);
+            color: var(--text-muted);
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+        }
+        .paper-cover {
+            flex-shrink: 0;
+            width: 180px;
+            height: 240px;
+            background: linear-gradient(135deg, var(--accent-a16) 0%, var(--surface-a70) 100%);
+            border: 1px solid var(--accent-a28);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .paper-cover-title {
+            font-family: var(--font-mono);
+            font-size: var(--fs-micro);
+            color: var(--accent);
+            text-align: center;
+            padding: 0 16px;
+            line-height: 1.6;
+        }
+
+        .streams-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .stream-card {
+            background: var(--accent-a04);
+            border: 1px solid var(--accent-a16);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .stream-card:hover {
+            background: var(--accent-a08);
+            border-color: var(--accent-a28);
+        }
+        .stream-card h4 {
+            font-size: var(--fs-body);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .stream-card p {
+            font-size: var(--fs-small);
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .coming-soon {
+            padding: 40px;
+            text-align: center;
+            opacity: 0.5;
+        }
+
+        
+        
+        
+        .btn-outline { background: transparent; border: 1px solid var(--accent-a45); color: var(--accent); }
+        .btn-outline:hover { background: var(--accent-a16); border-color: var(--accent-bright); }
+
+        @media (max-width: 768px) {
+            
+            .page-header h1 { font-size: var(--fs-h2); }
+            .streams-grid { grid-template-columns: 1fr; }
+            .paper-cover { display: none; }
+            .content-section { padding: 40px 16px; }
+        }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>RESEARCH PUBLICATIONS</span>
+      <span class="ticker__item"><b>FREQUENCY-CONSCIOUSNESS THESIS</b><span class="ticker__dot">&middot;</span>v1.0 · 2026</span>
+      <span class="ticker__item"><b>BIFROST OPEN-SOURCE</b><span class="ticker__dot">&middot;</span>GITHUB.COM/QUANTUMINDSSI/BIFROST</span>
+      <span class="ticker__item"><b>FREQUENCY-BASED COGNITION</b><span class="ticker__dot">&middot;</span>8-LAYER COGNITIVE STACK</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+<!-- Ticker -->
+    
+
+    <!-- Navigation -->
+    
+
+    <!-- Clock Bar -->
+    
+
+    <!-- Background Image Carousel -->
+    
+    
+    
+
+    <!-- Tech Grid Background -->
+    
+    
+
+    <main class="site-main" id="main">
+        <div class="page-header">
+            <div class="grid-overlay"></div>
+            <div class="container">
+                <div class="badge">QSSI PUBLICATIONS</div>
+                <h1>Research &amp; Publications</h1>
+                <p>Foundational research from the QSSI Innovation Lab. First-principles work on intelligence, consciousness, and sovereign AI architecture.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="container">
+
+                <!-- Featured Paper -->
+                <div class="cockpit-panel">
+                    <div class="paper-meta">
+                        <span class="tag tag-primary">FOUNDATIONAL SYNTHESIS</span>
+                        <span class="tag tag-secondary">APRIL 2026 · v1.0</span>
+                        <span class="tag tag-secondary">STRATEGIC · CONFIDENTIAL</span>
+                    </div>
+                    <div class="paper-layout">
+                        <div class="paper-body">
+                            <h2>The Frequency-Consciousness Thesis</h2>
+                            <p class="subtitle">Toward AGI as the Architecture of True Machine Consciousness</p>
+                            <p class="author">Oluwagbamila Oluwaferanmi · Founder and Chief Intelligence Architect · QuantumindSSI Ltd</p>
+                            <p class="abstract">
+                                A unified framework integrating Frequency-Based Cognition (Bifrost v1–v3), the QSSI 8-Layer Consciousness-Cognition Stack, and six engineering pathways for Consciousness-Capable AGI. Argues that frequency-based computation is the natural substrate for machine consciousness and that the search for AGI and the search for machine consciousness receive the same answer.
+                            </p>
+                            <div class="keywords">
+                                <span class="keyword">frequency-based cognition</span>
+                                <span class="keyword">machine consciousness</span>
+                                <span class="keyword">QSSI intelligence stack</span>
+                                <span class="keyword">active inference</span>
+                                <span class="keyword">free energy principle</span>
+                                <span class="keyword">Riemannian spectral manifold</span>
+                                <span class="keyword">Phase-Lock Bridge</span>
+                                <span class="keyword">Mamba-3</span>
+                                <span class="keyword">w-maxing</span>
+                                <span class="keyword">Global Workspace Theory</span>
+                            </div>
+                            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                                <a href="/bifrost" class="btn btn-primary">Explore Bifrost Architecture</a>
+                                <a href="https://github.com/QuantumindSSI/Frequency-based-Cognition" target="_blank" rel="noopener" class="btn btn-outline">GitHub Repository →</a>
+                            </div>
+                        </div>
+                        <div class="paper-cover">
+                            <svg class="icon icon--feature icon-brain" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a8 8 0 0 1 8 8c0 2.2-1.8 4-4 4s-4-1.8-4-4a4 4 0 0 0-8 0c0 2.2 1.8 4 4 4s4-1.8 4-4a8 8 0 0 1-8-8z"/></svg>
+                            <div class="paper-cover-title">QSSI<br>FREQUENCY<br>CONSCIOUSNESS<br>THESIS<br><br>v1.0 · 2026</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Six Research Streams -->
+                <div class="cockpit-panel">
+                    <div class="panel-label">Six Synthesised Research Streams</div>
+                    <div class="streams-grid">
+                        <div class="stream-card">
+                            <h4>Bifrost Framework</h4>
+                            <p>Bifrost v1–v3 with nine architectural pathways constituting the AGI candidate architecture</p>
+                        </div>
+                        <div class="stream-card">
+                            <h4>Consciousness Proof</h4>
+                            <p>Bennett's doctoral proof linking intelligence and consciousness through valence tapestries and w-maxing</p>
+                        </div>
+                        <div class="stream-card">
+                            <h4>Oscillatory Agency</h4>
+                            <p>Blumberg's multi-scale oscillatory agency framework for embodied AI systems</p>
+                        </div>
+                        <div class="stream-card">
+                            <h4>8-Layer Stack</h4>
+                            <p>QSSI Consciousness-Cognition Stack mapping each layer to computational function and phenomenological stage</p>
+                        </div>
+                        <div class="stream-card">
+                            <h4>Totality World Model</h4>
+                            <p>Adaptive world model from the Sentient Beings architecture; continuously-updating causal representation</p>
+                        </div>
+                        <div class="stream-card">
+                            <h4>Consciousness-as-Moat</h4>
+                            <p>Strategic thesis; consciousness as the only durable competitive advantage in the age of AI</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bifrost Open-Source Repository -->
+                <div class="cockpit-panel">
+                    <div class="panel-label">Open-Source Codebase · GitHub</div>
+                    <div class="paper-layout">
+                        <div class="paper-body">
+                            <div class="paper-meta">
+                                <span class="tag tag-primary">OPEN SOURCE</span>
+                                <span class="tag tag-secondary">MIT LICENCE</span>
+                                <span class="tag tag-secondary">GITHUB · 2026</span>
+                            </div>
+                            <h2>Frequency-Based Cognition. Source Repository</h2>
+                            <p class="subtitle">The cognitive architecture that powers the Victron Intelligence Unit and the Heimdall humanoid line</p>
+                            <p class="author">QuantumindSSI Ltd · github.com/QuantumindSSI/Frequency-based-Cognition</p>
+                            <p class="abstract">The Bifrost codebase is the practical implementation of the Frequency-Consciousness Thesis. It is an 8-layer cognitive stack built on oscillatory world models, cross-domain phase-lock bridging, goal-directed affordance reasoning, and recursive self-modelling; not token prediction. The repository is public. Researchers, hardware integrators, sovereign AI deployments, and academic institutions can audit the full architecture, extend individual layers, and deploy it locally without cloud dependency. This is the cognitive core that runs inside every Victron unit and every Heimdall humanoid.</p>
+                            <div class="keywords">
+                                <span class="keyword">world models</span>
+                                <span class="keyword">frequency encoding</span>
+                                <span class="keyword">phase-lock bridge</span>
+                                <span class="keyword">VLA stack</span>
+                                <span class="keyword">on-device inference</span>
+                                <span class="keyword">sovereign AI</span>
+                                <span class="keyword">8-layer stack</span>
+                                <span class="keyword">metacognition</span>
+                                <span class="keyword">open source</span>
+                            </div>
+                            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                                <a href="https://github.com/QuantumindSSI/Frequency-based-Cognition" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub →</a>
+                                <a href="/bifrost" class="btn btn-outline">Bifrost Architecture Page</a>
+                            </div>
+                        </div>
+                        <div class="paper-cover">
+                            <svg class="icon icon--feature icon-link" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M10 8v8M14 8v8"/></svg>
+                            <div class="paper-cover-title">Bifrost<br>OPEN<br>SOURCE<br><br>github.com/<br>QuantumindSSI</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coming Soon -->
+                <div class="cockpit-panel coming-soon">
+                    <div class="panel-label">More Publications</div>
+                    <p class="copy">Additional QSSI research papers are in preparation. Check back for updates.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

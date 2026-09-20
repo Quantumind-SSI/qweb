@@ -1,0 +1,261 @@
+/* ============================================================================
+   QUANTUMINDSSI — DESIGN TOKENS
+   The single source of truth. Nothing below this file may hardcode a value.
+
+   Contrast: every text token is verified against --bg-void (#06080a).
+   Ratios are noted inline. Minimum target is WCAG AA 4.5:1 for body copy.
+   ========================================================================= */
+
+:root {
+  /* ── NEUTRAL RAMP ────────────────────────────────────────────────────────
+     Cool-cast greys. Instrumentation, not pure black — pure black reads
+     cheap on OLED and kills the sense of depth the HUD needs.            */
+  --bg-void:        #06080a;   /* page background, deepest layer          */
+  --bg-base:        #0a0e11;   /* default section background              */
+  --surface-1:      #10151a;   /* cards, panels                           */
+  --surface-2:      #161d23;   /* raised panels, table headers            */
+  --surface-3:      #1e262e;   /* inputs, hover states                    */
+  --surface-4:      #27323b;   /* pressed / active states                 */
+
+  /* ── TEXT RAMP ───────────────────────────────────────────────────────── */
+  --text-primary:   #f2f6f8;   /* 18.4:1 — headings, key figures          */
+  --text-secondary: #a8b4bc;   /*  9.6:1 — body copy                      */
+  --text-muted:     #7d8b94;   /*  5.7:1 — supporting copy, captions      */
+  --text-faint:     #7a8892;   /*  5.5:1 — micro-labels, mono readouts.
+                                    Tuned up from #75838d so it still clears
+                                    AA on --surface-2 (4.7:1), the deepest
+                                    background it is ever painted on.      */
+  --text-inverse:   #06080a;   /* on accent / light fills                 */
+
+  /* ── ACCENT — SIGNAL TEAL ────────────────────────────────────────────────
+     Used with restraint: state, focus, data emphasis. Never for large
+     fills. The previous build hardcoded #2db8b6 276 times; it lives here
+     now and nowhere else.                                                */
+  --accent:         #2db8b6;   /*  8.3:1 — primary accent                 */
+  --accent-bright:  #5fe3e0;   /* 12.4:1 — hover, active                  */
+  --accent-deep:    #1a7d7c;   /* fills and borders only, not text        */
+  --accent-shadow:  #0d3d3c;   /* tinted backgrounds                      */
+
+  /* Accent at alpha — precomputed so nothing invents its own rgba() */
+  --accent-a04:     rgba(45, 184, 182, 0.04);
+  --accent-a08:     rgba(45, 184, 182, 0.08);
+  --accent-a16:     rgba(45, 184, 182, 0.16);
+  --accent-a28:     rgba(45, 184, 182, 0.28);
+  --accent-a45:     rgba(45, 184, 182, 0.45);
+
+  /* ── SIGNAL COLOURS ──────────────────────────────────────────────────── */
+  --signal-ok:      #3fb950;   /*  7.9:1 */
+  --signal-warn:    #f0b429;   /* 10.8:1 */
+  --signal-crit:    #f2555a;   /*  6.0:1 */
+  --signal-info:    #58a6ff;   /*  7.5:1 */
+
+  --signal-ok-bg:   rgba(63, 185, 80, 0.10);
+  --signal-warn-bg: rgba(240, 180, 41, 0.10);
+  --signal-crit-bg: rgba(242, 85, 90, 0.10);
+  --signal-info-bg: rgba(88, 166, 255, 0.10);
+
+  /* ── TRANSLUCENT SURFACES ────────────────────────────────────────────────
+     Pages used rgba(5,66,78,α) — the old teal-navy — for glass panels at a
+     dozen different alphas. These four steps replace all of them. */
+  --surface-a20:    rgba(22, 29, 35, 0.20);
+  --surface-a45:    rgba(22, 29, 35, 0.45);
+  --surface-a70:    rgba(22, 29, 35, 0.70);
+  --surface-a90:    rgba(22, 29, 35, 0.92);
+
+  /* Neutral tints for hairline fills and hover washes */
+  --tint-a02:       rgba(242, 246, 248, 0.02);
+  --tint-a04:       rgba(242, 246, 248, 0.04);
+  --tint-a08:       rgba(242, 246, 248, 0.08);
+
+  /* ── HAIRLINES ───────────────────────────────────────────────────────────
+     The HUD reads as precise because its lines are consistent. Four
+     weights, no more.                                                    */
+  --line-faint:     rgba(168, 180, 188, 0.08);   /* internal dividers     */
+  --line:           rgba(168, 180, 188, 0.14);   /* default borders       */
+  --line-strong:    rgba(168, 180, 188, 0.24);   /* emphasis              */
+  --line-accent:    var(--accent-a28);           /* HUD chrome            */
+
+  /* ── TYPEFACES ───────────────────────────────────────────────────────── */
+  --font-display: 'Chakra Petch', 'DM Sans', -apple-system, BlinkMacSystemFont,
+                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, 'SF Mono',
+               Menlo, Consolas, monospace;
+
+  /* ── TYPE SCALE ──────────────────────────────────────────────────────────
+     Modular, 1.25 ratio, fluid where it matters. Replaces the 63
+     ad-hoc font sizes found in the previous build.                       */
+  --fs-micro:  0.6875rem;                              /* 11px — HUD labels */
+  --fs-tiny:   0.75rem;                                /* 12px — captions   */
+  --fs-small:  0.8125rem;                              /* 13px — meta       */
+  --fs-body:   0.9375rem;                              /* 15px — base       */
+  --fs-lead:   clamp(1rem,    0.96rem + 0.20vw, 1.125rem);
+  --fs-h5:     clamp(1rem,    0.95rem + 0.25vw, 1.125rem);
+  --fs-h4:     clamp(1.125rem, 1.05rem + 0.38vw, 1.375rem);
+  --fs-h3:     clamp(1.375rem, 1.24rem + 0.65vw, 1.75rem);
+  --fs-h2:     clamp(1.75rem,  1.50rem + 1.25vw, 2.5rem);
+  --fs-h1:     clamp(2.25rem,  1.75rem + 2.50vw, 3.75rem);
+  --fs-display: clamp(2.75rem, 1.90rem + 4.25vw, 5rem);
+
+  /* Numeric readouts — the cockpit's "instrument" sizes */
+  --fs-readout-sm: clamp(1.25rem, 1.10rem + 0.75vw, 1.75rem);
+  --fs-readout:    clamp(1.75rem, 1.40rem + 1.75vw, 2.75rem);
+
+  /* ── LINE HEIGHT ─────────────────────────────────────────────────────── */
+  --lh-tight:   1.1;
+  --lh-snug:    1.25;
+  --lh-normal:  1.6;
+  --lh-relaxed: 1.75;
+
+  /* ── LETTER SPACING ──────────────────────────────────────────────────────
+     Mono HUD labels are tracked out; display type is tracked in.        */
+  --ls-display: -0.025em;
+  --ls-heading: -0.015em;
+  --ls-normal:  0;
+  --ls-label:   0.08em;
+  --ls-hud:     0.14em;
+
+  /* ── WEIGHT ──────────────────────────────────────────────────────────── */
+  --fw-light:    300;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* ── SPACE SCALE — 4px base ──────────────────────────────────────────── */
+  --space-0:  0;
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+
+  /* Fluid section rhythm — vertical space between major blocks */
+  --section-y:    clamp(3.5rem, 2.5rem + 5vw, 7rem);
+  --section-y-sm: clamp(2.5rem, 1.9rem + 3vw, 4.5rem);
+
+  /* ── LAYOUT ──────────────────────────────────────────────────────────── */
+  --container-max:  1280px;
+  --container-wide: 1480px;
+  --container-text: 68ch;      /* readable prose measure */
+  --gutter:         clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --grid-gap:       clamp(1rem, 0.7rem + 1.2vw, 1.75rem);
+
+  /* ── BREAKPOINTS ─────────────────────────────────────────────────────────
+     Named for documentation and for any var()-capable consumer. @media
+     conditions cannot read custom properties, so the literal values below
+     are the canonical list: 639/640, 767, 900/901, 1023/1024, 1180, 1280.
+     Never introduce a new breakpoint; reuse these.                       */
+  --bp-sm: 640px;    /* two-column grids        */
+  --bp-md: 767px;    /* compact widgets         */
+  --bp-lg: 900px;    /* HUD collapse            */
+  --bp-xl: 1024px;   /* desktop nav, 3/4-col    */
+  --bp-nav: 1180px;  /* nav status lamp         */
+  --bp-xxl: 1280px;  /* six-column grids        */
+
+  /* Measurement grid size — shared by .hud-grid and .page-header texture */
+  --grid-size: 64px;
+
+  /* ── HUD CHROME METRICS ──────────────────────────────────────────────────
+     These drive BOTH the chrome and the space the shell reserves for it.
+     This is the fix for the old overlay bug: one number, two consumers. */
+  --hud-rail:   34px;   /* left/right rail width  */
+  --hud-bar:    30px;   /* top/bottom bar height  */
+  --hud-inset:  10px;   /* bracket inset          */
+
+  /* ── RADII ───────────────────────────────────────────────────────────────
+     Deliberately tight. A cockpit is machined, not rounded.
+     Replaces the 20 arbitrary radius values in the previous build.      */
+  --radius-none: 0;
+  --radius-sm:   2px;
+  --radius-md:   4px;
+  --radius-lg:   8px;
+  --radius-pill: 999px;
+
+  /* ── ELEVATION ───────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.65);
+  --glow-accent: 0 0 0 1px var(--accent-a28), 0 0 24px var(--accent-a16);
+
+  /* ── MOTION ──────────────────────────────────────────────────────────── */
+  --dur-instant: 90ms;
+  --dur-fast:    160ms;
+  --dur-base:    240ms;
+  --dur-slow:    400ms;
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ── DEPTH & LIGHT ───────────────────────────────────────────────────────
+     The 3D layer. One perspective, one tilt magnitude, one specular —
+     shared by every interactive surface so the HUD tilts as one machine. */
+  --depth-perspective: 1100px;              /* scene camera distance        */
+  --depth-rotate:      7deg;                /* max tilt at card edges       */
+  --depth-lift:        6px;                 /* hover lift magnitude         */
+  --light-size:        220px;               /* cursor specular radius       */
+  --depth-glow:        rgba(95, 227, 224, 0.10);  /* cursor specular wash  */
+  --cube-size:         9rem;                /* hero wireframe cube          */
+
+  /* Small surfaces (icon plates, nav tabs) share the same camera but move
+     less — a 48px plate lifting 6px reads as detachment, not depth. */
+  --depth-lift-sm:     3px;                 /* icon / tab hover lift        */
+  --depth-tilt-sm:     5deg;                /* icon plate hover tilt        */
+  --light-size-sm:     110px;               /* specular radius on plates    */
+
+  /* ── Z-INDEX SCALE ───────────────────────────────────────────────────────
+     Named layers. The previous build had 13 arbitrary values from -1 to
+     9999 with no ordering logic; that is why things overlapped.         */
+  --z-below:    -1;
+  --z-base:      0;
+  --z-raised:    10;
+  --z-sticky:    100;
+  --z-hud:       200;   /* cockpit chrome — below nav, never over content */
+  --z-scrim:     250;   /* mobile drawer dimmer — below the header so the
+                           drawer (a header descendant) stays reachable */
+  --z-nav:       300;
+  --z-drawer:    400;
+  --z-overlay:   500;
+  --z-modal:     600;
+  --z-toast:     700;
+  --z-tooltip:   800;
+
+  /* ── FOCUS ───────────────────────────────────────────────────────────── */
+  --focus-ring:   2px solid var(--accent-bright);
+  --focus-offset: 2px;
+}
+
+/* ── DENSITY: compact HUD chrome on small screens ───────────────────────── */
+@media (max-width: 900px) {
+  :root {
+    --hud-rail: 0px;
+    --hud-bar:  0px;
+  }
+}
+
+/* ── REDUCED TRANSPARENCY ───────────────────────────────────────────────── */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --line-faint:  rgba(168, 180, 188, 0.16);
+    --line:        rgba(168, 180, 188, 0.28);
+    --line-strong: rgba(168, 180, 188, 0.42);
+  }
+}
+
+/* ── FORCED COLORS (Windows High Contrast) ──────────────────────────────── */
+@media (forced-colors: active) {
+  :root {
+    --line:        CanvasText;
+    --line-strong: CanvasText;
+    --accent:      LinkText;
+  }
+}

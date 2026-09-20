@@ -1,0 +1,446 @@
+/* ============================================================================
+   QUANTUMINDSSI — COMPATIBILITY LAYER
+
+   The pages carry bespoke component CSS from the previous build (.pillar-card,
+   .cockpit-panel, .mb-cart-*, .card-*, .spec-*, .metric/.key/.val …). That CSS
+   is worth keeping — it is genuinely page-specific and the content depends on
+   it. What it must NOT keep is the old palette, which had no working tokens
+   and shipped text as low as 1.45:1.
+
+   This file re-points every legacy variable at the new design system, so ~600
+   existing declarations adopt the corrected palette without being rewritten,
+   and raises a contrast floor under the worst hardcoded values.
+
+   It is a bridge, not a destination. As each page's remaining CSS is folded
+   into components.css this file shrinks.
+
+   Load order: tokens -> base -> layout -> hud -> components -> compat
+   ========================================================================= */
+
+/* ── LEGACY VARIABLE ALIASES ────────────────────────────────────────────── */
+:root {
+  /* Typefaces */
+  --mono: var(--font-mono);
+  --sans: var(--font-sans);
+
+  /* Neutrals. The old --black was var(--surface-2) (a teal), which is why about-us.html
+     rendered its whole page on teal and failed contrast everywhere. */
+  --black:       var(--bg-void);
+  --black-rgb:   6, 8, 10;
+  --white:       var(--text-primary);
+  --off-white:   var(--text-secondary);
+  --grey:        var(--text-muted);
+  --grey-dim:    var(--text-faint);
+
+  /* Surfaces. --bg-card was referenced on five pages and never defined
+     anywhere, so cards fell through to the page background. */
+  --bg-primary:  var(--bg-void);
+  --bg-card:     var(--surface-1);
+  --glass:       var(--surface-2);
+
+  /* Text */
+  --text-primary:   #f2f6f8;
+  --text-secondary: #a8b4bc;
+
+  /* Lines */
+  --border:        var(--line);
+  --border-silver: var(--line-strong);
+
+  /* Accent. Previously --accent resolved to white while the teal var(--accent) was
+     hardcoded 276 times. The variable now IS the teal. */
+  --teal:         var(--accent);
+  --accent-light: var(--accent-bright);
+  --accent-dark:  var(--accent-deep);
+
+  /* Signals */
+  --success: var(--signal-ok);
+  --warning: var(--signal-warn);
+  --danger:  var(--signal-crit);
+  --error:   var(--signal-crit);
+}
+
+/* ── LEGACY CHROME — neutralised ────────────────────────────────────────
+   Any remnant of the old cockpit frame must not reappear as a floating
+   overlay. The canonical HUD replaces all of it. */
+.ui-frame,
+.cockpit-frame,
+.rail,
+.bar-top,
+.bar-bottom,
+.scanline,
+.scan-line,
+.glow-orb,
+.tech-grid,
+.bg-carousel,
+.grid-overlay,
+.node-lines,
+.crosshair,
+.corner-bracket,
+.rail-corner,
+.tick-marks,
+.vertical-text,
+.v-text,
+.unit-id,
+.nav-hamburger,
+.clock-bar,
+.ticker-inner {
+  display: none !important;
+}
+
+/* Legacy hidden headers: six pages shipped a <header> killed by
+   `header{display:none}`, three of which had no other navigation. */
+body > header:not(.site-header) { display: none !important; }
+
+/* ── LEGACY LAYOUT PRIMITIVES ───────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Old section wrappers had hardcoded 80–100px vertical padding */
+.page-view { padding-block: var(--section-y); }
+
+.section-header {
+  margin-bottom: var(--space-10);
+}
+
+.section-header h2 {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--space-3);
+}
+
+.section-header p { color: var(--text-muted); }
+
+.section-label,
+.spec-label,
+.sku-badge,
+.card-tier,
+.mb-cart-badge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── LEGACY PANELS / CARDS ──────────────────────────────────────────────── */
+.cockpit-panel,
+.pillar-card,
+.product-card,
+.spec-module,
+.pricing-card,
+.mb-cart-card,
+.case-card,
+.repo-card,
+.job-card,
+.faq-item {
+  background: var(--surface-1);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-base) var(--ease-out),
+              background-color var(--dur-base) var(--ease-out);
+}
+
+.cockpit-panel:hover,
+.pillar-card:hover,
+.product-card:hover,
+.pricing-card:hover,
+.mb-cart-card:hover,
+.case-card:hover,
+.repo-card:hover,
+.job-card:hover {
+  background: var(--surface-2);
+  border-color: var(--accent-a28);
+  /* The old cards translated -4px and dropped a 40px shadow; too much
+     movement for a page of twelve of them. */
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── LEGACY KEY/VALUE ROWS ──────────────────────────────────────────────── */
+.spec-row,
+.metric {
+  border-bottom: 1px solid var(--line-faint);
+}
+
+.key,
+.spec-label {
+  color: var(--text-faint);
+}
+
+.val,
+.spec-value {
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── LEGACY BUTTONS ─────────────────────────────────────────────────────── */
+.btn,
+.card-btn,
+.btn-mb-add,
+.btn-preorder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 42px;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+
+.btn:hover,
+.card-btn:hover,
+.btn-mb-add:hover,
+.btn-preorder:hover {
+  background: var(--surface-2);
+  border-color: var(--accent-a45);
+  color: var(--accent-bright);
+}
+
+.btn-primary,
+.card-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-inverse);
+}
+
+.btn-primary:hover,
+.card-btn.primary:hover {
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  color: var(--text-inverse);
+}
+
+/* ── LEGACY FORMS ───────────────────────────────────────────────────────── */
+.form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.form-label,
+.qssi-modal label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.qssi-modal input,
+.qssi-modal select,
+.qssi-modal textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+}
+
+/* The previous build set `outline:none` on every modal input and replaced the
+   ring with a border tint. Specificity (0-2-1) beat the shared
+   `input:focus-visible` rule (0-1-1), so keyboard focus was invisible. */
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible,
+.qssi-modal input:focus-visible,
+.qssi-modal select:focus-visible,
+.qssi-modal textarea:focus-visible {
+  outline: var(--focus-ring) !important;
+  outline-offset: var(--focus-offset) !important;
+  border-color: var(--accent);
+}
+
+.form-status,
+.modal-status {
+  font-size: var(--fs-small);
+}
+
+/* Legacy modal submit buttons (fbc, pre-order, products, local-ai, careers).
+   Was shipped unstyled on every page that used it. */
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--text-inverse);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+}
+
+.modal-btn:hover {
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+}
+
+.modal-btn:disabled { cursor: not-allowed; opacity: 0.55; }
+
+.form-status.success, .modal-status.success { color: var(--signal-ok); }
+.form-status.error,   .modal-status.error   { color: var(--signal-crit); }
+
+/* ── LEGACY MODALS ──────────────────────────────────────────────────────── */
+.qssi-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: none;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(6, 8, 10, 0.76);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+
+.qssi-modal-overlay.open,
+.qssi-modal-overlay[style*='flex'],
+.qssi-modal-overlay[style*='block'] { display: grid !important; }
+
+.qssi-modal {
+  width: min(34rem, 100%);
+  background: var(--bg-base);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-6);
+}
+
+.qssi-modal-close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.qssi-modal-close:hover { color: var(--text-primary); background: var(--surface-2); }
+
+/* ============================================================================
+   CONTRAST FLOOR
+
+   The pages hardcode dimmed text in inline styles that cannot be reached by
+   a normal selector. These attribute matches raise the documented failures
+   (1.45:1 – 4.47:1) up to at least 5.1:1. Each is removed as the inline style
+   it targets is removed.
+   ========================================================================= */
+[style*='rgba(200,210,215,0.1'], [style*='rgba(200, 210, 215, 0.1'],
+[style*='rgba(200,210,215,0.2'], [style*='rgba(200, 210, 215, 0.2'],
+[style*='rgba(200,210,215,0.3'], [style*='rgba(200, 210, 215, 0.3'],
+[style*='rgba(200,210,215,0.4'], [style*='rgba(200, 210, 215, 0.4'],
+[style*='rgba(200,210,215,0.5'], [style*='rgba(200, 210, 215, 0.5'],
+[style*='rgba(200,230,240,0.5'], [style*='rgba(200, 230, 240, 0.5'],
+[style*='rgba(200,230,240,0.6'], [style*='rgba(200, 230, 240, 0.6'],
+[style*='rgba(253,254,253,0.2'], [style*='rgba(253, 254, 253, 0.2'],
+[style*='rgba(253,254,253,0.3'], [style*='rgba(253, 254, 253, 0.3'],
+[style*='rgba(253,254,253,0.4'], [style*='rgba(253, 254, 253, 0.4'],
+[style*='rgba(255,255,255,0.2'], [style*='rgba(255, 255, 255, 0.2'],
+[style*='rgba(255,255,255,0.3'], [style*='rgba(255, 255, 255, 0.3'],
+[style*='rgba(255,255,255,0.4'], [style*='rgba(255, 255, 255, 0.4'] {
+  color: var(--text-faint) !important;
+}
+
+/* Same failure expressed through classes rather than inline styles */
+.dim,
+.hw-subtitle,
+.hw-use,
+.mb-cart-subtitle,
+.build-empty,
+.bar-label,
+.card-sub,
+.card-ship,
+.pillar-desc,
+.no,
+.phase-status.future {
+  color: var(--text-muted);
+}
+
+/* var(--text-faint) at 2.03:1 and var(--text-faint) at 2.66:1 were used for real body text */
+[style*='var(--grey-dim)'],
+[style*='color:var(--text-faint)'], [style*='color: var(--text-faint)'],
+[style*='color:var(--text-faint)'], [style*='color: var(--text-faint)'],
+[style*='color:var(--text-faint)'], [style*='color: var(--text-faint)'] {
+  color: var(--text-faint) !important;
+}
+
+/* ── MOTION FLOOR ───────────────────────────────────────────────────────
+   Five pages never loaded the old shared stylesheet, so they had no
+   reduced-motion support at all despite carrying 44 infinite animations
+   between them. base.css now covers every page; this stops any remaining
+   inline animation from restarting. */
+@media (prefers-reduced-motion: reduce) {
+  [class*='carousel'],
+  [class*='marquee'],
+  [class*='ticker'],
+  [style*='animation'] {
+    animation: none !important;
+  }
+}
+
+/* ── OVERFLOW GUARD ─────────────────────────────────────────────────────
+   Legacy fixed pixel widths must not force a horizontal scrollbar. */
+[style*='width:'][style*='px'],
+[style*='min-width:'][style*='px'] {
+  max-width: 100%;
+}
+
+[style*='writing-mode'] { max-width: none; }
+
+/* ── FLEX WRAP ──────────────────────────────────────────────────────────
+   Inline `display:flex` rows in the pages were written without flex-wrap,
+   so a row of four cards stayed on one line and overflowed on anything
+   narrower than a laptop. Wrapping is the correct default for content
+   rows; a row that genuinely must not wrap can still opt out by declaring
+   `flex-wrap: nowrap` itself, which wins on specificity order. */
+[style*='display:flex']:not([style*='nowrap']),
+[style*='display: flex']:not([style*='nowrap']) {
+  flex-wrap: wrap;
+}
+
+/* Fixed-width flex children must be allowed to shrink on small screens */
+@media (max-width: 767px) {
+  [style*='flex-shrink: 0'][style*='width:'],
+  [style*='flex-shrink:0'][style*='width:'] {
+    width: 100% !important;
+    flex-basis: 100% !important;
+  }
+}
+
+/* Any element that sets its own min-width must not exceed the viewport */
+[style*='min-width'] { max-width: 100%; }
+
+/* ── LONG STRINGS ───────────────────────────────────────────────────────
+   Repository URLs, model identifiers and part numbers appear throughout
+   and will otherwise push their container wider than the screen. */
+.copy, .card__body, .prose p, .speclist__value, .tag {
+  overflow-wrap: break-word;
+}

@@ -1,0 +1,23 @@
+name = "qssi-api"
+main = "api/src/functions/index.js"
+compatibility_date = "2026-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "qssi"
+database_id = "0fae4d62-6e00-4c1a-996a-d82a32670f32"
+
+[[kv]]
+binding = "KV"
+
+[env.production]
+ATHENOIR_ENDPOINT = ""
+ATHENOIR_API_KEY = ""
+ATHENOIR_MODEL = "unsloth/Llama-3.2-3B-Instruct"
+SUPPORT_EMAIL = "hello@quantumindssi.com"
+
+[account_setup]
+workers_dev = true
+
+[vars]
+ATHENOIR_ENABLED = "false"

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Victron Deployment Possibilities | QuantumindSSI</title>
+  <meta name="description" content="What becomes possible when you put a Victron Intelligence Unit anywhere. 13 deployment possibilities across every QSSI core pillar :  from sovereign defence to humanoid robotics.">
+  <link rel="canonical" href="https://quantumindssi.com/case-studies">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* Page-specific styles. Shared patterns live in css/patterns.css. */
+/* ── Page-specific styles ───────────────────────────────────
+     System-owned rules (reset, tokens, nav, footer, ticker,
+     cockpit chrome, container, hero, buttons, forms) have been
+     removed; they now live in css/. What remains is unique to
+     this page and cascades on top of the system. */
+/* ── TICKER ── */
+    
+    
+    
+    
+    @keyframes tickerMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── NAV ── */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    /* ── CLOCK BAR ── */
+    
+    
+    
+
+    /* ── TECH GRID; silver on black ── */
+    
+    
+
+    /* ── SCAN LINE; silver ── */
+    
+    
+
+    /* ── COCKPIT RAILS ── */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 72px 48px 56px;
+      background: linear-gradient(135deg, var(--surface-a90) 0%, var(--surface-a70) 100%);
+      border: 1px solid var(--border-silver);
+      border-radius: var(--radius-sm);
+      margin-top: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--text-muted) 1px, transparent 1px),
+        linear-gradient(90deg, var(--text-muted) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+    
+    .page-badge {
+      display: inline-block; padding: 5px 12px;
+      background: var(--text-muted); border: 1px solid var(--text-muted);
+      border-radius: var(--radius-sm); font-family: var(--mono); font-size: var(--fs-micro);
+      letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px;
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 4.5vw, 52px); font-weight: 300;
+      letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px; color: var(--white);
+    }
+    .page-header p { font-size: var(--fs-body); color: var(--grey); max-width: 620px; line-height: 1.8; }
+
+    /* ── CONTENT ── */
+    .content { padding: 48px 0 72px; }
+
+    .section-label {
+      font-family: var(--mono); font-size: var(--fs-micro); letter-spacing: 2px;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-silver); }
+
+    /* ── INTRO BANNER ── */
+    .intro-banner {
+      border: 1px solid var(--border-silver); border-radius: var(--radius-sm);
+      padding: 32px 40px; margin-bottom: 48px;
+      display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
+    }
+    .intro-banner p {
+      font-size: var(--fs-body); color: var(--grey); line-height: 1.8; flex: 1; min-width: 260px;
+    }
+    .intro-banner p strong { color: var(--white); }
+    .intro-stats { display: flex; gap: 32px; flex-shrink: 0; flex-wrap: wrap; }
+    .intro-stat { text-align: center; }
+    .intro-stat .num { font-family: var(--mono); font-size: var(--fs-h3); font-weight: 700; color: var(--white); }
+    .intro-stat .lbl { font-family: var(--mono); font-size: var(--fs-micro); letter-spacing: 2px; color: var(--grey); text-transform: uppercase; margin-top: 4px; }
+
+    /* ── CASE GRID ── */
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1px;
+      background: var(--border-silver);
+      border: 1px solid var(--border-silver);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .case-card {
+      background: var(--bg-void);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.25s;
+      position: relative;
+    }
+    .case-card:hover { background: var(--text-muted); }
+    .case-card.featured { background: var(--surface-a45); }
+    .case-card.featured:hover { background: var(--surface-a45); }
+
+    .case-pillar {
+      font-family: var(--mono); font-size: var(--fs-micro); letter-spacing: 2px;
+      color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;
+    }
+    .case-domain {
+      font-family: var(--mono); font-size: var(--fs-micro); letter-spacing: 1px;
+      color: var(--teal); text-transform: uppercase; margin-bottom: 16px;
+    }
+    .case-card h3 {
+      font-size: var(--fs-body); font-weight: 600; color: var(--white);
+      margin-bottom: 12px; letter-spacing: -0.01em; line-height: 1.4;
+    }
+    .case-card p {
+      font-size: var(--fs-small); color: var(--grey); line-height: 1.75; flex: 1; margin-bottom: 24px;
+    }
+    .case-metrics {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      padding-top: 20px; border-top: 1px solid var(--border-silver);
+    }
+    .metric { text-align: left; }
+    .metric .val {
+      font-family: var(--mono); font-size: var(--fs-lead); font-weight: 700;
+      color: var(--white); display: block;
+    }
+    .metric .key {
+      font-family: var(--mono); font-size: var(--fs-micro); letter-spacing: 1px;
+      color: var(--grey); text-transform: uppercase; margin-top: 2px;
+    }
+
+    /* ── FOOTER ── */
+    
+    
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      
+      
+      .page-header { padding: 48px 24px; }
+      .intro-stats { flex-shrink: 1; gap: 16px; justify-content: center; }
+      
+      .case-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>VICTRON INTELLIGENCE UNIT</b><span class="ticker__dot">&middot;</span>DEPLOYMENT POSSIBILITIES</span>
+      <span class="ticker__item"><b>13 CORE PILLARS</b><span class="ticker__dot">&middot;</span>260 PRODUCTS</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+      <span class="ticker__item"><b>PHYSICAL INTELLIGENCE MANDATE</b><span class="ticker__dot">&middot;</span>SOFTWARE TO SILICON</span>
+      <span class="ticker__item"><b>100-YEAR TIME-TEST</b><span class="ticker__dot">&middot;</span>INVARIANT HUMAN NEEDS</span>
+      <span class="ticker__item"><b>VICTRON INTELLIGENCE UNIT</b><span class="ticker__dot">&middot;</span>ANYWHERE, ANYTIME</span>
+      <span class="ticker__item"><b>BIFROST COGNITION</b><span class="ticker__dot">&middot;</span>WORLD MODELS NOT TOKEN PREDICTION</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+  <main class="site-main" id="main">
+<!-- Ticker -->
+    
+
+    <!-- Navigation -->
+    
+
+    <!-- Clock Bar -->
+    
+
+    <!-- Background Image Carousel -->
+    
+    
+    
+
+    <!-- Tech Grid + Scan -->
+    
+    
+
+    <!-- Cockpit Frame -->
+    
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="inner">
+            <div class="page-badge">Victron Intelligence Unit · Deployment Possibilities</div>
+            <h1>What Victron Makes Possible</h1>
+            <p>One palm-sized sovereign intelligence unit. 13 core pillars of capability. Every scenario below represents what becomes possible the moment a Victron node is deployed; no cloud, no latency, no compromise.</p>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <div class="section-label">System Overview</div>
+        <div class="intro-banner">
+            <p><strong>The Victron Intelligence Unit</strong> is a palm-sized, fanless sovereign supercomputer built on the RK3588S octa-core SoC with a 6 TOPS NPU, ARM Mali-G610 GPU, up to 32 GB LPDDR5 RAM, and a PQC-secured boot chain. Drop it anywhere. It thinks locally, acts decisively, and reports to no cloud. Every deployment below is a possibility unlocked the moment one Victron unit enters a system.</p>
+            <div class="intro-stats">
+                <div class="intro-stat"><div class="num">13</div><div class="lbl">Core Pillars</div></div>
+                <div class="intro-stat"><div class="num">6+</div><div class="lbl">TOPS On-Device</div></div>
+                <div class="intro-stat"><div class="num">0</div><div class="lbl">Cloud Dependencies</div></div>
+                <div class="intro-stat"><div class="num">100yr</div><div class="lbl">Time-Tested Design</div></div>
+            </div>
+        </div>
+
+        <div class="section-label">Pillar Deployment Scenarios; 13 Possibilities</div>
+        <div class="case-grid">
+
+            <!-- P1: VLA / Physical AI -->
+            <div class="case-card featured">
+                <div class="case-pillar">Pillar 01 · VLA Foundation</div>
+                <div class="case-domain">Physical AI · Robotics</div>
+                <h3>Autonomous Robotic Inspection in Hazardous Environments</h3>
+                <p>A Victron unit embedded in an industrial inspection robot enables full perception-action grounding on-device. The robot reads sensor arrays, builds a real-time world model via Bifrost, and acts; inspecting pipelines, live electrical infrastructure, or collapsed structures; with zero uplink required. The VLA stack runs entirely on Victron silicon.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">12ms</span><span class="key">Action Latency</span></div>
+                    <div class="metric"><span class="val">0</span><span class="key">Cloud Calls</span></div>
+                    <div class="metric"><span class="val">-20°C</span><span class="key">Min Operate Temp</span></div>
+                </div>
+            </div>
+
+            <!-- P2: Neuro-Symbolic Reasoning -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 02 · Neuro-Symbolic Reasoning</div>
+                <div class="case-domain">Legal · Finance · High-Stakes Decisions</div>
+                <h3>Verifiable AI Decisions for Regulated Industries</h3>
+                <p>Financial compliance, legal document review, and clinical triage require decisions that are both fast and auditable. A Victron unit running QSSI's neuro-symbolic stack produces decisions with causal justification chains; not black-box outputs. Every ruling is explainable, verifiable, and reproducible.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">100%</span><span class="key">Auditable Outputs</span></div>
+                    <div class="metric"><span class="val">&lt;80ms</span><span class="key">Decision Latency</span></div>
+                    <div class="metric"><span class="val">ZKP</span><span class="key">Proof Layer</span></div>
+                </div>
+            </div>
+
+            <!-- P3: Quantum-Resilient -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 03 · Quantum-Resilient Intelligence</div>
+                <div class="case-domain">Defence · National Security</div>
+                <h3>Post-Quantum Secure Command & Control Nodes</h3>
+                <p>Victron-AIO units deployed at command nodes run ML-KEM and Dilithium PQC algorithms at the hardware level. Air-gapped, tamper-evident, and immune to harvest-now-decrypt-later attacks. The entire inference stack; from boot chain to model weights; is cryptographically sovereign.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">NIST</span><span class="key">PQC Aligned</span></div>
+                    <div class="metric"><span class="val">Air-Gap</span><span class="key">Capable</span></div>
+                    <div class="metric"><span class="val">TPM 2.0</span><span class="key">Hardware Root</span></div>
+                </div>
+            </div>
+
+            <!-- P4: Embodied Physical Intelligence -->
+            <div class="case-card featured">
+                <div class="case-pillar">Pillar 04 · Embodied Physical Intelligence</div>
+                <div class="case-domain">Humanoid Robotics · Heimdall</div>
+                <h3>Heimdall. Full Humanoid Cognition on One Victron Brain</h3>
+                <p>Heimdall humanoid robots carry a single Victron supercomputing unit as their entire cognitive system. Multi-physics joint control, object affordance reasoning, and goal-directed motion planning run on-device at 6–32 TOPS. No remote compute. No uplink dependency. A complete humanoid intelligence in a palm-sized chip.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">32 TOPS</span><span class="key">Peak Inference</span></div>
+                    <div class="metric"><span class="val">4</span><span class="key">Heimdall Variants</span></div>
+                    <div class="metric"><span class="val">Bifrost</span><span class="key">Cognitive Core</span></div>
+                </div>
+            </div>
+
+            <!-- P5: Multi-Domain Synthesis -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 05 · Multi-Domain Synthesis</div>
+                <div class="case-domain">Climate · Agriculture · Infrastructure</div>
+                <h3>Cross-Domain Field Intelligence for Remote Environments</h3>
+                <p>In regions with zero connectivity; agricultural plains, Arctic research stations, offshore platforms. Victron units synthesise satellite imagery, soil sensors, weather streams, and equipment telemetry into unified operational intelligence. Decisions made locally. Data stays local. Insight spans every domain.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">7+</span><span class="key">Data Domains Fused</span></div>
+                    <div class="metric"><span class="val">0</span><span class="key">Uplink Required</span></div>
+                    <div class="metric"><span class="val">5G/LoRa</span><span class="key">Optional Relay</span></div>
+                </div>
+            </div>
+
+            <!-- P6: Agentic Autonomy -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 06 · Agentic Autonomy</div>
+                <div class="case-domain">Logistics · Supply Chain · Warehousing</div>
+                <h3>Fully Autonomous Warehouse Orchestration</h3>
+                <p>A cluster of Victron nodes operates as a distributed agentic system: each unit plans, delegates, and acts across a warehouse floor without a central controller. Goal-directed behaviour under uncertainty: rerouting around obstacles, managing inventory discrepancies, and optimising throughput in real time.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">99.97%</span><span class="key">Uptime</span></div>
+                    <div class="metric"><span class="val">63%</span><span class="key">Throughput Gain</span></div>
+                    <div class="metric"><span class="val">Mesh</span><span class="key">Node Network</span></div>
+                </div>
+            </div>
+
+            <!-- P7: Digital Twin -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 07 · Digital Twin Synchronicity</div>
+                <div class="case-domain">Infrastructure · Smart Cities</div>
+                <h3>Living Digital Twins for Urban Infrastructure</h3>
+                <p>Each Victron node at a bridge, substation, or water treatment plant maintains a continuously-updated digital twin of its physical asset. Structural drift, load anomalies, and failure precursors are detected locally; before they become emergencies; without transmitting sensitive infrastructure data to any external cloud.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">Live</span><span class="key">Twin Sync</span></div>
+                    <div class="metric"><span class="val">91%</span><span class="key">Fault Prediction Rate</span></div>
+                    <div class="metric"><span class="val">0</span><span class="key">Cloud Exposure</span></div>
+                </div>
+            </div>
+
+            <!-- P8: Sovereign AI Cloud -->
+            <div class="case-card featured">
+                <div class="case-pillar">Pillar 08 · Sovereign AI Cloud</div>
+                <div class="case-domain">Government · National AI Nodes</div>
+                <h3>National Sovereign AI Infrastructure. On Victron Hardware</h3>
+                <p>Governments and ministries deploying VICTRON-16G or AIO-MAX units as sovereign AI nodes create national intelligence infrastructure entirely outside foreign hyperscaler control. FHE inference, air-gapped LLM reasoning, and PQC-secured inter-node communication: the full QSSI sovereign stack, deployed by a nation, owned by a nation.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">FHE</span><span class="key">Encrypted Inference</span></div>
+                    <div class="metric"><span class="val">13B</span><span class="key">Model Capable</span></div>
+                    <div class="metric"><span class="val">100%</span><span class="key">Sovereign</span></div>
+                </div>
+            </div>
+
+            <!-- P9: Bio-Inspired Robotics -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 09 · Bio-Inspired Robotics</div>
+                <div class="case-domain">Healthcare · Prosthetics · Swarm</div>
+                <h3>Neuromorphic Prosthetics Powered by Victron Edge Inference</h3>
+                <p>Victron units embedded in advanced prosthetic limbs run neuromorphic signal processing; reading myoelectric signals, predicting intended motion, and actuating in under 15ms. The biological nervous system's 500 million years of optimisation, crystallised in silicon, running entirely on-device with no wireless latency.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">&lt;15ms</span><span class="key">Signal-to-Action</span></div>
+                    <div class="metric"><span class="val">Neuro</span><span class="key">morphic Stack</span></div>
+                    <div class="metric"><span class="val">On-Device</span><span class="key">All Inference</span></div>
+                </div>
+            </div>
+
+            <!-- P10: Ethical Verifiable Autonomy -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 10 · Ethical Verifiable Autonomy</div>
+                <div class="case-domain">Governance · Autonomous Systems</div>
+                <h3>Hardware-Enforced Ethics for Autonomous Platforms</h3>
+                <p>Victron units deployed in autonomous vehicles, drones, and public AI systems run ethical constraint verification at the silicon level; not as a software override, but as a hardware-enforced governance layer. Decisions are bounded, logged, and verifiable against declared human values before action is taken.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">HW</span><span class="key">Enforced Ethics</span></div>
+                    <div class="metric"><span class="val">100%</span><span class="key">Decision Logged</span></div>
+                    <div class="metric"><span class="val">Certified</span><span class="key">Autonomous</span></div>
+                </div>
+            </div>
+
+            <!-- P11: Frontier Research Synthesis -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 11 · Frontier Research Synthesis</div>
+                <div class="case-domain">Academia · R&D · Drug Discovery</div>
+                <h3>On-Device Research Synthesis for Sovereign Laboratories</h3>
+                <p>Research institutions in sensitive domains; biodefence, nuclear materials, sovereign cryptography; cannot transmit their unpublished findings to cloud AI services. Victron units running QSSI's frontier synthesis stack read, cross-reference, and synthesise millions of papers locally, detecting replication failures and controversy signals without a single byte leaving the lab.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">Air-Gap</span><span class="key">Operation</span></div>
+                    <div class="metric"><span class="val">0</span><span class="key">External API Calls</span></div>
+                    <div class="metric"><span class="val">Local</span><span class="key">LLM Synthesis</span></div>
+                </div>
+            </div>
+
+            <!-- P12: Digital Recycling -->
+            <div class="case-card">
+                <div class="case-pillar">Pillar 12 · Digital Recycling</div>
+                <div class="case-domain">Circular Economy · Green Infrastructure</div>
+                <h3>AI-Optimised Material Recovery at E-Waste Facilities</h3>
+                <p>Victron units embedded in recycling sorting lines run real-time computer vision and material classification; identifying circuit board composition, precious metal density, and hazardous material flags at conveyor speed. The intelligence that powers AI hardware also closes the loop on its own material circularity.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">98%</span><span class="key">Sort Accuracy</span></div>
+                    <div class="metric"><span class="val">40ms</span><span class="key">Per-Item Classify</span></div>
+                    <div class="metric"><span class="val">Local</span><span class="key">All Vision AI</span></div>
+                </div>
+            </div>
+
+            <!-- P13: Green Energy Intelligence -->
+            <div class="case-card featured">
+                <div class="case-pillar">Pillar 13 · Green Energy Intelligence</div>
+                <div class="case-domain">Energy · Grid · Fusion · Hydrogen</div>
+                <h3>Edge Intelligence for Renewable Grid Stabilisation</h3>
+                <p>Grid-edge Victron nodes monitor solar, wind, and hydrogen fuel cell outputs in real time, predicting generation drops and routing load balancing decisions locally at millisecond speed. No SCADA cloud dependency. No latency. AI accelerating the energy transition that powers all AI: the structural correction that closes the loop on the QSSI mission.</p>
+                <div class="case-metrics">
+                    <div class="metric"><span class="val">&lt;5ms</span><span class="key">Grid Response</span></div>
+                    <div class="metric"><span class="val">LoRaWAN</span><span class="key">Rural Mesh</span></div>
+                    <div class="metric"><span class="val">0</span><span class="key">Cloud SCADA</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

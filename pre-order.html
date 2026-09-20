@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pre-Order Local AI | QuantumindSSI</title>
+  <meta name="description" content="Pre-order your Local AI Instance :  fully sovereign, on-premise AI on Mac Mini, AMD, and NVIDIA hardware. Plus Victron edge AI hardware and Heimdall humanoid robotics waitlist. Sovereign AI from QuantumindSSI.">
+  <link rel="canonical" href="https://quantumindssi.com/pre-order">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* ── Page-specific styles ───────────────────────────────────
+     Shared patterns live in css/patterns.css. What remains here
+     is unique to this page and cascades on top of the system. */
+
+    /* ── PRICING GRIDS; hairline datasheet tables ─────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1px;
+      background: var(--line-strong);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: var(--space-12);
+    }
+    .pricing-card {
+      background: var(--bg-void);
+      padding: var(--space-8) var(--space-6);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: background-color var(--dur-fast) var(--ease-out);
+    }
+    .pricing-card:hover { background: var(--surface-1); }
+    .pricing-card.featured { background: var(--surface-a45); }
+    .pricing-card.featured:hover { background: var(--surface-a70); }
+    .pricing-card img {
+      width: 100%;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-4);
+      object-fit: cover;
+      max-height: 11rem;
+    }
+    .featured-tag {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      color: var(--accent);
+      border: 1px solid var(--accent-a28);
+      padding: 3px var(--space-2);
+      border-radius: var(--radius-sm);
+    }
+    .card-tier { margin-bottom: var(--space-2); }
+    .card-name {
+      font-family: var(--font-mono);
+      font-size: var(--fs-body);
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+    .card-sub {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      margin-bottom: var(--space-5);
+    }
+    .card-price {
+      font-family: var(--font-mono);
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+    .card-price span {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      font-weight: var(--fw-regular);
+    }
+    .card-price-gbp {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      color: var(--text-muted);
+      margin-bottom: var(--space-2);
+      letter-spacing: 0.05em;
+    }
+    .card-vs {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: var(--space-1);
+      text-transform: uppercase;
+    }
+    .card-vs strong {
+      color: var(--accent);
+      font-weight: var(--fw-bold);
+    }
+    .card-saving {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px var(--space-2);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-4);
+    }
+    .card-saving.value  { background: var(--accent-a16); color: var(--accent); border: 1px solid var(--accent-a28); }
+    .card-saving.better { background: var(--signal-ok-bg); color: var(--signal-ok); border: 1px solid var(--signal-ok-bg); }
+    .card-saving.premium{ background: var(--signal-warn-bg); color: var(--signal-warn); border: 1px solid var(--signal-warn-bg); }
+    .card-ship {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .card-features {
+      list-style: none;
+      flex: 1;
+      margin-bottom: var(--space-6);
+    }
+    .card-features li {
+      font-size: var(--fs-small);
+      color: var(--text-muted);
+      padding: 7px 0 7px 18px;
+      position: relative;
+      border-bottom: 1px solid var(--line-faint);
+    }
+    .card-features li::before {
+      content: '\2192';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+      font-size: var(--fs-micro);
+    }
+    .card-features li.highlight { color: var(--text-primary); }
+    .card-features li.highlight::before { color: var(--accent); }
+
+    /* ── Sub-tier config selector ──────────────────────────── */
+    .config-row { margin-bottom: var(--space-4); }
+    .config-label {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: var(--space-2);
+      display: block;
+    }
+    .config-options { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+    .config-opt {
+      flex: 1;
+      min-width: 0;
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--line-strong);
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color var(--dur-fast) var(--ease-out),
+                  color var(--dur-fast) var(--ease-out),
+                  background-color var(--dur-fast) var(--ease-out);
+      text-align: center;
+      border-radius: var(--radius-md);
+    }
+    .config-opt:hover { border-color: var(--accent-a45); color: var(--text-primary); }
+    .config-opt.active { border-color: var(--accent); background: var(--accent-a16); color: var(--accent); }
+    .config-opt .opt-price { display: block; font-size: var(--fs-micro); color: var(--text-muted); margin-top: 2px; }
+    .config-opt.active .opt-price { color: var(--accent-bright); }
+
+    /* ── Managed service line ──────────────────────────────── */
+    .managed-line {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--accent-a08);
+      border: 1px solid var(--accent-a16);
+      border-radius: var(--radius-md);
+    }
+    .managed-line .ml-icon {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .managed-line .ml-text { font-size: var(--fs-micro); color: var(--text-muted); line-height: 1.5; }
+    .managed-line .ml-text strong { color: var(--text-primary); font-weight: var(--fw-semibold); }
+    .managed-line .ml-price {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      color: var(--accent);
+      font-weight: var(--fw-bold);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    /* ── SBC MOTHERBOARD CART ──────────────────────────────── */
+    .mb-cart-intro {
+      font-size: var(--fs-small);
+      color: var(--text-muted);
+      line-height: var(--lh-relaxed);
+      max-width: 720px;
+      margin: 0 0 var(--space-8);
+    }
+    .mb-cart-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1px;
+      background: var(--line-strong);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: var(--space-8);
+    }
+    .mb-cart-card {
+      background: var(--bg-void);
+      padding: var(--space-6) var(--space-5);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: background-color var(--dur-fast) var(--ease-out);
+    }
+    .mb-cart-card:hover { background: var(--surface-1); }
+    .mb-cart-card.selected {
+      background: var(--surface-a45);
+      box-shadow: inset 0 0 0 1px var(--accent-a45);
+    }
+    .mb-cart-badge {
+      display: inline-block;
+      padding: 3px var(--space-2);
+      background: var(--accent-a16);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: var(--space-3);
+      width: fit-content;
+    }
+    .mb-cart-card h3 {
+      font-family: var(--font-mono);
+      font-size: var(--fs-body);
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+    .mb-cart-subtitle {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      margin-bottom: var(--space-4);
+    }
+    .mb-cart-specs {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 var(--space-5);
+      flex: 1;
+    }
+    .mb-cart-specs li {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      padding: 6px 0 6px 16px;
+      position: relative;
+      border-bottom: 1px solid var(--line-faint);
+    }
+    .mb-cart-specs li:last-child { border-bottom: none; }
+    .mb-cart-specs li::before {
+      content: '\2192';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+      font-size: var(--fs-micro);
+    }
+    .mb-cart-price {
+      font-family: var(--font-mono);
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    /* ── Build panel ───────────────────────────────────────── */
+    .build-panel {
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      padding: var(--space-8) var(--space-6);
+      background: var(--surface-a20);
+      margin-bottom: var(--space-12);
+    }
+    .build-panel h3 { margin-bottom: var(--space-2); }
+    .build-panel p {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      line-height: var(--lh-relaxed);
+      margin-bottom: var(--space-5);
+    }
+    .build-list { list-style: none; padding: 0; margin: 0 0 var(--space-5); }
+    .build-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--line-strong);
+      gap: var(--space-4);
+    }
+    .build-item:last-child { border-bottom: none; }
+    .build-item-name {
+      font-size: var(--fs-small);
+      color: var(--text-primary);
+      font-weight: var(--fw-semibold);
+    }
+    .build-item-meta {
+      font-size: var(--fs-micro);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+    .build-item-right { text-align: right; flex-shrink: 0; }
+    .btn-remove {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      font-size: var(--fs-micro);
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 5px var(--space-3);
+      cursor: pointer;
+      transition: border-color var(--dur-fast) var(--ease-out),
+                  color var(--dur-fast) var(--ease-out);
+    }
+    .btn-remove:hover { border-color: var(--line-strong); color: var(--text-primary); }
+    .qty-row { display: inline-flex; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
+    .btn-qty {
+      width: 24px;
+      height: 24px;
+      background: var(--surface-2);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: var(--fs-small);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color var(--dur-fast) var(--ease-out),
+                  background-color var(--dur-fast) var(--ease-out);
+      line-height: 1;
+    }
+    .btn-qty:hover { border-color: var(--text-primary); background: var(--surface-3); }
+    .qty-value {
+      min-width: 22px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: var(--fs-tiny);
+      color: var(--text-primary);
+    }
+    .build-empty {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      font-style: italic;
+      padding: var(--space-3) 0;
+    }
+    .build-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-4) 0;
+      border-top: 1px solid var(--accent-a28);
+      font-family: var(--font-mono);
+      font-size: var(--fs-small);
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-5);
+    }
+
+    /* ── HEIMDALL WAITLIST ─────────────────────────────────── */
+    .waitlist-panel {
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      padding: var(--space-10);
+      display: flex;
+      gap: var(--space-10);
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-12);
+      background: var(--surface-a20);
+      position: relative;
+      overflow: hidden;
+    }
+    .waitlist-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line-faint) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-faint) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      pointer-events: none;
+    }
+    .waitlist-panel .inner { position: relative; z-index: 1; flex: 1; min-width: 16rem; }
+    .waitlist-panel h2 {
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-light);
+      letter-spacing: var(--ls-heading);
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+    }
+    .waitlist-panel p { font-size: var(--fs-body); color: var(--text-muted); line-height: var(--lh-relaxed); margin-bottom: var(--space-6); }
+    .waitlist-btns { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+
+    /* ── GUARANTEES; hairline strip ───────────────────────── */
+    .guarantees {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1px;
+      background: var(--line-strong);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .guarantee {
+      background: var(--bg-void);
+      padding: var(--space-6);
+      transition: background-color var(--dur-fast) var(--ease-out);
+    }
+    .guarantee:hover { background: var(--surface-1); }
+    .guarantee h4 { font-size: var(--fs-body); font-weight: var(--fw-semibold); color: var(--text-primary); margin-bottom: var(--space-2); }
+    .guarantee p  { font-size: var(--fs-tiny); color: var(--text-muted); line-height: var(--lh-normal); }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (min-width: 640px) {
+      .pricing-grid,
+      .mb-cart-grid,
+      .guarantees { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+      .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .guarantees   { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1280px) {
+      .mb-cart-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>LOCAL AI INSTANCE. YOUR DATA · YOUR HARDWARE · YOUR AI</span>
+      <span class="ticker__item"><b>MAC MINI</b><span class="ticker__dot">&middot;</span>AMD NODE NVIDIA SUPERCOMPUTING</span>
+      <span class="ticker__item"><b>VICTRON</b><span class="ticker__dot">&middot;</span>EDGE AI COMPUTING PLATFORM</span>
+      <span class="ticker__item"><b>HEIMDALL</b><span class="ticker__dot">&middot;</span>SOVEREIGN HUMANOID ROBOTICS</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+      <span class="ticker__item"><b>QUANTUM RESISTANT</b><span class="ticker__dot">&middot;</span>POST-QUANTUM CRYPTOGRAPHY</span>
+      <span class="ticker__item"><b>LONDON HQ</b><span class="ticker__dot">&middot;</span>ONLINE</span>
+      <span class="ticker__item"><b>LOCAL AI INSTANCE</b><span class="ticker__dot">&middot;</span>100% ON-PREMISE</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+  <main class="site-main" id="main">
+<!-- Ticker -->
+    
+
+    <!-- Navigation -->
+    
+
+    <!-- Clock Bar -->
+    
+
+    <!-- Background Image Carousel -->
+    
+    
+    
+
+    <!-- Tech Grid + Scan Line -->
+    
+    
+
+    <!-- Cockpit Frame; silver on black rails -->
+    
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <p class="eyebrow">Sovereign AI Procurement &middot; Production Slots Open</p>
+            <h1>Pre-Order Local AI</h1>
+            <p>Reserve your Local AI Instance: a fully sovereign, on-premise AI deployment on Mac Mini, AMD, or NVIDIA hardware. Your data never leaves your infrastructure. Also available: Victron edge AI hardware and the Heimdall humanoid robotics waitlist.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="section">
+        <div class="container">
+
+        <!-- Local AI Instance Tiers -->
+        <div class="section-head">
+          <p class="eyebrow">Local AI Instance. Select Your Tier</p>
+        </div>
+        <div class="pricing-grid">
+
+            <!-- MAC MINI -->
+            <div class="pricing-card" id="card-mac-mini">
+                <div class="card-tier">Entry · Personal / SME</div>
+                <div class="card-name">LOCALAI-MAC-MINI</div>
+                <div class="card-sub">Apple Silicon M4 Pro / M4 Max</div>
+                <div class="card-price" id="mm-price">$2,999 <span>/ one-time</span></div>
+                <div class="card-price-gbp" id="mm-price-gbp">≈ £2,399 GBP</div>
+                <div class="config-row">
+                    <span class="config-label">Configuration</span>
+                    <div class="config-options" id="mm-config">
+                        <button class="config-opt active" data-sku="LOCALAI-MAC-MINI-24" data-price="2999" data-gbp="2399" data-action="select-config" data-prefix="mm" data-sku="LOCALAI-MAC-MINI-24" data-price="2999" data-gbp="2399">24GB · M4 Pro<span class="opt-price">$2,999</span></button>
+                        <button class="config-opt" data-sku="LOCALAI-MAC-MINI-48" data-price="3499" data-gbp="2799" data-action="select-config" data-prefix="mm" data-sku="LOCALAI-MAC-MINI-48" data-price="3499" data-gbp="2799">48GB · M4 Pro<span class="opt-price">$3,499</span></button>
+                        <button class="config-opt" data-sku="LOCALAI-MAC-MINI-64" data-price="3999" data-gbp="3199" data-action="select-config" data-prefix="mm" data-sku="LOCALAI-MAC-MINI-64" data-price="3999" data-gbp="3199">64GB · M4 Pro<span class="opt-price">$3,999</span></button>
+                        <button class="config-opt" data-sku="LOCALAI-MAC-MINI-128" data-price="4999" data-gbp="3999" data-action="select-config" data-prefix="mm" data-sku="LOCALAI-MAC-MINI-128" data-price="4999" data-gbp="3999">128GB · M4 Max<span class="opt-price">$4,999</span></button>
+                    </div>
+                </div>
+                <div class="card-vs">vs. Cloud AI subscription <strong>$200+/mo</strong>; your data leaves, you own nothing</div>
+                <div class="card-saving value">Up to 128GB unified memory · 38 TOPS · runs 7B–70B models locally</div>
+                <div class="card-ship">→ Deploys in 2–4 weeks</div>
+                <ul class="card-features">
+                    <li>Apple M4 Pro or M4 Max chip</li>
+                    <li>Configurable: 24GB / 48GB / 64GB / 128GB</li>
+                    <li>Neural engine; up to 38 TOPS on-device</li>
+                    <li>Whisper-quiet, fanless or near-silent</li>
+                    <li>Runs 7B–70B parameter models locally</li>
+                    <li>Energy-efficient; &lt;30W typical inference</li>
+                    <li>QSSI software stack pre-loaded</li>
+                    <li>WhatsApp / Discord / SMS access included</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed Service</strong>; monitoring, updates, patches, support</span>
+                    <span class="ml-price">+$199/mo</span>
+                </div>
+                <button class="card-btn" id="mm-btn" data-action="preorder-card" data-prefix="mm">Reserve Slot →</button>
+            </div>
+
+            <!-- AMD NODE -->
+            <div class="pricing-card featured" id="card-amd-node">
+                <div class="featured-tag">RECOMMENDED</div>
+                <div class="card-tier">Business · Teams of 10–200</div>
+                <div class="card-name">LOCALAI-AMD-NODE</div>
+                <div class="card-sub">AMD EPYC · Ryzen AI · Radeon PRO</div>
+                <div class="card-price" id="amd-price">$12,999 <span>/ one-time</span></div>
+                <div class="card-price-gbp" id="amd-price-gbp">≈ £10,399 GBP</div>
+                <div class="config-row">
+                    <span class="config-label">Configuration</span>
+                    <div class="config-options" id="amd-config">
+                        <button class="config-opt active" data-sku="LOCALAI-AMD-128" data-price="12999" data-gbp="10399" data-action="select-config" data-prefix="amd" data-sku="LOCALAI-AMD-128" data-price="12999" data-gbp="10399">128GB · 1× EPYC<span class="opt-price">$12,999</span></button>
+                        <button class="config-opt" data-sku="LOCALAI-AMD-192" data-price="17999" data-gbp="14399" data-action="select-config" data-prefix="amd" data-sku="LOCALAI-AMD-192" data-price="17999" data-gbp="14399">192GB · 2× EPYC<span class="opt-price">$17,999</span></button>
+                    </div>
+                </div>
+                <div class="card-vs">vs. Cloud GPU instances <strong>$3,000+/mo</strong>; shared compute, data egress fees</div>
+                <div class="card-saving better">Up to 192GB ECC RAM · ROCm open-source stack · 70B–180B models locally</div>
+                <div class="card-ship">→ Deploys in 3–6 weeks</div>
+                <ul class="card-features">
+                    <li class="highlight">AMD EPYC server or Ryzen AI workstation</li>
+                    <li class="highlight">Radeon PRO W7900 / RX 7900 XTX GPU</li>
+                    <li class="highlight">128GB or 192GB ECC RAM + dedicated VRAM</li>
+                    <li>ROCm AI stack; fully open source</li>
+                    <li>Concurrent multi-user inference</li>
+                    <li>Runs 70B–180B parameter models</li>
+                    <li>Linux (Ubuntu / RHEL) hardened</li>
+                    <li>QSSI software stack pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed Service</strong>; monitoring, updates, patches, support</span>
+                    <span class="ml-price">+$399/mo</span>
+                </div>
+                <button class="card-btn primary" id="amd-btn" data-action="preorder-card" data-prefix="amd">Reserve Slot →</button>
+            </div>
+
+            <!-- NVIDIA SUPER -->
+            <div class="pricing-card" id="card-nvidia-super">
+                <div class="card-tier">Enterprise · Sovereign</div>
+                <div class="card-name">LOCALAI-NVIDIA-SUPER</div>
+                <div class="card-sub">NVIDIA H100 · HGX · DGX</div>
+                <div class="card-price" id="nv-price">$49,999 <span>/ one-time</span></div>
+                <div class="card-price-gbp" id="nv-price-gbp">≈ £39,999 GBP</div>
+                <div class="config-row">
+                    <span class="config-label">Configuration</span>
+                    <div class="config-options" id="nv-config">
+                        <button class="config-opt active" data-sku="LOCALAI-NV-1H100" data-price="49999" data-gbp="39999" data-action="select-config" data-prefix="nv" data-sku="LOCALAI-NV-1H100" data-price="49999" data-gbp="39999">1× H100 PCIe<span class="opt-price">$49,999</span></button>
+                        <button class="config-opt" data-sku="LOCALAI-NV-2H100" data-price="99999" data-gbp="79999" data-action="select-config" data-prefix="nv" data-sku="LOCALAI-NV-2H100" data-price="99999" data-gbp="79999">2× H100 PCIe<span class="opt-price">$99,999</span></button>
+                        <button class="config-opt" data-sku="LOCALAI-NV-DGX8" data-price="329999" data-gbp="263999" data-action="select-config" data-prefix="nv" data-sku="LOCALAI-NV-DGX8" data-price="329999" data-gbp="263999">8× H100 DGX<span class="opt-price">$329,999</span></button>
+                    </div>
+                </div>
+                <div class="card-vs">vs. Cloud H100 rentals <strong>$20,000+/mo</strong>; no sovereignty, no air-gap</div>
+                <div class="card-saving premium">Petaflop-class compute · air-gap ready · post-quantum encrypted weights</div>
+                <div class="card-ship">→ Deploys in 4–8 weeks</div>
+                <ul class="card-features">
+                    <li>NVIDIA H100 / H200 / A100 GPU options</li>
+                    <li>1×, 2×, or 8× GPU configurations</li>
+                    <li>DGX B200 or custom HGX server builds</li>
+                    <li>Multi-tenant isolation</li>
+                    <li>Full model training + fine-tuning</li>
+                    <li>Air-gap ready; no external connectivity</li>
+                    <li>Post-quantum encrypted model weights</li>
+                    <li>QSSI software stack pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed Service</strong>; monitoring, updates, patches, support</span>
+                    <span class="ml-price">+$999/mo</span>
+                </div>
+                <button class="card-btn" id="nv-btn" data-action="preorder-card" data-prefix="nv">Reserve Slot →</button>
+            </div>
+
+        </div>
+
+        <!-- Local AI Context Note -->
+        <div class="notice">
+            <div>
+                <span class="notice__title">&#9670; Local AI</span>
+                <p class="copy copy--relaxed">Every Local AI Instance includes hardware you own outright, domain-tuned open-weight models, a ChatGPT-style web UI on your local network, WhatsApp / Discord / SMS access from your phone, and QSSI-built applications (document intelligence, scheduling agent, research assistant, knowledge base). <strong class="text-accent">QSSI Managed Service</strong> (monitoring, model updates, security patches, dedicated support) is billed monthly, starting at $199/mo for Mac Mini, $399/mo for AMD Node, and $999/mo for NVIDIA Super. First 30 days included free with every instance. <a class="link" href="/local-ai">Learn more about Local AI &rarr;</a></p>
+            </div>
+        </div>
+
+        <!-- Local AI Edge Nodes. Radxa & Rockchip -->
+        <div class="section-head">
+          <p class="eyebrow">Local AI Edge Nodes. Radxa &amp; Rockchip SBCs</p>
+        </div>
+        <div class="pricing-grid">
+
+            <!-- RADXA ZERO 3E -->
+            <div class="pricing-card">
+                <div class="card-tier">Ultra-Compact · IoT</div>
+                <div class="card-name">RADXA-ZERO-3E</div>
+                <div class="card-sub">RK3566 · tiny edge node</div>
+                <div class="card-price">$319 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £255 GBP</div>
+                <div class="card-vs">vs. Raspberry Pi Zero 2 W <strong>$15</strong>; no NPU, no AI runtime</div>
+                <div class="card-saving value">1 TOPS NPU · 1B–3B models locally · smallest QSSI node</div>
+                <div class="card-ship">→ Ships in 1–2 weeks</div>
+                <ul class="card-features">
+                    <li>Rockchip RK3566 quad-core</li>
+                    <li>1 TOPS NPU</li>
+                    <li>Up to 4GB LPDDR4</li>
+                    <li>1B–3B quantised models locally</li>
+                    <li>HDMI + USB-C power</li>
+                    <li>QSSI Edge Runtime pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed</strong>; monitoring, updates</span>
+                    <span class="ml-price">+$29/mo</span>
+                </div>
+                <button class="card-btn" data-action="preorder-open" data-sku="LOCALAI-RADXA-ZERO3" data-price="$319">Reserve Slot →</button>
+            </div>
+
+            <!-- RADXA ROCK 3C -->
+            <div class="pricing-card">
+                <div class="card-tier">Compact · Maker / SME</div>
+                <div class="card-name">RADXA-ROCK-3C</div>
+                <div class="card-sub">RK3566 · balanced edge node</div>
+                <div class="card-price">$449 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £359 GBP</div>
+                <div class="card-vs">vs. Raspberry Pi 5 8GB <strong>$95</strong>; no NPU, no AI stack</div>
+                <div class="card-saving value">1 TOPS NPU · 3B models · rich GPIO expansion</div>
+                <div class="card-ship">→ Ships in 1–2 weeks</div>
+                <ul class="card-features">
+                    <li>Rockchip RK3566 quad-core</li>
+                    <li>1 TOPS NPU</li>
+                    <li>Up to 8GB LPDDR4</li>
+                    <li>3B quantised models locally</li>
+                    <li>Rich GPIO and expansion headers</li>
+                    <li>QSSI Edge Runtime pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed</strong>; monitoring, updates</span>
+                    <span class="ml-price">+$29/mo</span>
+                </div>
+                <button class="card-btn" data-action="preorder-open" data-sku="LOCALAI-RADXA-ROCK3C" data-price="$449">Reserve Slot →</button>
+            </div>
+
+            <!-- RADXA ROCK 5C -->
+            <div class="pricing-card">
+                <div class="card-tier">Performance · Edge Server</div>
+                <div class="card-name">RADXA-ROCK-5C</div>
+                <div class="card-sub">RK3588S · 6 TOPS · compact</div>
+                <div class="card-price">$529 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £423 GBP</div>
+                <div class="card-vs">vs. Jetson Orin Nano <strong>$249</strong>; locked NVIDIA ecosystem, no QSSI stack</div>
+                <div class="card-saving better">6 TOPS NPU · 3B–7B models · open-source community</div>
+                <div class="card-ship">→ Ships in 1–2 weeks</div>
+                <ul class="card-features">
+                    <li>Rockchip RK3588S octa-core</li>
+                    <li>6 TOPS NPU</li>
+                    <li>Up to 16GB LPDDR4X</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>Compact form factor</li>
+                    <li>QSSI Edge Runtime pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed</strong>; monitoring, updates</span>
+                    <span class="ml-price">+$39/mo</span>
+                </div>
+                <button class="card-btn" data-action="preorder-open" data-sku="LOCALAI-RADXA-ROCK5C" data-price="$529">Reserve Slot →</button>
+            </div>
+
+            <!-- RADXA ROCK 5B+ -->
+            <div class="pricing-card featured">
+                <div class="featured-tag">BEST VALUE</div>
+                <div class="card-tier">Flagship SBC · Desktop Replacement</div>
+                <div class="card-name">RADXA-ROCK-5B-PLUS</div>
+                <div class="card-sub">RK3588 · full I/O · 6 TOPS</div>
+                <div class="card-price">$609 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £487 GBP</div>
+                <div class="card-vs">vs. Jetson Orin Nano + carrier <strong>~$450</strong>; no full I/O, no QSSI stack</div>
+                <div class="card-saving better">6 TOPS · dual HDMI · 2.5GbE · PCIe · NVMe · full server</div>
+                <div class="card-ship">→ Ships in 1–2 weeks</div>
+                <ul class="card-features">
+                    <li class="highlight">Rockchip RK3588 octa-core</li>
+                    <li class="highlight">6 TOPS NPU + ARM Mali-G610</li>
+                    <li class="highlight">Up to 16GB RAM + M.2 NVMe</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>Dual HDMI, 2.5GbE, PCIe expansion</li>
+                    <li>QSSI Edge Runtime pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed</strong>; monitoring, updates</span>
+                    <span class="ml-price">+$39/mo</span>
+                </div>
+                <button class="card-btn primary" data-action="preorder-open" data-sku="LOCALAI-RADXA-ROCK5B" data-price="$609">Reserve Slot →</button>
+            </div>
+
+            <!-- ROCKCHIP RK3568 -->
+            <div class="pricing-card">
+                <div class="card-tier">Efficient · IoT Gateway</div>
+                <div class="card-name">ROCKCHIP-RK3568</div>
+                <div class="card-sub">1 TOPS NPU · entry edge</div>
+                <div class="card-price">$399 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £319 GBP</div>
+                <div class="card-vs">vs. Raspberry Pi 5 <strong>$95</strong>; no NPU, no industrial I/O</div>
+                <div class="card-saving value">1 TOPS NPU · 1B–3B models · 24/7 low-power operation</div>
+                <div class="card-ship">→ Ships in 1–2 weeks</div>
+                <ul class="card-features">
+                    <li>Quad-core Cortex-A55</li>
+                    <li>1 TOPS NPU</li>
+                    <li>Up to 8GB LPDDR4</li>
+                    <li>1B–3B quantised models locally</li>
+                    <li>Low-power 24/7 operation</li>
+                    <li>QSSI Edge Runtime pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed</strong>; monitoring, updates</span>
+                    <span class="ml-price">+$29/mo</span>
+                </div>
+                <button class="card-btn" data-action="preorder-open" data-sku="LOCALAI-ROCKCHIP-RK3568" data-price="$399">Reserve Slot →</button>
+            </div>
+
+            <!-- ROCKCHIP RK3576 -->
+            <div class="pricing-card">
+                <div class="card-tier">Mid-Range · Industrial Panel</div>
+                <div class="card-name">ROCKCHIP-RK3576</div>
+                <div class="card-sub">6 TOPS NPU · next-gen</div>
+                <div class="card-price">$559 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £447 GBP</div>
+                <div class="card-vs">vs. Jetson Orin Nano <strong>$249</strong>; locked ecosystem, no 4K ISP</div>
+                <div class="card-saving better">6 TOPS NPU · 3B–7B models · 4K display · multi-camera ISP</div>
+                <div class="card-ship">→ Ships in 1–2 weeks</div>
+                <ul class="card-features">
+                    <li>Quad-core Cortex-A72 + A53</li>
+                    <li>6 TOPS NPU</li>
+                    <li>Up to 16GB LPDDR4X / LPDDR5</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>4K display and multi-camera ISP</li>
+                    <li>QSSI Edge Runtime pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed</strong>; monitoring, updates</span>
+                    <span class="ml-price">+$39/mo</span>
+                </div>
+                <button class="card-btn" data-action="preorder-open" data-sku="LOCALAI-ROCKCHIP-RK3576" data-price="$559">Reserve Slot →</button>
+            </div>
+
+            <!-- ROCKCHIP RK3588 -->
+            <div class="pricing-card featured">
+                <div class="featured-tag">POPULAR</div>
+                <div class="card-tier">Performance · Enterprise Edge</div>
+                <div class="card-name">ROCKCHIP-RK3588</div>
+                <div class="card-sub">8-core · 6 TOPS NPU · full I/O</div>
+                <div class="card-price">$639 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £511 GBP</div>
+                <div class="card-vs">vs. Jetson Orin Nano + carrier <strong>~$450</strong>; no Mali GPU, no full I/O</div>
+                <div class="card-saving better">6 TOPS NPU + Mali-G610 · 3B–7B models · cost-effective enterprise edge</div>
+                <div class="card-ship">→ Ships in 1–2 weeks</div>
+                <ul class="card-features">
+                    <li class="highlight">Octa-core Cortex-A76 / A55</li>
+                    <li class="highlight">6 TOPS NPU + ARM Mali-G610</li>
+                    <li class="highlight">Up to 16GB LPDDR4X / LPDDR5</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>Linux / Android runtime</li>
+                    <li>QSSI Edge Runtime pre-loaded</li>
+                </ul>
+                <div class="managed-line">
+                    <span class="ml-icon">◈ MANAGED</span>
+                    <span class="ml-text"><strong>QSSI Managed</strong>; monitoring, updates</span>
+                    <span class="ml-price">+$39/mo</span>
+                </div>
+                <button class="card-btn primary" data-action="preorder-open" data-sku="LOCALAI-ROCKCHIP-RK3588" data-price="$639">Reserve Slot →</button>
+            </div>
+
+        </div>
+
+        <!-- Edge Nodes Context Note -->
+        <div class="notice">
+            <div>
+                <span class="notice__title">&#9670; Edge Nodes</span>
+                <p class="copy copy--relaxed">Radxa and Rockchip SBCs are AI-capable single-board computers that form the building blocks of distributed Local AI deployments. Each node ships with the QSSI Edge Runtime pre-loaded; model inference, agent orchestration, and secure communication back to your main instance. Ideal for sensor gateways, industrial panels, classroom labs, and edge-of-network AI. Nodes can be deployed standalone or clustered with a Mac Mini / AMD / NVIDIA instance as the orchestrator. <strong class="text-accent">QSSI Managed Service</strong> for edge nodes starts at $29/mo (1 TOPS boards) or $39/mo (6 TOPS boards). First 30 days free.</p>
+            </div>
+        </div>
+
+        <!-- Victron Hardware Tiers -->
+        <div class="section-head" id="victron-preorder">
+          <p class="eyebrow">Victron Edge AI Hardware</p>
+          <h2>Select your tier</h2>
+        </div>
+        <div class="pricing-grid">
+
+            <div class="pricing-card">
+                <div class="card-tier">Entry Level</div>
+                <div class="card-name">VICTRON-BB</div>
+                <div class="card-sub">Bare Bones · OEM & Embedded Systems</div>
+                <div class="card-price">$199 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £158 GBP</div>
+                <div class="card-vs">vs. Raspberry Pi 5 8GB <strong>$95</strong>; no NPU, no PQC, no industrial certs</div>
+                <div class="card-saving value">RK3588S · 6 TOPS NPU · PQC boot · sovereign runtime</div>
+                <div class="card-ship">→ Ships Q3 2026</div>
+                <ul class="card-features">
+                    <li>RK3588S Octa-core SoC</li>
+                    <li>6 TOPS NPU · ARM Mali-G610 GPU</li>
+                    <li>Customer-supplied RAM + storage</li>
+                    <li>Full I/O exposure for integrators</li>
+                    <li>PQC-secured boot chain</li>
+                    <li>QSSI Edge Intelligence Runtime</li>
+                </ul>
+                <button class="card-btn" data-action="preorder-open" data-sku="VICTRON-BB" data-price="$199">Reserve Slot →</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="card-tier">Entry System</div>
+                <div class="card-name">VICTRON-2G-32</div>
+                <div class="card-sub">IoT & Sensor Networks</div>
+                <div class="card-price">$299 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £239 GBP</div>
+                <div class="card-vs">vs. Jetson Orin Nano Super 8GB <strong>$249</strong>; 2× lower RAM, locked NVIDIA ecosystem</div>
+                <div class="card-saving value">6 TOPS NPU · QSSI Edge Runtime · open stack · PQC</div>
+                <div class="card-ship">→ Ships Q3 2026</div>
+                <ul class="card-features">
+                    <li>2 GB LPDDR4X RAM · 32 GB eMMC</li>
+                    <li>6 TOPS NPU inference</li>
+                    <li>WiFi 6 · Bluetooth 5.0</li>
+                    <li>Deep-embed IoT deployments</li>
+                    <li>PQC-secured boot chain</li>
+                    <li>1-year warranty</li>
+                </ul>
+                <button class="card-btn" data-action="preorder-open" data-sku="VICTRON-2G-32" data-price="$299">Reserve Slot →</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="card-tier">Standard</div>
+                <div class="card-name">VICTRON-4G-64</div>
+                <div class="card-sub">Industrial Applications</div>
+                <div class="card-price">$499 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £399 GBP</div>
+                <div class="card-vs">vs. Jetson Orin Nano Super + carrier board <strong>~$450–600</strong>; no industrial certs, no PQC</div>
+                <div class="card-saving better">Industrial HMI-ready · fanless · -20°C to +70°C · sovereign AI</div>
+                <div class="card-ship">→ Ships Q3 2026</div>
+                <ul class="card-features">
+                    <li>4 GB LPDDR4X RAM · 64 GB eMMC</li>
+                    <li>6 TOPS NPU · M.2 NVMe expansion</li>
+                    <li>Industrial HMI & retail terminal</li>
+                    <li>QSSI Edge Runtime + 2–3 concurrent apps</li>
+                    <li>PQC-secured boot chain</li>
+                    <li>2-year warranty</li>
+                </ul>
+                <button class="card-btn" data-action="preorder-open" data-sku="VICTRON-4G-64" data-price="$499">Reserve Slot →</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="featured-tag">MOST POPULAR</div>
+                <div class="card-tier">Professional</div>
+                <div class="card-name">VICTRON-8G-128</div>
+                <div class="card-sub">Enterprise & Healthcare</div>
+                <div class="card-price">$899 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £719 GBP</div>
+                <div class="card-vs">vs. Jetson AGX Orin 32GB module <strong>$999</strong>; bare module, no enclosure, no sovereignty</div>
+                <div class="card-saving better">Full system · PQC · HIPAA/GDPR-pathway · 3-yr warranty included</div>
+                <div class="card-ship">→ Ships Q4 2026</div>
+                <ul class="card-features">
+                    <li class="highlight">8 GB LPDDR4X · 128 GB eMMC</li>
+                    <li class="highlight">Full QSSI app stack</li>
+                    <li class="highlight">Local LLM inference (3B–7B quantised)</li>
+                    <li>Post-quantum cryptography</li>
+                    <li>Healthcare / defence / finance ready</li>
+                    <li>3-year warranty · priority support</li>
+                </ul>
+                <button class="card-btn primary" data-action="preorder-open" data-sku="VICTRON-8G-128" data-price="$899">Reserve Slot →</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="card-tier">Enterprise</div>
+                <div class="card-name">VICTRON-16G-128</div>
+                <div class="card-sub">Sovereign Deployments</div>
+                <div class="card-price">$1,499 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £1,199 GBP</div>
+                <div class="card-vs">vs. Advantech industrial edge AI computer <strong>$1,800–$2,500</strong>; proprietary stack, no sovereign AI</div>
+                <div class="card-saving premium">16GB LPDDR5 · ML-KEM-1024 PQC · air-gap capable · 5-yr warranty</div>
+                <div class="card-ship">→ Ships Q4 2026</div>
+                <ul class="card-features">
+                    <li>16 GB LPDDR5 · 128 GB eMMC</li>
+                    <li>Air-gap capable · dual-NIC</li>
+                    <li>FHE inference workloads</li>
+                    <li>ML-KEM PQC boot authentication</li>
+                    <li>Regulated industries ready</li>
+                    <li>5-year warranty</li>
+                </ul>
+                <button class="card-btn" data-action="preorder-open" data-sku="VICTRON-16G-128" data-price="$1,499">Reserve Slot →</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="featured-tag">FLAGSHIP</div>
+                <div class="card-tier">Integrated System</div>
+                <div class="card-name">VICTRON-AIO-32-MAX</div>
+                <div class="card-sub">Critical Infrastructure</div>
+                <div class="card-price">$4,999 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £3,999 GBP</div>
+                <div class="card-vs">vs. Advantech/Kontron industrial AI AIO <strong>$4,500–$8,000+</strong>; no 5G, no LoRaWAN, no sovereign AI runtime</div>
+                <div class="card-saving premium">32GB · 32 TOPS (Hailo-8) · 5G · LoRaWAN · 10.1" IPS · all modules included</div>
+                <div class="card-ship">→ Ships Q1 2027</div>
+                <ul class="card-features">
+                    <li class="highlight">32 GB LPDDR5 · 256 GB + M.2 NVMe</li>
+                    <li class="highlight">Hailo-8: 26 TOPS accelerator</li>
+                    <li class="highlight">10.1" IPS touchscreen · 5G · LoRaWAN</li>
+                    <li>13B quantised model capable</li>
+                    <li>All modules included</li>
+                    <li>Defence / national infrastructure</li>
+                </ul>
+                <button class="card-btn primary" data-action="preorder-open" data-sku="VICTRON-AIO-32-MAX" data-price="$4,999">Reserve Slot →</button>
+            </div>
+
+            <div class="pricing-card">
+                <img src="radxa-rock-5c.webp" alt="Radxa ROCK 5C motherboard" loading="lazy" decoding="async" width="1200" height="750">
+                <div class="card-tier">Radxa Platform</div>
+                <div class="card-name">VICTRON-RADXA-ROCK5C</div>
+                <div class="card-sub">Radxa Motherboard · Open Platform</div>
+                <div class="card-price">$329 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £263 GBP</div>
+                <div class="card-vs">vs. Radxa ROCK 5C retail <strong>$329</strong>; no Victron runtime, no PQC, no QSSI support</div>
+                <div class="card-saving value">RK3588S · 6 TOPS · Victron runtime · PQC boot · open platform</div>
+                <div class="card-ship">→ Ships Q3 2026</div>
+                <ul class="card-features">
+                    <li>RK3588S Octa-core SoC</li>
+                    <li>6 TOPS NPU · up to 16GB LPDDR4X</li>
+                    <li>Compact Radxa form factor</li>
+                    <li>PQC-secured boot chain</li>
+                    <li>QSSI Edge Intelligence Runtime</li>
+                    <li>1-year warranty</li>
+                </ul>
+                <button class="card-btn" data-action="preorder-open" data-sku="VICTRON-RADXA-ROCK5C" data-price="$329">Reserve Slot →</button>
+            </div>
+
+            <div class="pricing-card">
+                <img src="radxa-cubie-a5e.webp" alt="Radxa Cubie A5E motherboard" loading="lazy" decoding="async" width="1200" height="943">
+                <div class="card-tier">Cubie Platform</div>
+                <div class="card-name">VICTRON-RADXA-CUBIE-A5E</div>
+                <div class="card-sub">Radxa Cubie · Compact Edge</div>
+                <div class="card-price">$249 <span>/ one-time</span></div>
+                <div class="card-price-gbp">≈ £199 GBP</div>
+                <div class="card-vs">vs. entry SBCs <strong>$50–120</strong>; no NPU, no Victron stack, no industrial support</div>
+                <div class="card-saving value">Allwinner A527 · integrated NPU · Victron runtime · ultra-compact</div>
+                <div class="card-ship">→ Ships Q3 2026</div>
+                <ul class="card-features">
+                    <li>Allwinner A527 SoC</li>
+                    <li>Integrated NPU for edge inference</li>
+                    <li>Ultra-compact Cubie footprint</li>
+                    <li>PQC-secured boot chain</li>
+                    <li>QSSI Edge Intelligence Runtime</li>
+                    <li>1-year warranty</li>
+                </ul>
+                <button class="card-btn" data-action="preorder-open" data-sku="VICTRON-RADXA-CUBIE-A5E" data-price="$249">Reserve Slot →</button>
+            </div>
+
+        </div>
+
+        <!-- Market Context Note -->
+        <div class="notice">
+            <div>
+                <span class="notice__title">&#9670; Pricing Note</span>
+                <p class="copy copy--relaxed">All prices in USD. GBP equivalents at ~0.80 exchange rate. Victron is priced competitively against consumer AI boards (Raspberry Pi 5, Jetson Orin Nano) at the entry level, and below equivalent industrial-grade AI edge computers (Advantech, Kontron, Axiomtek) at the professional and enterprise tiers; while adding post-quantum cryptography, sovereign AI runtime, and industrial certifications that no comparable product includes at any price point.</p>
+            </div>
+        </div>
+
+        <!-- SBC Motherboard Cart -->
+        <div class="section-head">
+          <p class="eyebrow">SBC Motherboard Catalog. AI-Capable LocalAI Nodes</p>
+        </div>
+        <p class="mb-cart-intro">
+            Pick the AI-capable single-board motherboards that power your QSSI LocalAI deployment. The hardware is only the starting point: the QSSI moat is the assisted configuration, the orchestration of multiple agent harnesses, the ready-to-use domain solutions, and the continual reinforcement learning (with your explicit permission) backed by managed maintenance and support.
+        </p>
+        <div class="mb-cart-grid" id="mb-cart-grid">
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-NANO" data-name="NVIDIA Jetson Nano LocalAI Node" data-price="299">
+                <div class="mb-cart-badge">NVIDIA · ENTRY</div>
+                <h3>NVIDIA Jetson Nano</h3>
+                <div class="mb-cart-subtitle">4GB · Low-cost edge AI</div>
+                <ul class="mb-cart-specs">
+                    <li>128-core NVIDIA Maxwell GPU</li>
+                    <li>0.5 TFLOPS / 472 GFLOPS FP16</li>
+                    <li>4GB LPDDR4 unified memory</li>
+                    <li>Small 3B models locally</li>
+                    <li>JetPack / CUDA runtime</li>
+                    <li>Ideal for classrooms and prototypes</li>
+                </ul>
+                <div class="mb-cart-price">$299</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-NANO">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-ORIN-NANO" data-name="NVIDIA Jetson Orin Nano LocalAI Node" data-price="499">
+                <div class="mb-cart-badge">NVIDIA · EDGE</div>
+                <h3>NVIDIA Jetson Orin Nano</h3>
+                <div class="mb-cart-subtitle">8GB · 67 TOPS</div>
+                <ul class="mb-cart-specs">
+                    <li>1024-core NVIDIA Ampere GPU</li>
+                    <li>Up to 67 INT8 TOPS</li>
+                    <li>8GB LPDDR5</li>
+                    <li>7B–13B quantised models locally</li>
+                    <li>TensorRT / CUDA / ONNX</li>
+                    <li>Compact carrier + passive cooling</li>
+                </ul>
+                <div class="mb-cart-price">$499</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-ORIN-NANO">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-ORIN-NX" data-name="NVIDIA Jetson Orin NX LocalAI Node" data-price="699">
+                <div class="mb-cart-badge">NVIDIA · PERFORMANCE</div>
+                <h3>NVIDIA Jetson Orin NX</h3>
+                <div class="mb-cart-subtitle">16GB · 100 TOPS</div>
+                <ul class="mb-cart-specs">
+                    <li>2048-core NVIDIA Ampere GPU</li>
+                    <li>Up to 100 INT8 TOPS</li>
+                    <li>16GB LPDDR5X</li>
+                    <li>13B quantised models locally</li>
+                    <li>High-throughput vision + LLM</li>
+                    <li>Industrial carrier options</li>
+                </ul>
+                <div class="mb-cart-price">$699</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-ORIN-NX">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-AGX-ORIN" data-name="NVIDIA Jetson AGX Orin LocalAI Node" data-price="1499">
+                <div class="mb-cart-badge">NVIDIA · FLAGSHIP</div>
+                <h3>NVIDIA Jetson AGX Orin</h3>
+                <div class="mb-cart-subtitle">64GB · 275 TOPS</div>
+                <ul class="mb-cart-specs">
+                    <li>2048-core NVIDIA Ampere GPU</li>
+                    <li>Up to 275 INT8 TOPS</li>
+                    <li>64GB LPDDR5X unified memory</li>
+                    <li>70B+ quantised models locally</li>
+                    <li>Full training / fine-tuning capable</li>
+                    <li>Enterprise carrier and 5G options</li>
+                </ul>
+                <div class="mb-cart-price">$1,499</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-AGX-ORIN">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-AMD-KRIA" data-name="AMD Kria KR260 LocalAI Node" data-price="449">
+                <div class="mb-cart-badge">AMD · ADAPTIVE</div>
+                <h3>AMD Kria KR260</h3>
+                <div class="mb-cart-subtitle">Robotics Starter Kit</div>
+                <ul class="mb-cart-specs">
+                    <li>Zynq UltraScale+ MPSoC</li>
+                    <li>Up to 1.4 TOPS AI Engine</li>
+                    <li>Industrial I/O and ROS2-ready</li>
+                    <li>Vitis AI / open-source runtime</li>
+                    <li>Real-time sensor fusion</li>
+                    <li>Designed for robotics and vision</li>
+                </ul>
+                <div class="mb-cart-price">$449</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-AMD-KRIA">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-AMD-RYZEN-AI" data-name="AMD Ryzen AI Embedded LocalAI Node" data-price="599">
+                <div class="mb-cart-badge">AMD · X86 EDGE</div>
+                <h3>AMD Ryzen AI Embedded</h3>
+                <div class="mb-cart-subtitle">V1000 / V2000 / R2000</div>
+                <ul class="mb-cart-specs">
+                    <li>AMD Ryzen AI x86 embedded</li>
+                    <li>Up to 39 TOPS NPU</li>
+                    <li>Standard x86 software ecosystem</li>
+                    <li>7B–13B quantised models</li>
+                    <li>ROCm / ONNX runtime support</li>
+                    <li>Industrial PC and panel PC form factors</li>
+                </ul>
+                <div class="mb-cart-price">$599</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-AMD-RYZEN-AI">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-AMD-VERSAL" data-name="AMD Versal AI Edge LocalAI Node" data-price="899">
+                <div class="mb-cart-badge">AMD · ADAPTIVE SOC</div>
+                <h3>AMD Versal AI Edge</h3>
+                <div class="mb-cart-subtitle">Adaptive SoC · AI acceleration</div>
+                <ul class="mb-cart-specs">
+                    <li>Scalar + Adaptable + AI Engines</li>
+                    <li>Up to 123 TOPS INT8</li>
+                    <li>Hardware-programmable logic</li>
+                    <li>Custom inference pipelines</li>
+                    <li>Functional-safety capable</li>
+                    <li>Aviation / automotive / defence ready</li>
+                </ul>
+                <div class="mb-cart-price">$899</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-AMD-VERSAL">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-ROCKCHIP-RK3568" data-name="ROCKCHIP RK3568 LocalAI Node" data-price="249">
+                <div class="mb-cart-badge">ROCKCHIP · EFFICIENT</div>
+                <h3>ROCKCHIP RK3568</h3>
+                <div class="mb-cart-subtitle">1 TOPS NPU · entry edge</div>
+                <ul class="mb-cart-specs">
+                    <li>Quad-core Cortex-A55</li>
+                    <li>1 TOPS NPU</li>
+                    <li>Up to 8GB LPDDR4</li>
+                    <li>Small 1B–3B models locally</li>
+                    <li>Low-power 24/7 operation</li>
+                    <li>Best for sensor gateways and IoT</li>
+                </ul>
+                <div class="mb-cart-price">$249</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-ROCKCHIP-RK3568">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-ROCKCHIP-RK3576" data-name="ROCKCHIP RK3576 LocalAI Node" data-price="349">
+                <div class="mb-cart-badge">ROCKCHIP · MID</div>
+                <h3>ROCKCHIP RK3576</h3>
+                <div class="mb-cart-subtitle">6 TOPS NPU · next-gen</div>
+                <ul class="mb-cart-specs">
+                    <li>Quad-core Cortex-A72 + A53</li>
+                    <li>6 TOPS NPU</li>
+                    <li>Up to 16GB LPDDR4X / LPDDR5</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>4K display and multi-camera ISP</li>
+                    <li>Industrial panel PC ready</li>
+                </ul>
+                <div class="mb-cart-price">$349</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-ROCKCHIP-RK3576">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-ROCKCHIP-RK3588" data-name="ROCKCHIP RK3588 LocalAI Node" data-price="399">
+                <div class="mb-cart-badge">ROCKCHIP · PERFORMANCE</div>
+                <h3>ROCKCHIP RK3588</h3>
+                <div class="mb-cart-subtitle">8-core · 6 TOPS NPU</div>
+                <ul class="mb-cart-specs">
+                    <li>Octa-core Cortex-A76 / A55</li>
+                    <li>6 TOPS NPU + ARM Mali-G610</li>
+                    <li>Up to 16GB LPDDR4X / LPDDR5</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>Linux / Android runtime</li>
+                    <li>Cost-effective enterprise edge</li>
+                </ul>
+                <div class="mb-cart-price">$399</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-ROCKCHIP-RK3588">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ZERO3" data-name="RADXA ZERO 3E LocalAI Node" data-price="199">
+                <div class="mb-cart-badge">RADXA · COMPACT</div>
+                <h3>RADXA ZERO 3E</h3>
+                <div class="mb-cart-subtitle">RK3566 · tiny edge</div>
+                <ul class="mb-cart-specs">
+                    <li>Rockchip RK3566</li>
+                    <li>1 TOPS NPU</li>
+                    <li>Up to 4GB LPDDR4</li>
+                    <li>1B–3B quantised models locally</li>
+                    <li>HDMI + USB-C power</li>
+                    <li>Smallest QSSI LocalAI node</li>
+                </ul>
+                <div class="mb-cart-price">$199</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ZERO3">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ROCK3C" data-name="RADXA ROCK 3C LocalAI Node" data-price="279">
+                <div class="mb-cart-badge">RADXA · BALANCED</div>
+                <h3>RADXA ROCK 3C</h3>
+                <div class="mb-cart-subtitle">RK3566 · mid-range</div>
+                <ul class="mb-cart-specs">
+                    <li>Rockchip RK3566</li>
+                    <li>1 TOPS NPU</li>
+                    <li>Up to 8GB LPDDR4</li>
+                    <li>3B quantised models locally</li>
+                    <li>Rich GPIO and expansion headers</li>
+                    <li>Maker and SME friendly</li>
+                </ul>
+                <div class="mb-cart-price">$279</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ROCK3C">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ROCK5C" data-name="RADXA ROCK 5C LocalAI Node" data-price="329">
+                <div class="mb-cart-badge">RADXA · PERFORMANCE</div>
+                <h3>RADXA ROCK 5C</h3>
+                <div class="mb-cart-subtitle">RK3588S · 6 TOPS</div>
+                <ul class="mb-cart-specs">
+                    <li>Rockchip RK3588S</li>
+                    <li>6 TOPS NPU</li>
+                    <li>Up to 16GB LPDDR4X</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>Compact form factor</li>
+                    <li>Active open-source community</li>
+                </ul>
+                <div class="mb-cart-price">$329</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ROCK5C">Add to Build</button>
+            </div>
+
+            <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ROCK5B" data-name="RADXA ROCK 5B+ LocalAI Node" data-price="379">
+                <div class="mb-cart-badge">RADXA · FLAGSHIP</div>
+                <h3>RADXA ROCK 5B+</h3>
+                <div class="mb-cart-subtitle">RK3588 · full I/O</div>
+                <ul class="mb-cart-specs">
+                    <li>Rockchip RK3588</li>
+                    <li>6 TOPS NPU</li>
+                    <li>Up to 16GB RAM + M.2 NVMe</li>
+                    <li>3B–7B quantised models locally</li>
+                    <li>Dual HDMI, 2.5GbE, PCIe expansion</li>
+                    <li>Full desktop / server replacement</li>
+                </ul>
+                <div class="mb-cart-price">$379</div>
+                <button class="btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ROCK5B">Add to Build</button>
+            </div>
+
+        </div>
+
+        <div class="build-panel" id="build-panel">
+            <h3>Your LocalAI Build</h3>
+            <p>Your selected boards are assembled into a single QSSI LocalAI quote. Beyond the hardware, every build includes assisted configuration, multi-agent harness orchestration, domain-specific solution packs, optional continual reinforcement learning (with your explicit permission), and ongoing managed maintenance.</p>
+            <ul class="build-list" id="build-list">
+                <li class="build-empty">No motherboards selected yet.</li>
+            </ul>
+            <div class="build-total" id="build-total" style="display:none;">
+                <span>Estimated Hardware Total</span>
+                <span id="build-total-value">$0</span>
+            </div>
+            <button class="btn btn--primary btn--block" id="btn-quote" data-action="build-quote" disabled>Request Build Quote</button>
+        </div>
+
+        <!-- Heimdall Waitlist -->
+        <div class="section-head" id="heimdall-waitlist">
+          <p class="eyebrow">Heimdall Humanoid Robotics. Join Waitlist</p>
+        </div>
+        <div class="waitlist-panel">
+            <div class="inner">
+                <h2>Heimdall. Victron-Powered Humanoid</h2>
+                <p>Heimdall is the physical embodiment of the Victron intelligence platform. Each unit is designed to run on a Victron supercomputing brain for on-device autonomy. Industrial, Sentinel, MedAssist, and Research variants are planned.</p>
+                <div class="waitlist-btns">
+                    <button class="btn btn--primary" data-open="waitlist-modal">Join Waitlist &rarr;</button>
+                    <a href="/products#heimdall" class="btn btn--secondary">View Heimdall &rarr;</a>
+                </div>
+            </div>
+            <div class="stack">
+                <div class="panel panel--tight">
+                    <div class="stat-cell">
+                        <b>32</b>
+                        <span class="readout__label">TOPS AI Compute</span>
+                    </div>
+                </div>
+                <div class="panel panel--tight">
+                    <div class="stat-cell">
+                        <b>0</b>
+                        <span class="readout__label">Cloud Dependencies</span>
+                    </div>
+                </div>
+                <div class="panel panel--tight">
+                    <div class="stat-cell">
+                        <b class="text-accent">Bifrost</b>
+                        <span class="readout__label">Intelligence Stack</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guarantees -->
+        <div class="section-head">
+          <p class="eyebrow">Purchase Guarantees</p>
+        </div>
+        <div class="guarantees">
+            <div class="guarantee">
+                <div class="text-label">01 · Security</div>
+                <h4>Secure Payment</h4>
+                <p>256-bit SSL encryption on all transactions.</p>
+            </div>
+            <div class="guarantee">
+                <div class="text-label">02 · Refund</div>
+                <h4>Full Refund</h4>
+                <p>Cancel anytime until 30 days before your shipping date.</p>
+            </div>
+            <div class="guarantee">
+                <div class="text-label">03 · Shipping</div>
+                <h4>Global Delivery</h4>
+                <p>Shipped to 150+ countries. Unique serial ID assigned at dispatch.</p>
+            </div>
+            <div class="guarantee">
+                <div class="text-label">04 · Sovereignty</div>
+                <h4>Data Sovereign</h4>
+                <p>Your data never leaves your hardware. Zero cloud dependency, by design.</p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Pre-order & Waitlist Modals -->
+    
+
+    <!-- Pre-order Modal -->
+    <div class="qssi-modal-overlay" id="preorder-modal">
+        <div class="qssi-modal">
+            <button class="qssi-modal-close" aria-label="Close dialog" data-close="preorder-modal">&times;</button>
+            <h3>Reserve Your Slot</h3>
+            <div class="sku-badge" id="preorder-sku">LOCALAI-MAC-MINI &middot; From $2,999</div>
+            <label for="po-name" data-required>Full Name *</label>
+            <input type="text" id="po-name" placeholder="Your full name" required autocomplete="name">
+            <label for="po-email" data-required>Email Address *</label>
+            <input type="email" id="po-email" placeholder="you@organisation.com" required autocomplete="email">
+            <label for="po-org">Organisation</label>
+            <input type="text" id="po-org" placeholder="Company or institution" autocomplete="organization">
+            <label for="po-country">Country</label>
+            <input type="text" id="po-country" placeholder="United Kingdom" autocomplete="country-name">
+            <label for="po-qty">Quantity</label>
+            <select id="po-qty">
+                <option value="1">1 unit</option>
+                <option value="2">2 units</option>
+                <option value="5">5 units</option>
+                <option value="10">10 units</option>
+                <option value="20">20+ units (volume pricing)</option>
+            </select>
+            <label for="po-usecase">Use Case / Deployment Context</label>
+            <input type="text" id="po-usecase" placeholder="e.g. Healthcare edge inference">
+            <button class="modal-btn" id="po-submit">Confirm Reservation →</button>
+            <span class="modal-status" role="status" aria-live="polite" id="po-status"></span>
+        </div>
+    </div>
+
+    <!-- Heimdall Waitlist Modal -->
+    <div class="qssi-modal-overlay" id="waitlist-modal">
+        <div class="qssi-modal">
+            <button class="qssi-modal-close" aria-label="Close dialog" data-close="waitlist-modal">&times;</button>
+            <h3>Join Heimdall Waitlist</h3>
+            <div class="sku-badge">HEIMDALL HUMANOID &middot; SOVEREIGN ROBOTICS</div>
+            <label for="wl-name" data-required>Full Name *</label>
+            <input type="text" id="wl-name" placeholder="Your full name" required autocomplete="name">
+            <label for="wl-email" data-required>Email Address *</label>
+            <input type="email" id="wl-email" placeholder="you@organisation.com" required autocomplete="email">
+            <label for="wl-org">Organisation</label>
+            <input type="text" id="wl-org" placeholder="Company or institution" autocomplete="organization">
+            <label for="wl-country">Country</label>
+            <input type="text" id="wl-country" placeholder="United Kingdom" autocomplete="country-name">
+            <label for="wl-variant">Preferred Variant</label>
+            <select id="wl-variant">
+                <option value="">Select variant…</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Sentinel">Sentinel</option>
+                <option value="MedAssist">MedAssist</option>
+                <option value="Research">Research</option>
+            </select>
+            <label for="wl-usecase">Intended Use Case</label>
+            <input type="text" id="wl-usecase" placeholder="e.g. Hospital ward assistance">
+            <button class="modal-btn" id="wl-submit">Join Waitlist →</button>
+            <span class="modal-status" role="status" aria-live="polite" id="wl-status"></span>
+        </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/pre-order.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

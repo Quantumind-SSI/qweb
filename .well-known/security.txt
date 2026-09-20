@@ -1,0 +1,4 @@
+Contact: mailto:admin@quantumindssi.com
+Expires: 2027-08-18T00:00:00Z
+Preferred-Languages: en
+Canonical: https://quantumindssi.com/.well-known/security.txt

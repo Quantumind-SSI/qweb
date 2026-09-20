@@ -1,0 +1,16 @@
+{
+  "name": "qssi_site",
+  "private": true,
+  "description": "QuantumindSSI marketing site. Static multi-page front end (no build step) with Playwright QA tooling. The deployable Azure Functions API lives in api/ with its own package.json.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "serve": "python3 serve.py",
+    "audit": "node audit.js",
+    "shot": "node shot.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

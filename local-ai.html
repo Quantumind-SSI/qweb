@@ -1,0 +1,1374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local AI Instance | QuantumindSSI</title>
+  <meta name="description" content="QuantumindSSI Local AI Instance :  fully sovereign, on-premise AI deployments on Mac Mini, AMD, and NVIDIA supercomputing hardware. Your data never leaves your infrastructure.">
+  <link rel="canonical" href="https://quantumindssi.com/local-ai">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* ── Page-specific styles ───────────────────────────────────
+     Shared patterns live in css/patterns.css. What remains here
+     is unique to this page and cascades on top of the system. */
+
+    .page-header h1 span { color: var(--accent); }
+
+    /* ── RULE HEAD; kicker between two hairlines ──────────── */
+    .rule-head {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+
+    /* ── HERO STATS BAR ────────────────────────────────────── */
+    .stats-bar {
+      display: flex;
+      background: var(--accent-a08);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .stat-item {
+      flex: 1;
+      padding: var(--space-6) var(--space-6);
+      text-align: center;
+      border-right: 1px solid var(--accent-a16);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--accent);
+      display: block;
+    }
+    .stat-label {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      margin-top: var(--space-1);
+      letter-spacing: var(--ls-label);
+    }
+
+    /* ── WHAT IS IT; editorial split ──────────────────────── */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-12);
+      align-items: start;
+    }
+    .intro-grid h2 {
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-5);
+      letter-spacing: var(--ls-heading);
+    }
+    .intro-grid p {
+      font-size: var(--fs-body);
+      color: var(--text-secondary);
+      line-height: var(--lh-relaxed);
+      margin-bottom: var(--space-4);
+    }
+    .intro-grid p strong { color: var(--accent); font-weight: var(--fw-semibold); }
+
+    /* ── HOW IT WORKS; joined steps ───────────────────────── */
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .process-step {
+      padding: var(--space-8) var(--space-6);
+      background: var(--accent-a04);
+      border: 1px solid var(--accent-a16);
+      position: relative;
+    }
+    .process-step:first-child { border-radius: var(--radius-lg) 0 0 var(--radius-lg); }
+    .process-step:last-child { border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+    .process-step + .process-step { border-left: none; }
+    .step-number {
+      font-family: var(--font-mono);
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--accent-a28);
+      margin-bottom: var(--space-3);
+    }
+    .process-step h3 {
+      font-size: var(--fs-body);
+      font-weight: var(--fw-semibold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+    .process-step p { font-size: var(--fs-small); color: var(--text-muted); line-height: var(--lh-relaxed); }
+
+    /* ── HARDWARE TIERS ────────────────────────────────────── */
+    .hardware-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-5);
+    }
+    .hardware-card {
+      background: var(--accent-a04);
+      border: 1px solid var(--accent-a16);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8) var(--space-8);
+      transition: var(--dur-fast) var(--ease-out);
+      display: flex;
+      flex-direction: column;
+    }
+    .hardware-card:hover {
+      background: var(--accent-a08);
+      border-color: var(--accent-a45);
+      transform: translateY(calc(var(--space-1) * -1));
+      box-shadow: var(--shadow-md);
+    }
+    .hardware-card.flagship {
+      border-color: var(--accent-a45);
+      background: var(--accent-a08);
+    }
+    .hw-badge,
+    .flagship-badge {
+      align-self: flex-start;
+      padding: 2px var(--space-3);
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      color: var(--accent);
+      margin-bottom: var(--space-3);
+      border: 1px solid var(--accent-a28);
+      background: var(--accent-a16);
+    }
+    .flagship-badge { background: var(--accent-a28); border-color: var(--accent-a45); }
+    .hardware-card h3 {
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+    .hw-subtitle { font-size: var(--fs-small); color: var(--text-faint); margin-bottom: var(--space-5); }
+    .hw-use {
+      font-size: var(--fs-tiny);
+      text-transform: uppercase;
+      letter-spacing: var(--ls-label);
+      color: var(--text-faint);
+      margin-bottom: var(--space-6);
+    }
+    .hw-specs { list-style: none; padding: 0; margin: 0 0 var(--space-6); flex: 1; }
+    .hw-specs li {
+      font-size: var(--fs-small);
+      color: var(--text-secondary);
+      padding: var(--space-2) 0 var(--space-2) var(--space-5);
+      position: relative;
+      border-bottom: 1px solid var(--accent-a08);
+    }
+    .hw-specs li:last-child { border-bottom: none; }
+    .hw-specs li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: var(--fs-tiny);
+    }
+    .btn-mb-add.added {
+      background: var(--accent);
+      color: var(--bg-void);
+      border-color: var(--accent);
+    }
+
+    /* ── SBC MOTHERBOARD CART ──────────────────────────────── */
+    .mb-cart-intro {
+      max-width: var(--container-text);
+      margin: 0 auto var(--space-10);
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: var(--fs-body);
+      line-height: var(--lh-relaxed);
+    }
+    .mb-cart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-5);
+    }
+    .mb-cart-card {
+      background: var(--accent-a04);
+      border: 1px solid var(--accent-a16);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: var(--dur-fast) var(--ease-out);
+      display: flex;
+      flex-direction: column;
+    }
+    .mb-cart-card:hover {
+      background: var(--accent-a08);
+      border-color: var(--accent-a45);
+      transform: translateY(calc(var(--space-1) * -1));
+      box-shadow: var(--shadow-md);
+    }
+    .mb-cart-card.selected { border-color: var(--accent-a45); background: var(--accent-a08); }
+    .mb-cart-badge {
+      align-self: flex-start;
+      padding: 2px var(--space-3);
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      color: var(--accent);
+      margin-bottom: var(--space-3);
+      border: 1px solid var(--accent-a28);
+      background: var(--accent-a16);
+    }
+    .mb-cart-card h3 {
+      font-size: var(--fs-h4);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+    .mb-cart-subtitle { font-size: var(--fs-small); color: var(--text-faint); margin-bottom: var(--space-4); }
+    .mb-cart-specs { list-style: none; padding: 0; margin: 0 0 var(--space-5); flex: 1; }
+    .mb-cart-specs li {
+      font-size: var(--fs-small);
+      color: var(--text-secondary);
+      padding: var(--space-1) 0 var(--space-1) var(--space-4);
+      position: relative;
+      border-bottom: 1px solid var(--accent-a08);
+    }
+    .mb-cart-specs li:last-child { border-bottom: none; }
+    .mb-cart-specs li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: var(--fs-tiny);
+    }
+    .mb-cart-price {
+      font-family: var(--font-mono);
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-bold);
+      color: var(--accent);
+      margin-bottom: var(--space-4);
+    }
+
+    .build-panel {
+      background: var(--accent-a08);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-top: var(--space-10);
+    }
+    .build-panel h3 { font-size: var(--fs-lead); color: var(--text-primary); margin-bottom: var(--space-2); }
+    .build-panel p { font-size: var(--fs-small); color: var(--text-muted); margin-bottom: var(--space-5); }
+    .build-list { list-style: none; padding: 0; margin: 0 0 var(--space-5); }
+    .build-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--accent-a16);
+    }
+    .build-item:last-child { border-bottom: none; }
+    .build-item-name { font-size: var(--fs-body); color: var(--text-primary); font-weight: var(--fw-semibold); }
+    .build-item-meta { font-size: var(--fs-tiny); color: var(--text-muted); font-family: var(--font-mono); }
+    .build-item-right { text-align: right; display: flex; flex-direction: column; gap: var(--space-1); }
+    .btn-remove {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text-muted);
+      border-radius: var(--radius-md);
+      font-size: var(--fs-micro);
+      font-family: var(--font-mono);
+      padding: var(--space-1) var(--space-3);
+      cursor: pointer;
+      transition: var(--dur-fast) var(--ease-out);
+    }
+    .btn-remove:hover { color: var(--text-primary); border-color: var(--text-faint); }
+    .qty-row { display: inline-flex; align-items: center; gap: var(--space-2); }
+    .btn-qty {
+      width: var(--space-6);
+      height: var(--space-6);
+      background: var(--accent-a16);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-md);
+      color: var(--accent);
+      font-size: var(--fs-small);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--dur-fast) var(--ease-out);
+      line-height: 1;
+    }
+    .btn-qty:hover { background: var(--accent-a28); border-color: var(--accent-a45); }
+    .qty-value {
+      min-width: var(--space-5);
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: var(--fs-small);
+      color: var(--text-primary);
+    }
+    .build-empty { font-size: var(--fs-small); color: var(--text-faint); font-style: italic; padding: var(--space-3) 0; }
+    .build-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-4) 0;
+      border-top: 1px solid var(--accent-a28);
+      font-family: var(--font-mono);
+      font-size: var(--fs-body);
+      color: var(--accent);
+      margin-bottom: var(--space-5);
+    }
+
+    /* ── FPGA & ASIC UPGRADE PANEL ─────────────────────────── */
+    .fpga-panel {
+      background: var(--accent-a04);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10);
+      margin-bottom: var(--space-6);
+    }
+    .fpga-panel .grid { margin-top: var(--space-8); }
+    .status-line {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      color: var(--accent-a45);
+      letter-spacing: var(--ls-label);
+      margin-bottom: var(--space-3);
+    }
+
+    /* ── SOVEREIGN AI CARD ─────────────────────────────────── */
+    .sovereign-card {
+      background: linear-gradient(135deg, var(--surface-a70) 0%, var(--accent-a08) 100%);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-12) var(--space-12);
+      position: relative;
+      overflow: hidden;
+    }
+    .sovereign-card::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -20%;
+      width: 45%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, var(--accent-a08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .sovereign-card > * { position: relative; }
+    .sovereign-card h2 {
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+      letter-spacing: var(--ls-heading);
+    }
+    .sovereign-card > p {
+      font-size: var(--fs-body);
+      color: var(--text-secondary);
+      line-height: var(--lh-relaxed);
+      max-width: var(--container-text);
+      margin-bottom: var(--space-4);
+    }
+    .sovereign-card p strong { color: var(--accent); }
+
+    /* ── MISSION CARD ──────────────────────────────────────── */
+    .mission-card {
+      background: linear-gradient(135deg, var(--surface-a45) 0%, var(--surface-a90) 100%);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-12) var(--space-12);
+      margin-bottom: var(--space-8);
+    }
+    .mission-card h2 {
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-5);
+      letter-spacing: var(--ls-heading);
+      max-width: 44rem;
+    }
+    .mission-card .lede {
+      font-size: var(--fs-lead);
+      color: var(--text-secondary);
+      line-height: 1.9;
+      max-width: 48rem;
+      margin-bottom: var(--space-4);
+    }
+
+    /* ── CTA ───────────────────────────────────────────────── */
+    .cta-card {
+      background: var(--accent-a08);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-12) var(--space-10);
+      text-align: center;
+    }
+    .cta-card h2 {
+      font-size: var(--fs-h2);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+    }
+    .cta-card p {
+      color: var(--text-muted);
+      max-width: var(--container-text);
+      margin: 0 auto var(--space-8);
+      line-height: var(--lh-relaxed);
+    }
+    .cta-buttons { display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap; }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .stats-bar { flex-wrap: wrap; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--accent-a16); min-width: 50%; }
+      .intro-grid { grid-template-columns: 1fr; gap: var(--space-6); }
+      .process-step:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+      .process-step:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+      .process-step + .process-step { border-left: 1px solid var(--accent-a16); border-top: none; }
+      .sovereign-card,
+      .mission-card { padding: var(--space-8) var(--space-6); }
+      .build-item { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>LOCAL AI INSTANCE</b><span class="ticker__dot">&middot;</span>YOUR DATA · YOUR HARDWARE · YOUR AI</span>
+      <span class="ticker__item"><b>MAC MINI</b><span class="ticker__dot">&middot;</span>AMD NVIDIA SUPERCOMPUTING</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+      <span class="ticker__item"><b>FPGA MODULES</b><span class="ticker__dot">&middot;</span>DIRECT-TO-SILICON ASIC UPGRADE READY</span>
+      <span class="ticker__item"><b>100% ON-PREMISE</b><span class="ticker__dot">&middot;</span>CUSTOM-TUNED MODELS</span>
+      <span class="ticker__item"><b>REDUCE BIG TECH RELIANCE</b><span class="ticker__dot">&middot;</span>OWN YOUR INTELLIGENCE</span>
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>INTELLIGENCE WITHOUT COMPROMISE</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+  <main class="site-main" id="main">
+    <div class="page-header">
+      <div class="grid-overlay"></div>
+      <div class="container">
+        <p class="eyebrow">QUANTUMINDSSI &middot; SOVEREIGN AI SERVICES</p>
+        <h1>Local AI <span>Instance</span></h1>
+        <p>Your AI. Your data. Your infrastructure. We deploy a fully private, sovereign AI stack on hardware you own or lease; running models custom-tuned to your organisation. No cloud. No shared compute. No data leaving your walls.</p>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="section section--sm">
+      <div class="container">
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span class="stat-value">100%</span>
+            <div class="stat-label">On-Premise</div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <div class="stat-label">Cloud Dependencies</div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">3</span>
+            <div class="stat-label">Hardware Tiers</div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">24/7</span>
+            <div class="stat-label">Managed &amp; Monitored</div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">∞</span>
+            <div class="stat-label">You Own the Models</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's Included -->
+    <section class="section" aria-label="What every instance includes">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">WHAT YOU GET &middot; EVERY INSTANCE INCLUDES</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="grid grid--auto grid--tight">
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">01 &middot; HARDWARE</div>
+            <h3 class="subhead mb-2">The Physical Machine</h3>
+            <p class="copy copy--relaxed">You receive the configured hardware. Mac Mini, AMD workstation, or NVIDIA node. It is yours. You own it outright. It ships pre-loaded with the QSSI software stack and your tuned models, ready to power on.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">02 &middot; AI CONFIGURATION</div>
+            <h3 class="subhead mb-2">Tuned Models &amp; Stack</h3>
+            <p class="copy copy--relaxed">We configure and fine-tune open-weight language models to your domain: your documents, your workflows, your terminology. The full inference stack (Ollama, vLLM, or custom runtime) is installed, benchmarked, and production-ready out of the box.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">03 &middot; MOBILE ACCESS</div>
+            <h3 class="subhead mb-2">Use Your AI From Your Phone</h3>
+            <p class="copy copy--relaxed">Your instance connects to messaging platforms you already use; <strong>WhatsApp</strong>, <strong>Discord</strong>, and SMS; so you can query your AI from your phone over any network. The AI runs on your hardware at home or in the office; you interact with it anywhere.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">04 &middot; PROPRIETARY APPS</div>
+            <h3 class="subhead mb-2">Purpose-Built Applications</h3>
+            <p class="copy copy--relaxed">Your instance ships with QSSI-built applications that plug directly into your AI: a document intelligence tool, a scheduling agent, a private research assistant, and a knowledge base manager. Each app uses your local model as its engine. No external API calls.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">05 &middot; WEB INTERFACE</div>
+            <h3 class="subhead mb-2">Chat UI on Any Browser</h3>
+            <p class="copy copy--relaxed">A full ChatGPT-style web interface runs on your local network. Access it from any laptop, tablet, or phone connected to your WiFi; no app install required. Multi-user, conversation history, model switching, file uploads.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">06 &middot; MANAGED SERVICE</div>
+            <h3 class="subhead mb-2">We Keep It Running</h3>
+            <p class="copy copy--relaxed">QSSI monitors uptime, pushes model updates, applies security patches, and provides dedicated support. You never have to think about the infrastructure. You just use the AI.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What is it -->
+    <section class="section" aria-label="What is a Local AI instance">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">WHAT IS A LOCAL AI INSTANCE</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="intro-grid">
+          <div>
+            <h2>AI that lives inside your organisation</h2>
+            <p>A Local AI Instance is a complete, production-grade AI deployment running on physical hardware located inside your building, your data centre, or a private co-location facility. It is not a cloud subscription. It is not a shared service.</p>
+            <p>QuantumindSSI selects, configures, and deploys the hardware. We tune the models to your domain. We wire up the interfaces your team actually uses; chat, API, document intelligence, agentic workflows. Then we hand you the keys.</p>
+            <p><strong>Security is built in from the ground up.</strong> Every instance is hardened at the OS level, model weights are encrypted at rest, and network egress is locked down. You decide what connects to what. There are no background telemetry calls, no usage analytics leaving your hardware, and no vendor access without your explicit authorisation.</p>
+            <p><strong>You own the data. You own the models. We run the infrastructure.</strong></p>
+          </div>
+          <div>
+            <h2>The gateway to Sovereign AI</h2>
+            <p>The Local AI Instance is the entry point into QuantumindSSI's broader <strong>Sovereign AI</strong> arm. Every organisation that adopts local AI takes a step away from dependency on hyperscaler platforms. OpenAI, Google, Microsoft Azure; and toward owning their intelligence infrastructure.</p>
+            <p>This matters for compliance (GDPR, ISO 27001, NHS DSP Toolkit, defence classifications), for competitive moat (your training data doesn't fund your competitors), and for resilience (AI that works even when the internet doesn't).</p>
+            <p>The Local AI Instance scales from a single Mac Mini for a solo professional to a multi-node NVIDIA supercomputing cluster for a national institution. And as hardware evolves; through <strong>FPGA acceleration modules</strong> and <strong>direct-to-silicon ASIC</strong> units: your instance upgrades with it, without replacing the entire stack.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" aria-label="How it works">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">HOW IT WORKS</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3>Consultation</h3>
+            <p>We assess your team size, data types, latency requirements, and compliance constraints to specify the right hardware tier.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3>Hardware Procurement</h3>
+            <p>We source and configure your Mac Mini, AMD workstation, or NVIDIA supercomputing node; pre-loaded with the QSSI software stack.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3>Model Tuning</h3>
+            <p>We fine-tune open-weight models (LLaMA, Mistral, Qwen, or custom) on your domain knowledge, documents, and workflows.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3>Deployment &amp; Access Setup</h3>
+            <p>We deploy the instance and wire up every access channel; local web UI, WhatsApp bot, Discord bot, SMS gateway, and any proprietary apps included in your package. From day one you can chat with your AI from your phone over WhatsApp or Discord, just like messaging a contact.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3>Managed Operations</h3>
+            <p>We monitor uptime, push model updates, handle security patches, and provide dedicated support. You focus on using your AI.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware Tiers -->
+    <section class="section" aria-label="Hardware tiers">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">HARDWARE TIERS</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="hardware-grid">
+          <div class="hardware-card" data-light>
+            <div class="hw-badge">ENTRY &middot; PERSONAL / SME</div>
+            <h3>Mac Mini Instance</h3>
+            <div class="hw-subtitle">Apple Silicon M4 Pro / M4 Max</div>
+            <div class="hw-use">Best for: Individuals &middot; Small teams &middot; Startups</div>
+            <ul class="hw-specs">
+              <li>Apple M4 Pro or M4 Max chip</li>
+              <li>Up to 128GB unified memory</li>
+              <li>Neural engine; up to 38 TOPS on-device</li>
+              <li>Whisper-quiet, fanless or near-silent</li>
+              <li>Runs 7B–70B parameter models locally</li>
+              <li>Energy-efficient; &lt;30W typical inference load</li>
+              <li>macOS or Linux (Asahi) runtime</li>
+            </ul>
+            <button type="button" class="btn btn--accent btn--block" data-action="consult-open" data-tier="mac-mini">Get Started &rarr;</button>
+          </div>
+          <div class="hardware-card flagship">
+            <div class="flagship-badge">RECOMMENDED &middot; BUSINESS</div>
+            <h3>AMD Node Instance</h3>
+            <div class="hw-subtitle">AMD EPYC &middot; Ryzen AI &middot; Radeon PRO</div>
+            <div class="hw-use">Best for: Teams of 10–200 &middot; Departments &middot; Agencies</div>
+            <ul class="hw-specs">
+              <li>AMD EPYC server or Ryzen AI workstation</li>
+              <li>AMD Radeon PRO W7900 / RX 7900 XTX GPU</li>
+              <li>Up to 192GB ECC RAM + dedicated VRAM</li>
+              <li>ROCm AI stack; fully open source GPU runtime</li>
+              <li>Concurrent multi-user inference</li>
+              <li>Runs 70B–180B parameter models</li>
+              <li>Linux (Ubuntu / RHEL) hardened deployment</li>
+            </ul>
+            <button type="button" class="btn btn--accent btn--block" data-action="consult-open" data-tier="amd-node">Get Started &rarr;</button>
+          </div>
+          <div class="hardware-card" data-light>
+            <div class="hw-badge">ENTERPRISE &middot; SOVEREIGN</div>
+            <h3>NVIDIA Supercomputing</h3>
+            <div class="hw-subtitle">NVIDIA DGX &middot; HGX &middot; RTX Server</div>
+            <div class="hw-use">Best for: Enterprise &middot; Government &middot; Critical Infrastructure</div>
+            <ul class="hw-specs">
+              <li>NVIDIA H100 / H200 / A100 GPU clusters</li>
+              <li>DGX B200 or custom HGX server builds</li>
+              <li>Petaflop-class AI compute on-premise</li>
+              <li>Multi-tenant isolation; department-level segregation</li>
+              <li>Full model training + fine-tuning capability</li>
+              <li>Air-gap ready; no external connectivity required</li>
+              <li>Post-quantum encrypted model weights at rest</li>
+            </ul>
+            <button type="button" class="btn btn--accent btn--block" data-action="consult-open" data-tier="nvidia-super">Get Started &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SBC Motherboard Cart -->
+    <section class="section" aria-label="SBC motherboard catalog">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">SBC MOTHERBOARD CATALOG &middot; AI-CAPABLE LOCALAI NODES</div>
+          <div class="rule-line"></div>
+        </div>
+        <p class="mb-cart-intro">
+          Pick the AI-capable single-board motherboards that power your QSSI LocalAI deployment. The hardware is only the starting point: the QSSI moat is the assisted configuration, the orchestration of multiple agent harnesses, the ready-to-use domain solutions, and the continual reinforcement learning (with your explicit permission) backed by managed maintenance and support.
+        </p>
+
+        <div class="mb-cart-grid" id="mb-cart-grid">
+
+          <!-- NVIDIA -->
+          <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-NANO" data-name="NVIDIA Jetson Nano LocalAI Node" data-price="299">
+            <div class="mb-cart-badge">NVIDIA &middot; ENTRY</div>
+            <h3>NVIDIA Jetson Nano</h3>
+            <div class="mb-cart-subtitle">4GB &middot; Low-cost edge AI</div>
+            <ul class="mb-cart-specs">
+              <li>128-core NVIDIA Maxwell GPU</li>
+              <li>0.5 TFLOPS / 472 GFLOPS FP16</li>
+              <li>4GB LPDDR4 unified memory</li>
+              <li>Small 3B models locally</li>
+              <li>JetPack / CUDA runtime</li>
+              <li>Ideal for classrooms and prototypes</li>
+            </ul>
+            <div class="mb-cart-price">$299</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-NANO">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-ORIN-NANO" data-name="NVIDIA Jetson Orin Nano LocalAI Node" data-price="499">
+            <div class="mb-cart-badge">NVIDIA &middot; EDGE</div>
+            <h3>NVIDIA Jetson Orin Nano</h3>
+            <div class="mb-cart-subtitle">8GB &middot; 67 TOPS</div>
+            <ul class="mb-cart-specs">
+              <li>1024-core NVIDIA Ampere GPU</li>
+              <li>Up to 67 INT8 TOPS</li>
+              <li>8GB LPDDR5</li>
+              <li>7B–13B quantised models locally</li>
+              <li>TensorRT / CUDA / ONNX</li>
+              <li>Compact carrier + passive cooling</li>
+            </ul>
+            <div class="mb-cart-price">$499</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-ORIN-NANO">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-ORIN-NX" data-name="NVIDIA Jetson Orin NX LocalAI Node" data-price="699">
+            <div class="mb-cart-badge">NVIDIA &middot; PERFORMANCE</div>
+            <h3>NVIDIA Jetson Orin NX</h3>
+            <div class="mb-cart-subtitle">16GB &middot; 100 TOPS</div>
+            <ul class="mb-cart-specs">
+              <li>2048-core NVIDIA Ampere GPU</li>
+              <li>Up to 100 INT8 TOPS</li>
+              <li>16GB LPDDR5X</li>
+              <li>13B quantised models locally</li>
+              <li>High-throughput vision + LLM</li>
+              <li>Industrial carrier options</li>
+            </ul>
+            <div class="mb-cart-price">$699</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-ORIN-NX">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-NVIDIA-AGX-ORIN" data-name="NVIDIA Jetson AGX Orin LocalAI Node" data-price="1499">
+            <div class="mb-cart-badge">NVIDIA &middot; FLAGSHIP</div>
+            <h3>NVIDIA Jetson AGX Orin</h3>
+            <div class="mb-cart-subtitle">64GB &middot; 275 TOPS</div>
+            <ul class="mb-cart-specs">
+              <li>2048-core NVIDIA Ampere GPU</li>
+              <li>Up to 275 INT8 TOPS</li>
+              <li>64GB LPDDR5X unified memory</li>
+              <li>70B+ quantised models locally</li>
+              <li>Full training / fine-tuning capable</li>
+              <li>Enterprise carrier and 5G options</li>
+            </ul>
+            <div class="mb-cart-price">$1,499</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-NVIDIA-AGX-ORIN">Add to Build</button>
+          </div>
+
+          <!-- AMD -->
+          <div class="mb-cart-card" data-sku="QSSI-LAN-AMD-KRIA" data-name="AMD Kria KR260 LocalAI Node" data-price="449">
+            <div class="mb-cart-badge">AMD &middot; ADAPTIVE</div>
+            <h3>AMD Kria KR260</h3>
+            <div class="mb-cart-subtitle">Robotics Starter Kit</div>
+            <ul class="mb-cart-specs">
+              <li>Zynq UltraScale+ MPSoC</li>
+              <li>Up to 1.4 TOPS AI Engine</li>
+              <li>Industrial I/O and ROS2-ready</li>
+              <li>Vitis AI / open-source runtime</li>
+              <li>Real-time sensor fusion</li>
+              <li>Designed for robotics and vision</li>
+            </ul>
+            <div class="mb-cart-price">$449</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-AMD-KRIA">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-AMD-RYZEN-AI" data-name="AMD Ryzen AI Embedded LocalAI Node" data-price="599">
+            <div class="mb-cart-badge">AMD &middot; X86 EDGE</div>
+            <h3>AMD Ryzen AI Embedded</h3>
+            <div class="mb-cart-subtitle">V1000 / V2000 / R2000</div>
+            <ul class="mb-cart-specs">
+              <li>AMD Ryzen AI x86 embedded</li>
+              <li>Up to 39 TOPS NPU</li>
+              <li>Standard x86 software ecosystem</li>
+              <li>7B–13B quantised models</li>
+              <li>ROCm / ONNX runtime support</li>
+              <li>Industrial PC and panel PC form factors</li>
+            </ul>
+            <div class="mb-cart-price">$599</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-AMD-RYZEN-AI">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-AMD-VERSAL" data-name="AMD Versal AI Edge LocalAI Node" data-price="899">
+            <div class="mb-cart-badge">AMD &middot; ADAPTIVE SOC</div>
+            <h3>AMD Versal AI Edge</h3>
+            <div class="mb-cart-subtitle">Adaptive SoC &middot; AI acceleration</div>
+            <ul class="mb-cart-specs">
+              <li>Scalar + Adaptable + AI Engines</li>
+              <li>Up to 123 TOPS INT8</li>
+              <li>Hardware-programmable logic</li>
+              <li>Custom inference pipelines</li>
+              <li>Functional-safety capable</li>
+              <li>Aviation / automotive / defence ready</li>
+            </ul>
+            <div class="mb-cart-price">$899</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-AMD-VERSAL">Add to Build</button>
+          </div>
+
+          <!-- ROCKCHIP -->
+          <div class="mb-cart-card" data-sku="QSSI-LAN-ROCKCHIP-RK3568" data-name="ROCKCHIP RK3568 LocalAI Node" data-price="249">
+            <div class="mb-cart-badge">ROCKCHIP &middot; EFFICIENT</div>
+            <h3>ROCKCHIP RK3568</h3>
+            <div class="mb-cart-subtitle">1 TOPS NPU &middot; entry edge</div>
+            <ul class="mb-cart-specs">
+              <li>Quad-core Cortex-A55</li>
+              <li>1 TOPS NPU</li>
+              <li>Up to 8GB LPDDR4</li>
+              <li>Small 1B–3B models locally</li>
+              <li>Low-power 24/7 operation</li>
+              <li>Best for sensor gateways and IoT</li>
+            </ul>
+            <div class="mb-cart-price">$249</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-ROCKCHIP-RK3568">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-ROCKCHIP-RK3576" data-name="ROCKCHIP RK3576 LocalAI Node" data-price="349">
+            <div class="mb-cart-badge">ROCKCHIP &middot; MID</div>
+            <h3>ROCKCHIP RK3576</h3>
+            <div class="mb-cart-subtitle">6 TOPS NPU &middot; next-gen</div>
+            <ul class="mb-cart-specs">
+              <li>Quad-core Cortex-A72 + A53</li>
+              <li>6 TOPS NPU</li>
+              <li>Up to 16GB LPDDR4X / LPDDR5</li>
+              <li>3B–7B quantised models locally</li>
+              <li>4K display and multi-camera ISP</li>
+              <li>Industrial panel PC ready</li>
+            </ul>
+            <div class="mb-cart-price">$349</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-ROCKCHIP-RK3576">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-ROCKCHIP-RK3588" data-name="ROCKCHIP RK3588 LocalAI Node" data-price="399">
+            <div class="mb-cart-badge">ROCKCHIP &middot; PERFORMANCE</div>
+            <h3>ROCKCHIP RK3588</h3>
+            <div class="mb-cart-subtitle">8-core &middot; 6 TOPS NPU</div>
+            <ul class="mb-cart-specs">
+              <li>Octa-core Cortex-A76 / A55</li>
+              <li>6 TOPS NPU + ARM Mali-G610</li>
+              <li>Up to 16GB LPDDR4X / LPDDR5</li>
+              <li>3B–7B quantised models locally</li>
+              <li>Linux / Android runtime</li>
+              <li>Cost-effective enterprise edge</li>
+            </ul>
+            <div class="mb-cart-price">$399</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-ROCKCHIP-RK3588">Add to Build</button>
+          </div>
+
+          <!-- RADXA -->
+          <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ZERO3" data-name="RADXA ZERO 3E LocalAI Node" data-price="199">
+            <div class="mb-cart-badge">RADXA &middot; COMPACT</div>
+            <h3>RADXA ZERO 3E</h3>
+            <div class="mb-cart-subtitle">RK3566 &middot; tiny edge</div>
+            <ul class="mb-cart-specs">
+              <li>Rockchip RK3566</li>
+              <li>1 TOPS NPU</li>
+              <li>Up to 4GB LPDDR4</li>
+              <li>1B–3B quantised models locally</li>
+              <li>HDMI + USB-C power</li>
+              <li>Smallest QSSI LocalAI node</li>
+            </ul>
+            <div class="mb-cart-price">$199</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ZERO3">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ROCK3C" data-name="RADXA ROCK 3C LocalAI Node" data-price="279">
+            <div class="mb-cart-badge">RADXA &middot; BALANCED</div>
+            <h3>RADXA ROCK 3C</h3>
+            <div class="mb-cart-subtitle">RK3566 &middot; mid-range</div>
+            <ul class="mb-cart-specs">
+              <li>Rockchip RK3566</li>
+              <li>1 TOPS NPU</li>
+              <li>Up to 8GB LPDDR4</li>
+              <li>3B quantised models locally</li>
+              <li>Rich GPIO and expansion headers</li>
+              <li>Maker and SME friendly</li>
+            </ul>
+            <div class="mb-cart-price">$279</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ROCK3C">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ROCK5C" data-name="RADXA ROCK 5C LocalAI Node" data-price="329">
+            <div class="mb-cart-badge">RADXA &middot; PERFORMANCE</div>
+            <h3>RADXA ROCK 5C</h3>
+            <div class="mb-cart-subtitle">RK3588S &middot; 6 TOPS</div>
+            <ul class="mb-cart-specs">
+              <li>Rockchip RK3588S</li>
+              <li>6 TOPS NPU</li>
+              <li>Up to 16GB LPDDR4X</li>
+              <li>3B–7B quantised models locally</li>
+              <li>Compact form factor</li>
+              <li>Active open-source community</li>
+            </ul>
+            <div class="mb-cart-price">$329</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ROCK5C">Add to Build</button>
+          </div>
+
+          <div class="mb-cart-card" data-sku="QSSI-LAN-RADXA-ROCK5B" data-name="RADXA ROCK 5B+ LocalAI Node" data-price="379">
+            <div class="mb-cart-badge">RADXA &middot; FLAGSHIP</div>
+            <h3>RADXA ROCK 5B+</h3>
+            <div class="mb-cart-subtitle">RK3588 &middot; full I/O</div>
+            <ul class="mb-cart-specs">
+              <li>Rockchip RK3588</li>
+              <li>6 TOPS NPU</li>
+              <li>Up to 16GB RAM + M.2 NVMe</li>
+              <li>3B–7B quantised models locally</li>
+              <li>Dual HDMI, 2.5GbE, PCIe expansion</li>
+              <li>Full desktop / server replacement</li>
+            </ul>
+            <div class="mb-cart-price">$379</div>
+            <button type="button" class="btn btn--secondary btn--block btn-mb-add" data-action="cart-toggle" data-sku="QSSI-LAN-RADXA-ROCK5B">Add to Build</button>
+          </div>
+
+        </div>
+
+        <div class="build-panel" id="build-panel">
+          <h3>Your LocalAI Build</h3>
+          <p>Your selected boards are assembled into a single QSSI LocalAI quote. Beyond the hardware, every build includes assisted configuration, multi-agent harness orchestration, domain-specific solution packs, optional continual reinforcement learning (with your explicit permission), and ongoing managed maintenance.</p>
+          <ul class="build-list" id="build-list">
+            <li class="build-empty">No motherboards selected yet.</li>
+          </ul>
+          <div class="build-total" id="build-total" style="display:none;">
+            <span>Estimated Hardware Total</span>
+            <span id="build-total-value">$0</span>
+          </div>
+          <button type="button" class="btn btn--primary btn--block" id="btn-quote" data-action="build-quote" disabled>Request Build Quote</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Access Methods -->
+    <section class="section" aria-label="Access methods">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">ACCESS METHODS &middot; HOW YOU REACH YOUR AI</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="grid grid--auto grid--tight">
+          <div class="panel panel--accent text-center">
+            <div class="fs-h2 mb-3">📱</div>
+            <div class="kicker mb-2">WHATSAPP</div>
+            <h4 class="subhead mb-2">WhatsApp Bot</h4>
+            <p class="copy">Message your AI like a contact in WhatsApp. Send questions, documents, voice notes. Works on any phone, anywhere with data. The AI runs on your hardware. WhatsApp is just the interface.</p>
+          </div>
+          <div class="panel panel--accent text-center">
+            <div class="fs-h2 mb-3">🎮</div>
+            <div class="kicker mb-2">DISCORD</div>
+            <h4 class="subhead mb-2">Discord Bot</h4>
+            <p class="copy">Add your AI to a private Discord server. Ideal for teams; multiple people can query the same instance in different channels. Slash commands, thread-based conversations, role-gated access.</p>
+          </div>
+          <div class="panel panel--accent text-center">
+            <div class="fs-h2 mb-3">🌐</div>
+            <div class="kicker mb-2">WEB UI</div>
+            <h4 class="subhead mb-2">Browser Chat</h4>
+            <p class="copy">Full ChatGPT-style interface accessible on any device on your network. Upload files, switch models, manage conversation history. No install required; just open a browser.</p>
+          </div>
+          <div class="panel panel--accent text-center">
+            <div class="fs-h2 mb-3">⚙️</div>
+            <div class="kicker mb-2">PROPRIETARY APPS</div>
+            <h4 class="subhead mb-2">QSSI Applications</h4>
+            <p class="copy">Purpose-built apps for specific tasks; document analysis, scheduling, research, knowledge management. Each is powered by your local model. Installed on your hardware, owned by you.</p>
+          </div>
+          <div class="panel panel--accent text-center">
+            <div class="fs-h2 mb-3">🔌</div>
+            <div class="kicker mb-2">REST API</div>
+            <h4 class="subhead mb-2">OpenAI-Compatible API</h4>
+            <p class="copy">Your instance exposes an OpenAI-compatible REST API on your local network. Drop it into any tool that already supports ChatGPT; and it routes to your private hardware instead of the cloud.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware Upgrade Path: FPGA + ASIC -->
+    <section class="section" aria-label="FPGA and ASIC upgrade path">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">UPGRADE PATH &middot; FPGA &amp; ASIC ACCELERATION</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="fpga-panel">
+          <div class="kicker mb-3">FUTURE-PROOF &middot; NON-DISRUPTIVE UPGRADES</div>
+          <h2 class="fs-h2">Your instance grows with the hardware</h2>
+          <p class="copy copy--relaxed">One of the key advantages of a QSSI-managed Local AI Instance is that it is built to accommodate hardware upgrades without disrupting your deployment. As the AI silicon landscape advances, your instance absorbs those gains.</p>
+          <p class="copy copy--relaxed">We actively monitor FPGA module releases and direct-to-silicon ASIC developments; including inference-optimised chips from emerging fabs; and qualify upgrades before pushing them to production instances. You get better performance, lower power draw, and longer model context windows as the hardware matures, without re-procurement cycles.</p>
+          <div class="grid grid--auto grid--tight">
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">FPGA MODULES</div>
+              <h3 class="subhead mb-2">FPGA Acceleration</h3>
+              <p class="copy mb-3">Field-programmable gate array modules slot into existing hardware to accelerate specific inference operations; attention layers, tokenisation pipelines, and quantised weight lookups; at a fraction of the cost of a full GPU upgrade.</p>
+              <div class="status-line">STATUS: QUALIFYING &middot; COMING SOON</div>
+              <a class="link" href="/qmx-spec">&rarr; Read QMX Architecture Spec</a>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">DIRECT-TO-SILICON ASIC</div>
+              <h3 class="subhead mb-2">ASIC AI Modules</h3>
+              <p class="copy mb-3">Purpose-built AI inference chips; direct-to-silicon ASIC units designed exclusively for LLM inference. Orders of magnitude more efficient than general-purpose GPUs for token generation, with near-zero idle power. The future of on-device AI compute.</p>
+              <div class="status-line">STATUS: MONITORING &middot; ROADMAP</div>
+              <a class="link" href="/qmx-spec">&rarr; Read QMX Architecture Spec</a>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">MANAGED UPGRADE SERVICE</div>
+              <h3 class="subhead mb-2">Zero-Disruption Upgrades</h3>
+              <p class="copy mb-3">QSSI manages all hardware qualification, compatibility testing, and live migration. Your users experience no downtime. Your models retain all fine-tuning. Your data never moves.</p>
+              <div class="status-line">INCLUDED IN MANAGED PLAN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sovereign AI section -->
+    <section class="section" aria-label="Sovereign AI arm">
+      <div class="container">
+        <div class="sovereign-card" data-light>
+          <p class="eyebrow">SOVEREIGN AI ARM &middot; QUANTUMINDSSI</p>
+          <h2>This is the beginning of Sovereign AI</h2>
+          <p>The Local AI Instance is the first product in QuantumindSSI's Sovereign AI arm. Where the Victron hardware platform gives you sovereign edge computing, and Heimdall gives you sovereign embodied intelligence: the Local AI Instance gives you <strong>sovereign language intelligence</strong>.</p>
+          <p>Every AI decision your organisation makes will either strengthen or weaken your data sovereignty. We exist to ensure that organisations; from GP practices to government departments to global enterprises; never have to choose between powerful AI and owning their own intelligence.</p>
+          <div class="grid grid--auto grid--tight mt-8">
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">DATA SOVEREIGNTY</div>
+              <h4 class="subhead mb-1">Your data stays yours</h4>
+              <p class="copy">Training data, queries, and outputs never leave your infrastructure. No opt-out required. No terms of service loopholes.</p>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">MODEL OWNERSHIP</div>
+              <h4 class="subhead mb-1">You own the weights</h4>
+              <p class="copy">Fine-tuned model weights belong to you. We deliver them, you keep them. No licence revocation risk.</p>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">INFRASTRUCTURE</div>
+              <h4 class="subhead mb-1">Hardware you control</h4>
+              <p class="copy">Deployed on physical hardware in your possession. Runs on a power cut. Works without the internet. Survives vendor bankruptcy.</p>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">COMPLIANCE</div>
+              <h4 class="subhead mb-1">Built for regulated sectors</h4>
+              <p class="copy">NHS DSP Toolkit, GDPR Article 25, ISO 27001, NCSC Cyber Essentials, and defence classification requirements.</p>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">OPEN MODELS</div>
+              <h4 class="subhead mb-1">No black boxes</h4>
+              <p class="copy">Built on open-weight models you can inspect, audit, and modify. No closed-source AI dependencies.</p>
+            </div>
+            <div class="panel panel--accent">
+              <div class="kicker mb-2">CONTINUITY</div>
+              <h4 class="subhead mb-1">AI that never goes down</h4>
+              <p class="copy">Your instance doesn't depend on OpenAI's uptime, AWS availability zones, or any third-party SLA.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="section" aria-label="Our mission">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">OUR MISSION &middot; WHY LOCAL AI MATTERS</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="mission-card" data-light>
+          <div class="kicker mb-4">QUANTUMINDSSI &middot; PURPOSE</div>
+          <h2>Intelligence should belong to the individual, not the corporation</h2>
+          <p class="lede">The AI industry has replicated the same extractive model that defined social media and cloud computing: your data trains their models, their models generate their revenue, and you pay subscription fees for access to intelligence built on your own behaviour. QuantumindSSI exists to reverse that dynamic.</p>
+          <p class="lede">A Local AI Instance is not just a product. It is a statement of ownership. We serve local AI and fully agentic solutions on personal and organisational devices; reducing reliance on big tech for intelligence, cutting the cost of access, and putting the capability in the hands of the people who need it most.</p>
+        </div>
+        <div class="grid grid--auto grid--tight">
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">01 &middot; INDEPENDENCE</div>
+            <h3 class="subhead mb-2">Break from Big Tech</h3>
+            <p class="copy">OpenAI, Google, Anthropic, and Microsoft charge for access to intelligence built largely on publicly created knowledge. Your local instance gives you equivalent capability; permanently; for the cost of the hardware.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">02 &middot; COST</div>
+            <h3 class="subhead mb-2">Reduce Cost. Permanently.</h3>
+            <p class="copy">Cloud AI subscriptions are recurring, unpredictable, and scale with usage against you. A local instance has a fixed hardware cost and zero per-token fees. For high-usage teams, the payback period is typically under 6 months.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">03 &middot; QUALITY OF LIFE</div>
+            <h3 class="subhead mb-2">AI that improves daily life</h3>
+            <p class="copy">When AI runs on your device, it can be ambient; always available, always private, deeply personal. It manages your schedule, drafts your communications, surfaces what you need before you ask. Technology in close proximity improves how you live and work.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">04 &middot; PRODUCTIVITY</div>
+            <h3 class="subhead mb-2">Fully agentic work</h3>
+            <p class="copy">Proximity to agentic workloads; where AI plans, executes, and iterates autonomously; expands what a single person or small team can accomplish. Tasks that previously required dedicated staff can be delegated to your local agent stack permanently.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">05 &middot; EDUCATION</div>
+            <h3 class="subhead mb-2">Technology literacy at first hand</h3>
+            <p class="copy">Running AI locally forces meaningful engagement with the technology; model selection, context management, prompt engineering, hardware constraints. This builds genuine AI literacy that no cloud dashboard can provide. Users become practitioners, not consumers.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">06 &middot; KNOWLEDGE</div>
+            <h3 class="subhead mb-2">AI accelerates learning</h3>
+            <p class="copy">AI is empirically shown to accelerate research, deepen comprehension, and expand the scope of what individuals can study independently. A local instance tuned to your personal knowledge base becomes the most capable study partner ever built; and it never shares what you're working on.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="section" aria-label="Use cases">
+      <div class="container">
+        <div class="rule-head">
+          <div class="rule-line"></div>
+          <div class="kicker">USE CASES</div>
+          <div class="rule-line"></div>
+        </div>
+        <div class="grid grid--auto grid--tight">
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">HEALTHCARE</div>
+            <h3 class="subhead mb-2">Clinical Document Intelligence</h3>
+            <p class="copy">Summarise patient records, flag drug interactions, draft discharge letters; all on a GDPR-compliant on-premise instance that never touches a public cloud.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">LEGAL &amp; PROFESSIONAL SERVICES</div>
+            <h3 class="subhead mb-2">Private Contract &amp; Case Analysis</h3>
+            <p class="copy">Analyse contracts, case law, and privileged correspondence without any document ever leaving the firm's infrastructure.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">FINANCE &amp; BANKING</div>
+            <h3 class="subhead mb-2">Regulatory Compliance Copilot</h3>
+            <p class="copy">Train your AI on FCA guidelines, internal policies, and transaction histories. Generate compliance reports and flag anomalies privately.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">GOVERNMENT &amp; PUBLIC SECTOR</div>
+            <h3 class="subhead mb-2">Classified Document Handling</h3>
+            <p class="copy">Process OFFICIAL-SENSITIVE and above material on an air-gapped NVIDIA instance. Zero network egress. Post-quantum encrypted at rest.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">EDUCATION &amp; RESEARCH</div>
+            <h3 class="subhead mb-2">Private Research Assistant</h3>
+            <p class="copy">Embed your institution's unpublished research, datasets, and library into a local AI that helps researchers without leaking IP to commercial AI providers.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">MANUFACTURING &amp; INDUSTRIAL</div>
+            <h3 class="subhead mb-2">On-Floor Intelligence</h3>
+            <p class="copy">Deploy AI on the factory floor; processing sensor telemetry, maintenance logs, and operational data entirely on-site with no cloud latency.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">PERSONAL &middot; INDIVIDUAL</div>
+            <h3 class="subhead mb-2">Personal AI on Your Own Hardware</h3>
+            <p class="copy">Your own Mac Mini running a model tuned to your life: your notes, your projects, your calendar, your goals. No subscription. No data harvesting. An AI that works for you, not for an advertiser's algorithm.</p>
+          </div>
+          <div class="panel panel--accent">
+            <div class="kicker mb-2">STUDYING &amp; SELF-DEVELOPMENT</div>
+            <h3 class="subhead mb-2">Private Learning Companion</h3>
+            <p class="copy">Load your textbooks, course materials, and research papers into a local RAG pipeline. Your AI tutor knows exactly what you're studying, adapts to your learning pace, and never sells your academic profile to anyone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" aria-label="Book a consultation">
+      <div class="container">
+        <div class="cta-card" data-light>
+          <h2>Ready to own your AI?</h2>
+          <p>Book a free consultation. We'll assess your requirements, recommend the right hardware tier, and outline a deployment timeline.</p>
+          <div class="cta-buttons">
+            <button type="button" class="btn btn--primary btn--lg" data-action="consult-open" data-tier="general">Book Free Consultation</button>
+            <a href="/products" class="btn btn--ghost btn--lg">&larr; Back to Products</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Consultation Modal -->
+  <div class="qssi-modal-overlay" id="consult-modal">
+    <div class="qssi-modal">
+      <button class="qssi-modal-close" aria-label="Close dialog" data-close="consult-modal">&times;</button>
+      <h3>Local AI Instance Consultation</h3>
+      <div class="sku-badge" id="consult-badge">LOCAL AI INSTANCE &middot; SOVEREIGN AI SERVICES</div>
+      <label for="ci-name">Full Name *</label>
+      <input type="text" id="ci-name" placeholder="Your full name" autocomplete="name">
+      <label for="ci-email">Email Address *</label>
+      <input type="email" id="ci-email" placeholder="you@organisation.com" autocomplete="email">
+      <label for="ci-org">Organisation</label>
+      <input type="text" id="ci-org" placeholder="Company or institution" autocomplete="organization">
+      <label for="ci-country">Country</label>
+      <input type="text" id="ci-country" placeholder="United Kingdom" autocomplete="country-name">
+      <label for="ci-tier">Hardware Tier Interest</label>
+      <select id="ci-tier">
+        <option value="">Select tier…</option>
+        <option value="Mac Mini Instance">Mac Mini Instance (Entry)</option>
+        <option value="AMD Node Instance">AMD Node Instance (Business)</option>
+        <option value="NVIDIA Supercomputing">NVIDIA Supercomputing (Enterprise)</option>
+        <option value="Not sure">Not sure; need guidance</option>
+      </select>
+      <label for="ci-sector">Sector / Industry</label>
+      <select id="ci-sector">
+        <option value="">Select sector…</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Legal">Legal &amp; Professional Services</option>
+        <option value="Finance">Finance &amp; Banking</option>
+        <option value="Government">Government &amp; Public Sector</option>
+        <option value="Education">Education &amp; Research</option>
+        <option value="Manufacturing">Manufacturing &amp; Industrial</option>
+        <option value="Defence">Defence &amp; Security</option>
+        <option value="Other">Other</option>
+      </select>
+      <label for="ci-message">Tell us about your use case</label>
+      <textarea id="ci-message" placeholder="Describe what you want your local AI to do…"></textarea>
+      <button class="modal-btn" id="ci-submit">Book Consultation →</button>
+      <span class="modal-status" role="status" aria-live="polite" id="ci-status"></span>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/local-ai.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

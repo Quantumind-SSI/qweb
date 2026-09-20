@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QMX Architecture Spec | QuantumindSSI</title>
+  <meta name="description" content="QMX :  the QuantumindSSI Modular eXpert Interconnect. An open hardware and software specification for connecting heterogeneous ASIC inference modules into a sovereign, on-premise Mixture of Experts backbone.">
+  <link rel="canonical" href="https://quantumindssi.com/qmx-spec">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* Page-specific styles. Shared patterns live in css/patterns.css. */
+/* ── Page-specific styles ───────────────────────────────────
+     System-owned rules (reset, tokens, nav, footer, ticker,
+     cockpit chrome, container, hero, buttons, forms) have been
+     removed; they now live in css/. What remains is unique to
+     this page and cascades on top of the system. */
+/* Page header */
+        .page-header {
+            padding: 96px 32px 64px;
+            position: relative;
+            background: linear-gradient(135deg, var(--surface-a90) 0%, var(--surface-a90) 100%);
+        }
+        
+        
+        .eyebrow { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+        .page-header h1 { font-size: var(--fs-h1); font-weight: 700; letter-spacing: -2px; color: var(--text-primary); margin-bottom: 8px; line-height: 1.05; }
+        .page-header h1 .accent { color: var(--accent); }
+        .page-header .tagline { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--text-muted); letter-spacing: 1px; margin-bottom: 24px; }
+        .page-header p { font-size: var(--fs-lead); color: var(--text-secondary); max-width: 680px; line-height: 1.85; }
+        .draft-badge { display: inline-block; padding: 5px 14px; background: var(--signal-warn-bg); border: 1px solid var(--signal-warn-bg); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 2px; color: var(--signal-warn); margin-bottom: 24px; }
+
+        /* Section labels */
+        .section-label { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+        .section-label .line { height: 1px; flex: 1; background: var(--accent-a16); }
+        .section-label .text { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 2px; color: var(--accent); white-space: nowrap; }
+
+        /* Content sections */
+        .spec-section { padding: 64px 32px 48px; }
+        .spec-section + .spec-section { padding-top: 0; }
+
+        /* Prose */
+        .prose h2 { font-size: var(--fs-h2); font-weight: 700; color: var(--text-primary); margin-bottom: 16px; letter-spacing: -0.5px; }
+        .prose h3 { font-size: var(--fs-lead); font-weight: 600; color: var(--text-primary); margin-bottom: 10px; margin-top: 32px; }
+        .prose p { font-size: var(--fs-body); color: var(--text-secondary); line-height: 1.85; margin-bottom: 14px; }
+        .prose p strong { color: var(--accent); font-weight: 600; }
+        .prose ul { list-style: none; padding: 0; margin: 0 0 20px; }
+        .prose ul li { font-size: var(--fs-body); color: var(--text-secondary); padding: 6px 0 6px 20px; position: relative; border-bottom: 1px solid var(--accent-a08); line-height: 1.7; }
+        .prose ul li:last-child { border-bottom: none; }
+        .prose ul li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-size: var(--fs-tiny); top: 7px; }
+
+        /* Two column */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+
+        /* Architecture diagram (ASCII-style) */
+        .arch-diagram {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--accent-a28);
+            border-radius: 12px;
+            padding: 32px;
+            font-family: var(--font-mono);
+            font-size: var(--fs-tiny);
+            color: var(--accent-bright);
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 32px 0;
+            white-space: pre;
+        }
+        .arch-diagram .dim { color: var(--text-faint); }
+        .arch-diagram .hi { color: var(--text-primary); }
+        .arch-diagram .accent { color: var(--accent); }
+
+        /* Spec cards */
+        .spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .spec-card {
+            background: var(--accent-a04);
+            border: 1px solid var(--accent-a16);
+            border-radius: 12px;
+            padding: 28px;
+        }
+        .spec-card.highlight { border-color: var(--accent-a28); background: var(--accent-a08); }
+        .spec-card .sc-label { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 1px; color: var(--accent); margin-bottom: 10px; }
+        .spec-card h3 { font-size: var(--fs-body); font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+        .spec-card p { font-size: var(--fs-small); color: var(--text-muted); line-height: 1.65; }
+        .spec-card .spec-val { font-family: var(--font-mono); font-size: var(--fs-body); color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+
+        /* Comparison table */
+        .comp-table { width: 100%; border-collapse: collapse; margin: 32px 0; font-size: var(--fs-small); }
+        .comp-table th { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 1px; color: var(--accent); text-transform: uppercase; padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--accent-a28); }
+        .comp-table td { padding: 12px 16px; color: var(--text-muted); border-bottom: 1px solid var(--accent-a08); vertical-align: top; line-height: 1.6; }
+        .comp-table tr.qssi td { color: var(--text-primary); background: var(--accent-a08); }
+        .comp-table tr.qssi td:first-child { color: var(--accent); font-weight: 600; font-family: var(--font-mono); font-size: var(--fs-tiny); }
+        .comp-table td:first-child { font-family: var(--font-mono); font-size: var(--fs-tiny); color: var(--text-faint); }
+        .yes { color: var(--signal-ok); }
+        .no { color: var(--text-faint); }
+        .partial { color: var(--signal-warn); }
+
+        /* Roadmap */
+        .roadmap { display: flex; flex-direction: column; gap: 0; }
+        .roadmap-phase {
+            display: flex; gap: 24px; align-items: flex-start;
+            padding: 28px 0;
+            border-bottom: 1px solid var(--accent-a08);
+        }
+        .roadmap-phase:last-child { border-bottom: none; }
+        .phase-marker { flex-shrink: 0; width: 80px; text-align: right; }
+        .phase-num { font-family: var(--font-mono); font-size: var(--fs-h3); font-weight: 700; color: var(--accent-a28); display: block; }
+        .phase-status { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: 1px; margin-top: 4px; }
+        .phase-status.active { color: var(--signal-ok); }
+        .phase-status.next { color: var(--signal-warn); }
+        .phase-status.future { color: var(--text-faint); }
+        .phase-body h3 { font-size: var(--fs-body); font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+        .phase-body p { font-size: var(--fs-small); color: var(--text-muted); line-height: 1.65; }
+
+        /* Inline code */
+        code { font-family: var(--font-mono); font-size: var(--fs-tiny); background: var(--accent-a08); border: 1px solid var(--accent-a16); border-radius: var(--radius-sm); padding: 1px 6px; color: var(--accent); }
+
+        /* Background */
+        
+        
+        
+        
+        
+        
+        
+        @keyframes gfloat { 0%,100% { transform: translate(0,0); } 50% { transform: translate(30px, -30px); } }
+
+        @media (max-width: 768px) {
+            
+            .page-header h1 { font-size: var(--fs-h2); }
+            .spec-section { padding: 40px 16px 32px; }
+            .two-col { grid-template-columns: 1fr; gap: 24px; }
+            .arch-diagram { font-size: var(--fs-micro); }
+            .roadmap-phase { flex-direction: column; gap: 8px; }
+            .phase-marker { width: auto; text-align: left; }
+        }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>QMX SPEC</b><span class="ticker__dot">&middot;</span>QUANTUMIND MODULAR EXPERT INTERCONNECT</span>
+      <span class="ticker__item"><b>HETEROGENEOUS ASIC BACKBONE</b><span class="ticker__dot">&middot;</span>SOVEREIGN MoE</span>
+      <span class="ticker__item"><b>CXL 3.x FABRIC</b><span class="ticker__dot">&middot;</span>FPGA MODULES DIRECT-TO-SILICON</span>
+      <span class="ticker__item"><b>OPEN SPECIFICATION</b><span class="ticker__dot">&middot;</span>NO VENDOR LOCK-IN</span>
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>INTELLIGENCE WITHOUT COMPROMISE</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+<!-- Ticker -->
+    
+
+    <!-- Navigation -->
+    
+
+    <!-- Clock Bar -->
+    
+
+    
+    
+    
+    
+    
+
+    <main class="site-main" id="main">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="grid-overlay"></div>
+            <div class="container">
+                <div class="draft-badge">ARCHITECTURE SPEC · DRAFT v0.1 · JUNE 2026</div>
+                <div class="eyebrow">QUANTUMINDSSI · RESEARCH &amp; ARCHITECTURE</div>
+                <h1><span class="accent">QMX</span>. Quantumind<br>Modular eXpert Interconnect</h1>
+                <div class="tagline">AN OPEN SPECIFICATION FOR HETEROGENEOUS ASIC-BACKED MIXTURE OF EXPERTS</div>
+                <p>QMX defines the hardware interface, software protocol, and routing architecture needed to connect multiple heterogeneous ASIC inference modules into a single coherent Mixture of Experts system; running entirely on-premise, owned by the operator, with zero cloud dependency.</p>
+            </div>
+        </div>
+
+        <!-- 1. The Problem -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§1 · THE PROBLEM</div>
+                <div class="line"></div>
+            </div>
+            <div class="two-col">
+                <div class="prose">
+                    <h2>MoE is the dominant architecture. The interconnect is a closed monopoly.</h2>
+                    <p>Every frontier LLM shipped in 2025–2026 uses a Mixture of Experts architecture. DeepSeek V3/R1 (256 experts), Llama 4, Grok, Mistral Large. The reason is efficiency: only a fraction of model weights activate per token, so you get the capability of a 400B model at the compute cost of a 40B model.</p>
+                    <p>The problem is that <strong>expert routing creates massive communication overhead</strong>. For DeepSeek V3 with 256 experts across 64 GPUs, expert weight loading consumes up to 98.9% of decode time. NVIDIA built NVLink 6 specifically to solve this: a proprietary, closed interconnect that only works within NVIDIA hardware.</p>
+                    <p>When you want to run MoE on heterogeneous hardware; mixing Apple Silicon, AMD, FPGA modules, and purpose-built ASIC inference chips; there is <strong>no open standard for the interconnect or the routing layer</strong>. You are forced to either choose a single vendor's full stack or build bespoke glue code every time.</p>
+                    <h3>What exists today and why it falls short</h3>
+                    <p>Academic work (Mozart, A3D-MoE, NASiC) proposes chiplet architectures for MoE at wafer scale; research-stage, not field-deployable. <strong>MoE Sovereign</strong> (April 2026) is a software-only Docker-based multi-model router; useful, but purely a software abstraction layer with no hardware specification, no physical module standard, and explicitly cloud-flexible rather than sovereign-first. <strong>taitashaw/moe-router-engine</strong> is an open-source FPGA MoE token dispatcher; solves intra-machine routing overhead but targets homogeneous GPU clusters only.</p>
+                    <p><strong>Nobody has defined an open physical module specification</strong> that lets any ASIC inference chip; from any fab; plug into a common interconnect fabric, register its capabilities, and receive routed inference work from a sovereign on-premise orchestrator.</p>
+                </div>
+                <div class="prose">
+                    <h2>The gap QMX fills</h2>
+                    <p>QMX is the missing layer. It specifies:</p>
+                    <ul>
+                        <li>A <strong>physical module interface</strong>; the connector, power envelope, and signal standard that any ASIC or FPGA inference module must implement to join a QMX fabric</li>
+                        <li>A <strong>capability manifest protocol</strong>; how a module advertises its domain strengths, throughput, quantisation support, and current load to the fabric controller</li>
+                        <li>A <strong>routing protocol</strong>; how inference requests are dispatched to the right expert module based on semantic domain, latency budget, and queue depth</li>
+                        <li>A <strong>fabric controller spec</strong>; the software interface the Victron platform exposes to manage the full module registry, health monitoring, and upgrade lifecycle</li>
+                    </ul>
+                    <p>QMX is designed to be <strong>silicon-agnostic</strong>. A Mac Mini's Neural Engine, an AMD Radeon inference module, an FPGA acceleration card, and a purpose-built ASIC chip can all coexist on the same QMX fabric; contributing their respective strengths to a single coherent intelligence stack.</p>
+                    <p>The target deployment is not a hyperscaler data centre. It is <strong>a desk, a server room, or a small rack</strong>; owned by a person, a clinic, a law firm, or a government department.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Architecture Overview -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§2 · ARCHITECTURE OVERVIEW</div>
+                <div class="line"></div>
+            </div>
+
+            <div class="arch-diagram"><span class="dim">┌──────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="dim">│</span>  <span class="hi">QMX FABRIC. QUANTUMIND MODULAR EXPERT INTERCONNECT</span>                              <span class="dim">│</span>
+<span class="dim">├──────────────────────────────────────────────────────────────────────────────────┤</span>
+<span class="dim">│</span>                                                                                  <span class="dim">│</span>
+<span class="dim">│</span>   <span class="hi">USER / APPLICATION LAYER</span>                                                       <span class="dim">│</span>
+<span class="dim">│</span>   Chat · API · Agentic Workflows · Document Intelligence · RAG pipelines           <span class="dim">│</span>
+<span class="dim">│</span>                          <span class="accent">│</span>                                                        <span class="dim">│</span>
+<span class="dim">│</span>                          <span class="accent">▼</span>                                                        <span class="dim">│</span>
+<span class="dim">│</span>   <span class="hi">VICTRON FABRIC CONTROLLER</span>  <span class="dim">(runs on host: Mac Mini / AMD Node / NVIDIA)</span>         <span class="dim">│</span>
+<span class="dim">│</span>   ┌─────────────────────────────────────────────────────────────────────────┐    <span class="dim">│</span>
+<span class="dim">│</span>   │  <span class="accent">QMX ROUTER</span>          <span class="accent">MODULE REGISTRY</span>         <span class="accent">HEALTH MONITOR</span>               │    <span class="dim">│</span>
+<span class="dim">│</span>   │  Semantic dispatch   Capability manifest     Queue depth · Latency        │    <span class="dim">│</span>
+<span class="dim">│</span>   │  Domain tagging      Domain · TOPS · VRAM    Thermal · Uptime             │    <span class="dim">│</span>
+<span class="dim">│</span>   │  Load balancing      Quantisation support    Upgrade lifecycle            │    <span class="dim">│</span>
+<span class="dim">│</span>   └──────────────┬──────────────────┬──────────────────────┬───────────────┘    <span class="dim">│</span>
+<span class="dim">│</span>                  <span class="accent">│</span>                  <span class="accent">│</span>                      <span class="accent">│</span>                      <span class="dim">│</span>
+<span class="dim">│</span>          <span class="accent">QMX INTERCONNECT FABRIC</span>  <span class="dim">(CXL 3.x / PCIe 5 / 400GbE for distributed)</span>  <span class="dim">│</span>
+<span class="dim">│</span>                  <span class="accent">│</span>                  <span class="accent">│</span>                      <span class="accent">│</span>                      <span class="dim">│</span>
+<span class="dim">│</span>                  <span class="accent">▼</span>                  <span class="accent">▼</span>                      <span class="accent">▼</span>                      <span class="dim">│</span>
+<span class="dim">│</span>   <span class="hi">EXPERT MODULE A</span>    <span class="hi">EXPERT MODULE B</span>       <span class="hi">EXPERT MODULE C</span>                      <span class="dim">│</span>
+<span class="dim">│</span>   ┌─────────────┐    ┌─────────────┐       ┌─────────────┐                      <span class="dim">│</span>
+<span class="dim">│</span>   │ FPGA ACCEL  │    │  ASIC LLM   │       │ Apple NE /  │                      <span class="dim">│</span>
+<span class="dim">│</span>   │ Attention + │    │  Inference  │       │ AMD Radeon  │                      <span class="dim">│</span>
+<span class="dim">│</span>   │ Tokeniser   │    │  Chip       │       │ General     │                      <span class="dim">│</span>
+<span class="dim">│</span>   │             │    │             │       │  Purpose    │                      <span class="dim">│</span>
+<span class="dim">│</span>   │ <span class="accent">MANIFEST:</span>   │    │ <span class="accent">MANIFEST:</span>   │       │ <span class="accent">MANIFEST:</span>   │                      <span class="dim">│</span>
+<span class="dim">│</span>   │ CODE, MATH  │    │ REASON,NL   │       │ GENERAL,    │                      <span class="dim">│</span>
+<span class="dim">│</span>   │ STRUCTURED  │    │ CREATIVE    │       │ MULTIMODAL  │                      <span class="dim">│</span>
+<span class="dim">│</span>   └─────────────┘    └─────────────┘       └─────────────┘                      <span class="dim">│</span>
+<span class="dim">│</span>                                                                                  <span class="dim">│</span>
+<span class="dim">│</span>   All modules implement: <span class="accent">QMX Module Interface v0.1</span>                               <span class="dim">│</span>
+<span class="dim">│</span>   Physical: <span class="accent">QMX-M connector</span>  |  Protocol: <span class="accent">QMX-P</span>  |  Manifest: <span class="accent">QMX-CAP schema</span>    <span class="dim">│</span>
+<span class="dim">└──────────────────────────────────────────────────────────────────────────────────┘</span></div>
+
+            <div class="prose">
+                <h3>Four-layer model</h3>
+                <p>QMX separates concerns across four layers, each independently specifiable and upgradeable:</p>
+                <ul>
+                    <li><strong>L1. Physical (QMX-M):</strong> The module connector standard. Defines pin layout, power rails (12V/5V/3.3V), PCIe 5.0 x4 signal lanes, and a dedicated QMX management bus (I²C variant) for out-of-band capability advertisement and health telemetry.</li>
+                    <li><strong>L2. Interconnect (QMX-F):</strong> The fabric standard. For local multi-module setups: CXL 3.x over the PCIe 5.0 lanes with memory pooling enabled. For rack-scale or distributed sovereign deployments: 400GbE with RDMA (RoCE v2) for sub-5µs inter-node latency.</li>
+                    <li><strong>L3. Capability Protocol (QMX-CAP):</strong> The manifest schema. Every module broadcasts a JSON capability document at boot and on state change, declaring: domain tags, active model identifiers, quantisation level, current TOPS, available VRAM, queue depth, time-to-first-token p50/p95, and thermal state.</li>
+                    <li><strong>L4. Routing (QMX-R):</strong> The dispatch protocol. The Victron fabric controller reads all registered QMX-CAP manifests and maintains a live routing table. Incoming inference requests are tagged by the router with a semantic domain score, then dispatched to the module best matched by domain, latency budget, and current load.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 3. The Interconnect in Detail -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§3 · INTERCONNECT. CXL, PCIe, AND ETHERNET</div>
+                <div class="line"></div>
+            </div>
+            <div class="spec-grid">
+                <div class="spec-card highlight">
+                    <div class="sc-label">PRIMARY · LOCAL FABRIC</div>
+                    <div class="spec-val">CXL 3.x</div>
+                    <h3>Compute Express Link</h3>
+                    <p>The primary interconnect for local multi-module QMX deployments. CXL 3.x provides cache-coherent memory pooling across all attached modules; meaning expert modules can share a unified memory fabric rather than copying tensors between devices. Latency: ~100ns. Bandwidth: up to 256 GB/s bidirectional over PCIe 5.0 x16. CXL is an open industry standard (not NVIDIA-proprietary), supported by Intel, AMD, Arm, and all major ASIC vendors. First CXL 3.x fabric switch silicon (Panmnesia PCIe 6.0/CXL 3.2) became available in late 2025.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">FALLBACK · ENTRY TIER</div>
+                    <div class="spec-val">PCIe 5.0</div>
+                    <h3>PCI Express 5.0</h3>
+                    <p>For early-phase QMX deployments where CXL fabric switches are unavailable. QMX-M modules connect via PCIe 5.0 x4 (32 GB/s per module). The fabric controller manages memory transfers explicitly. Higher latency than CXL (~1–3µs) but sufficient for batched inference workloads where latency tolerance is ≥5ms.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">DISTRIBUTED · RACK SCALE</div>
+                    <div class="spec-val">400GbE + RoCE</div>
+                    <h3>Ethernet RDMA</h3>
+                    <p>For sovereign deployments spanning multiple physical nodes; different rooms, server racks, or buildings. RDMA over Converged Ethernet v2 (RoCE v2) brings inter-node latency to 1–5µs with kernel bypass. Each node runs its own local QMX fabric; the QMX-R router handles cross-node dispatch as a federated fabric. No NVSwitch, no InfiniBand licence, no vendor lock-in.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">FUTURE · UALink</div>
+                    <div class="spec-val">UALink 1.0</div>
+                    <h3>Ultra Accelerator Link</h3>
+                    <p>UALink 1.0 (targeting 1,024-device scaling from AMD, Intel, Astera Labs; hardware arriving late 2026) is on the QMX roadmap as the high-scale fabric option. QMX-F is designed to be transport-agnostic at the specification level; UALink support will be a QMX-F v1.1 extension.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. The Routing Layer -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§4 · THE ROUTING LAYER. QMX-R</div>
+                <div class="line"></div>
+            </div>
+            <div class="two-col">
+                <div class="prose">
+                    <h2>Semantic routing, not load balancing</h2>
+                    <p>The QMX router is not a simple round-robin or least-loaded dispatcher. It performs <strong>semantic domain scoring</strong> on every incoming inference request and matches it to the module whose capability manifest best fits the task type.</p>
+                    <p>Domain tags in the QMX-CAP schema are drawn from a controlled vocabulary: <code>GENERAL</code>, <code>CODE</code>, <code>MATH</code>, <code>REASONING</code>, <code>MEDICAL</code>, <code>LEGAL</code>, <code>STRUCTURED_DATA</code>, <code>CREATIVE</code>, <code>MULTILINGUAL</code>, <code>VISION</code>, <code>AUDIO</code>. A module may declare multiple tags with confidence weights.</p>
+                    <h3>Routing decision pipeline</h3>
+                    <p>Each request passes through four stages before dispatch:</p>
+                    <ul>
+                        <li><strong>Domain classification:</strong> a lightweight local classifier (≤100M params, always-hot) tags the request with domain scores in &lt;10ms</li>
+                        <li><strong>Candidate selection:</strong> modules with matching domain tags are ranked by availability score (queue depth × latency p50 × thermal headroom)</li>
+                        <li><strong>Latency budget check:</strong> if the request carries a latency SLA, only modules capable of meeting it are considered</li>
+                        <li><strong>Dispatch + streaming:</strong> tokens stream back through the fabric controller to the caller; if the winning module saturates mid-stream, the router can hand off continuation to a secondary module</li>
+                    </ul>
+                    <h3>Multi-expert synthesis</h3>
+                    <p>For complex queries that span domains (e.g. a medical coding question requiring both <code>MEDICAL</code> and <code>STRUCTURED_DATA</code> expertise), QMX-R supports <strong>parallel expert dispatch</strong> with result synthesis. The fabric controller sends sub-queries to two modules simultaneously and a lightweight synthesis model (also resident on the host) merges the outputs. This is the true MoE pattern; not sequential fallback, but genuine parallel expert consultation.</p>
+                </div>
+                <div class="prose">
+                    <h2>Capability manifest. QMX-CAP schema</h2>
+                    <p>Every QMX-compliant module broadcasts this schema at registration and on any state change:</p>
+                    <div class="arch-diagram" style="font-size: var(--fs-micro); white-space:pre-wrap;">{
+  "<span class="hi">qmx_version</span>": "0.1",
+  "<span class="hi">module_id</span>": "qmx-m-uuid-v4",
+  "<span class="hi">module_type</span>": "ASIC_INFERENCE | FPGA | GPU | NPU",
+  "<span class="hi">vendor</span>": "string",
+  "<span class="hi">model_id</span>": "llama3-70b-q4_k_m",
+
+  "<span class="accent">capabilities</span>": {
+    "<span class="hi">domain_tags</span>": [
+      { "tag": "REASONING", "weight": 0.92 },
+      { "tag": "CODE",      "weight": 0.78 },
+      { "tag": "MATH",      "weight": 0.85 }
+    ],
+    "<span class="hi">context_length</span>": 131072,
+    "<span class="hi">quantisation</span>": "Q4_K_M",
+    "<span class="hi">peak_tops</span>": 38.4,
+    "<span class="hi">vram_gb</span>": 24,
+    "<span class="hi">multimodal</span>": false
+  },
+
+  "<span class="accent">telemetry</span>": {
+    "<span class="hi">queue_depth</span>": 2,
+    "<span class="hi">ttft_p50_ms</span>": 84,
+    "<span class="hi">ttft_p95_ms</span>": 210,
+    "<span class="hi">thermal_headroom_pct</span>": 68,
+    "<span class="hi">uptime_s</span>": 86401
+  },
+
+  "<span class="accent">security</span>": {
+    "<span class="hi">weights_encrypted_at_rest</span>": true,
+    "<span class="hi">egress_locked</span>": true,
+    "<span class="hi">pq_crypto</span>": true
+  }
+}</div>
+                    <p>The manifest is published over the QMX management bus (out-of-band I²C) at boot, and pushed via a lightweight UDP multicast to the fabric controller on any field change. Pull endpoint also available at <code>http://[module-ip]:7070/qmx/cap</code>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Security Model -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§5 · SECURITY MODEL</div>
+                <div class="line"></div>
+            </div>
+            <div class="spec-grid">
+                <div class="spec-card highlight">
+                    <div class="sc-label">WEIGHTS</div>
+                    <h3>Encrypted at Rest</h3>
+                    <p>All model weights stored on a QMX module must be encrypted using AES-256-GCM at minimum. The decryption key is held in the module's secure enclave and never exposed on the fabric. Post-quantum key encapsulation (ML-KEM-768 / Kyber) is required for QMX v1.0 certification.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">FABRIC TRAFFIC</div>
+                    <h3>Encrypted in Transit</h3>
+                    <p>All QMX-F fabric traffic between the fabric controller and modules is encrypted. For CXL/PCIe: AEAD encryption at the QMX-P protocol layer. For Ethernet: mandatory TLS 1.3 with post-quantum hybrid key exchange (X25519 + ML-KEM-768).</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">MODULE IDENTITY</div>
+                    <h3>Hardware Attestation</h3>
+                    <p>Each QMX module must present a hardware-rooted identity certificate (stored in a dedicated secure element, TPM 2.0 compatible) at registration. The fabric controller verifies the certificate chain before accepting any module into the routing table. Prevents rogue module injection.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">EGRESS</div>
+                    <h3>Zero External Calls</h3>
+                    <p>QMX-compliant modules must not initiate any network connection outside the local QMX fabric. The fabric controller maintains an egress policy enforced at the OS level. No telemetry, no update pings, no vendor callbacks; unless the operator explicitly provisions an outbound channel.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">AUDIT</div>
+                    <h3>Immutable Inference Log</h3>
+                    <p>All routing decisions, module assignments, and inference completions are logged to an append-only audit store on the fabric controller. Log integrity is protected by a hash chain (SHA-3). Required for regulated sector deployments (GDPR, NHS DSP Toolkit, defence classification).</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">AIR GAP</div>
+                    <h3>Full Air-Gap Capable</h3>
+                    <p>The entire QMX fabric; fabric controller, all modules, routing layer; is designed to operate with zero external network connectivity. Updates are applied via signed offline packages. This is a hard design requirement, not an optional mode.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Competitive Landscape -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§6 · COMPETITIVE LANDSCAPE · WHY QMX IS NOVEL</div>
+                <div class="line"></div>
+            </div>
+            <div class="prose" style="margin-bottom: 24px;">
+                <p>As of June 2026, no publicly available project or product occupies the same position as QMX. The table below maps the closest existing work against the QMX specification dimensions. Research conducted June 2026.</p>
+            </div>
+            <div class="table-wrap">
+              <table class="table comp-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Project / Product</th>
+                        <th scope="col">Open spec</th>
+                        <th scope="col">Physical module standard</th>
+                        <th scope="col">Heterogeneous ASIC</th>
+                        <th scope="col">Sovereign / on-premise first</th>
+                        <th scope="col">MoE routing</th>
+                        <th scope="col">Personal / SME scale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="qssi">
+                        <th scope="row">QMX (QSSI)</th>
+                        <td><span class="yes">✓ Apache 2.0</span></td>
+                        <td><span class="yes">✓ QMX-M connector</span></td>
+                        <td><span class="yes">✓ By design</span></td>
+                        <td><span class="yes">✓ Core requirement</span></td>
+                        <td><span class="yes">✓ QMX-R semantic router</span></td>
+                        <td><span class="yes">✓ Mac Mini upward</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">MoE Sovereign (Apr 2026)</th>
+                        <td><span class="yes">✓ Apache 2.0</span></td>
+                        <td><span class="no">✗ Software only</span></td>
+                        <td><span class="partial">~ GPU clusters</span></td>
+                        <td><span class="partial">~ Optional, cloud-flexible</span></td>
+                        <td><span class="yes">✓ Software router</span></td>
+                        <td><span class="partial">~ Docker required</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">moe-router-engine (FPGA)</th>
+                        <td><span class="yes">✓ Open source</span></td>
+                        <td><span class="partial">~ FPGA only</span></td>
+                        <td><span class="no">✗ Homogeneous GPU</span></td>
+                        <td><span class="partial">~ Not specified</span></td>
+                        <td><span class="yes">✓ Hardware token dispatch</span></td>
+                        <td><span class="no">✗ Data centre focus</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mozart / A3D-MoE (academic)</th>
+                        <td><span class="partial">~ Research paper</span></td>
+                        <td><span class="partial">~ Custom chiplet</span></td>
+                        <td><span class="yes">✓ Chiplet heterogeneous</span></td>
+                        <td><span class="no">✗ Cloud / HPC</span></td>
+                        <td><span class="yes">✓ Hardware MoE</span></td>
+                        <td><span class="no">✗ Wafer-scale only</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">SambaNova RDU</th>
+                        <td><span class="no">✗ Proprietary</span></td>
+                        <td><span class="no">✗ Proprietary</span></td>
+                        <td><span class="no">✗ SambaNova only</span></td>
+                        <td><span class="no">✗ Cloud SaaS</span></td>
+                        <td><span class="yes">✓ MoE inference</span></td>
+                        <td><span class="no">✗ Enterprise only</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">NVLink 6 / NVSwitch</th>
+                        <td><span class="no">✗ NVIDIA proprietary</span></td>
+                        <td><span class="no">✗ NVIDIA only</span></td>
+                        <td><span class="no">✗ NVIDIA GPUs only</span></td>
+                        <td><span class="partial">~ On-premise available</span></td>
+                        <td><span class="yes">✓ High-bandwidth</span></td>
+                        <td><span class="no">✗ $100k+ entry</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">CXL 3.x (standard)</th>
+                        <td><span class="yes">✓ Open standard</span></td>
+                        <td><span class="yes">✓ Physical spec</span></td>
+                        <td><span class="yes">✓ Heterogeneous</span></td>
+                        <td><span class="yes">✓ On-premise</span></td>
+                        <td><span class="no">✗ Interconnect only, no router</span></td>
+                        <td><span class="partial">~ Server-class hardware</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="prose">
+                <p><strong>The conclusion is clear:</strong> CXL provides the physical interconnect foundation, but no project combines it with an open module specification, a semantic routing protocol, and a sovereign-first design principle targeting personal and SME-scale deployments. QMX is the first specification to occupy this space.</p>
+            </div>
+        </div>
+
+        <!-- 7. Deployment Configurations -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§7 · DEPLOYMENT CONFIGURATIONS</div>
+                <div class="line"></div>
+            </div>
+            <div class="spec-grid">
+                <div class="spec-card">
+                    <div class="sc-label">CONFIG A · PERSONAL</div>
+                    <h3>Single-node QMX</h3>
+                    <p>One Mac Mini M4 Max or AMD workstation acts as both fabric controller and primary expert module. A single FPGA acceleration card connects via QMX-M (PCIe 5.0 x4 initially, CXL 3.x when available). Two experts on one physical machine. Suitable for individual professionals and students.</p>
+                </div>
+                <div class="spec-card highlight">
+                    <div class="sc-label">CONFIG B · TEAM</div>
+                    <h3>Multi-module local fabric</h3>
+                    <p>One AMD EPYC node as fabric controller. Two to four QMX-M modules on a CXL 3.x fabric switch; e.g. one FPGA module (code/structured data), one general-purpose ASIC module (reasoning/NL), one domain-specific fine-tune (medical/legal). 8–24 concurrent users. The target configuration for the Local AI Instance business tier.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="sc-label">CONFIG C · ENTERPRISE</div>
+                    <h3>Distributed federated fabric</h3>
+                    <p>Multiple physical nodes (NVIDIA DGX or custom builds), each running a local QMX CXL fabric, interconnected over 400GbE RoCE. The fabric controllers form a federated QMX-R cluster. Suitable for government departments, hospitals, and financial institutions requiring department-level expert segregation and national-scale inference throughput.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Roadmap -->
+        <div class="spec-section">
+            <div class="section-label">
+                <div class="line"></div>
+                <div class="text">§8 · SPECIFICATION ROADMAP</div>
+                <div class="line"></div>
+            </div>
+            <div class="roadmap">
+                <div class="roadmap-phase">
+                    <div class="phase-marker">
+                        <span class="phase-num">v0.1</span>
+                        <div class="phase-status active">ACTIVE · NOW</div>
+                    </div>
+                    <div class="phase-body">
+                        <h3>Software-first validation</h3>
+                        <p>Implement QMX-CAP manifest schema and QMX-R semantic router entirely in software on existing Mac Mini / AMD / NVIDIA hardware. Different locally-running models (LLaMA 3, Mistral, Qwen) act as software experts. Validate routing logic, latency budgets, domain classification accuracy, and synthesis quality before any custom silicon.</p>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="phase-marker">
+                        <span class="phase-num">v0.2</span>
+                        <div class="phase-status next">NEXT · Q3 2026</div>
+                    </div>
+                    <div class="phase-body">
+                        <h3>PCIe 5.0 module interface. QMX-M draft</h3>
+                        <p>Define the physical QMX-M connector and power spec. Prototype first QMX-M module as a reference design using an existing FPGA development board (Xilinx Alveo U55C or similar). Publish the QMX-M draft specification as an open document under Apache 2.0.</p>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="phase-marker">
+                        <span class="phase-num">v0.3</span>
+                        <div class="phase-status future">Q4 2026</div>
+                    </div>
+                    <div class="phase-body">
+                        <h3>CXL 3.x fabric. QMX-F</h3>
+                        <p>Integrate CXL 3.x fabric switch (Panmnesia or equivalent) as the primary QMX-F interconnect. Implement memory pooling across fabric controller and FPGA module. Benchmark latency and bandwidth against software-baseline. Publish QMX-F specification draft.</p>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="phase-marker">
+                        <span class="phase-num">v1.0</span>
+                        <div class="phase-status future">2027</div>
+                    </div>
+                    <div class="phase-body">
+                        <h3>Full specification release + ASIC qualification programme</h3>
+                        <p>Publish complete QMX v1.0 specification. Launch QMX Certification Programme: a formal process by which ASIC and FPGA vendors can qualify their modules as QMX-compliant. First ASIC inference chip certifications. Integration into the Victron AIO-32-MAX as the fabric controller reference platform.</p>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="phase-marker">
+                        <span class="phase-num">v1.1</span>
+                        <div class="phase-status future">2027–28</div>
+                    </div>
+                    <div class="phase-body">
+                        <h3>UALink 1.0 fabric extension + direct-to-silicon ASIC modules</h3>
+                        <p>Add UALink 1.0 as a QMX-F transport option for large-scale sovereign deployments. Qualify first purpose-built ASIC inference chips (direct-to-silicon LLM inference modules) under the QMX-M physical spec. Enable petaflop-class sovereign MoE deployments on commodity rackspace.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Contribute -->
+        <div style="padding: 0 32px 80px;">
+            <div style="background: var(--accent-a08); border: 1px solid var(--accent-a28); border-radius: 16px; padding: 56px 40px; text-align: center;">
+                <div class="kicker mb-4">OPEN SPECIFICATION · APACHE 2.0</div>
+                <h2 style="font-size: var(--fs-h2); font-weight: 700; color: var(--text-primary); margin-bottom: 14px;">This specification is open. Contribute to it.</h2>
+                <p style="color: var(--text-muted); max-width: 560px; margin: 0 auto 32px; line-height: 1.8;">QMX is intended as a community specification; not a QSSI-proprietary standard. ASIC vendors, FPGA engineers, system architects, and sovereign AI advocates are invited to contribute. The goal is an open ecosystem, not a moat.</p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://github.com/QuantumindSSI/Bifrost" target="_blank" style="padding: 14px 36px; background: var(--accent); border-radius: var(--radius-pill); color: var(--bg-void); font-weight: 700; font-size: var(--fs-small); text-decoration: none; font-family: var(--font-mono); transition: background 0.2s;" rel="noopener noreferrer">View on GitHub →</a>
+                    <a href="/contact" style="padding: 14px 36px; background: transparent; border: 1px solid var(--text-faint); border-radius: var(--radius-pill); color: var(--text-secondary); font-size: var(--fs-small); text-decoration: none; font-family: var(--font-mono); transition: all 0.2s;">Contact the Architecture Team</a>
+                    <a href="/local-ai" style="padding: 14px 36px; background: transparent; border: 1px solid var(--text-faint); border-radius: var(--radius-pill); color: var(--text-secondary); font-size: var(--fs-small); text-decoration: none; font-family: var(--font-mono); transition: all 0.2s;">← Local AI Instance</a>
+                </div>
+            </div>
+        </div>
+    </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Technical Architecture | QuantumindSSI Victron & Heimdall</title>
+  <meta name="description" content="QuantumindSSI engineers intelligence that compounds. Every subsystem; from Bifrost cognition to Victron silicon :  is recursively error-eliminated, latent-space-maximised, and built to pass the 100-year time-test. Sovereign. Deterministic. Irreplaceable." />
+  <link rel="canonical" href="https://quantumindssi.com/technical">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* ── Page-specific styles ───────────────────────────────────
+     Shared patterns live in css/patterns.css. What remains here
+     is unique to this page and cascades on top of the system. */
+
+    /* ── SPECS GRID; hairline datasheet table ─────────────── */
+    .specs-section {
+      border-bottom: 1px solid var(--line-faint);
+    }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      border-top: 1px solid var(--line-faint);
+    }
+    .spec-module {
+      padding: var(--space-10) var(--space-8);
+      border-right: 1px solid var(--line-faint);
+      border-bottom: 1px solid var(--line-faint);
+    }
+    .spec-module-title {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .spec-module-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: var(--text-muted);
+      border-radius: 50%;
+    }
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--line-faint);
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-label {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      color: var(--text-muted);
+      letter-spacing: var(--ls-label);
+    }
+    .spec-value {
+      font-family: var(--font-mono);
+      font-size: var(--fs-small);
+      color: var(--text-primary);
+      font-weight: var(--fw-bold);
+      text-align: right;
+    }
+    .spec-value.highlight { color: var(--signal-ok); }
+    .spec-badge {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: 0.04em;
+      color: var(--signal-ok);
+      border: 1px solid var(--signal-ok);
+      padding: 2px 6px;
+    }
+
+    /* ── DESIGN & STRUCTURE ────────────────────────────────── */
+    .section-desc {
+      max-width: 340px;
+      color: var(--text-muted);
+      font-size: var(--fs-body);
+      line-height: var(--lh-relaxed);
+      margin-left: auto;
+    }
+
+    .sub-section {
+      border-bottom: 1px solid var(--line-faint);
+    }
+    .sub-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-6) var(--space-8);
+      border-bottom: 1px solid var(--line-faint);
+    }
+    .sub-section-title {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .sub-section-rule {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      color: var(--text-faint);
+      letter-spacing: var(--ls-label);
+    }
+
+    /* Design image grid */
+    .design-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1px;
+      background: var(--line-faint);
+    }
+    .design-grid > div {
+      background: var(--bg-void);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+    }
+    .design-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--dur-slow) var(--ease-out);
+    }
+    .design-grid img:hover { transform: scale(1.03); }
+
+    /* Structure image */
+    .structure-img {
+      padding: var(--space-8);
+    }
+    .structure-img img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    /* ── PRE-ORDER CTA ─────────────────────────────────────── */
+    .preorder-section {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      border-bottom: 1px solid var(--line-faint);
+      min-height: 25rem;
+    }
+    .preorder-content {
+      padding: var(--space-16) var(--space-10);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--line-faint);
+    }
+    .preorder-img {
+      overflow: hidden;
+      min-height: 18rem;
+    }
+    .preorder-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    /* ── QMX CALLOUT ────────────────────────────────────────── */
+    .qmx-callout {
+      background: linear-gradient(135deg, var(--accent-a08) 0%, var(--surface-a45) 100%);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-12) var(--space-10);
+    }
+
+    /* ── MANIFESTO QUOTE ────────────────────────────────────── */
+    .manifesto-quote {
+      max-width: var(--container-text);
+      margin-inline: auto;
+      text-align: center;
+      border-left: none;
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (min-width: 640px) {
+      .specs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .design-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .preorder-section { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .specs-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .spec-module:nth-child(4n) { border-right: none; }
+    }
+    @media (max-width: 1023px) {
+      .spec-module { border-right: none; }
+    }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>VICTRON INTELLIGENCE UNIT</b><span class="ticker__dot">&middot;</span>PRE-ORDER OPEN</span>
+      <span class="ticker__item"><b>13 CORE PILLARS</b><span class="ticker__dot">&middot;</span>260 PRODUCTS</span>
+      <span class="ticker__item"><b>BIFROST COGNITION</b><span class="ticker__dot">&middot;</span>WORLD MODELS NOT TOKEN PREDICTION</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+      <span class="ticker__item"><b>HEIMDALL HUMANOID</b><span class="ticker__dot">&middot;</span>WAITLIST OPEN</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+  <nav class="subnav" aria-label="Related sections">
+    <a href="/technical" aria-current="page">Technical</a>
+    <a href="/products">Products</a>
+    <a href="/bifrost">Bifrost cognition</a>
+    <a href="/case-studies">Use cases</a>
+    <span class="subnav__meta">Victron &middot; Heimdall &middot; Bifrost v3</span>
+  </nav>
+
+  <main class="site-main" id="main">
+    <section class="hero">
+      <div class="container">
+        <div class="hero__inner">
+          <p class="eyebrow">Technical architecture &middot; Victron &amp; Heimdall</p>
+          <h1 class="hero__title">13 core pillars of sovereign AI</h1>
+          <p class="hero__lede">Every subsystem of the Victron Intelligence Unit and Heimdall humanoid line is built on deterministic, first-principles architecture; recursively error-eliminated, latent-space-maximised, and tested against a 100-year invariant human need.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMAGE SCROLLER -->
+    <div class="scroller scroller--stop-lg" aria-label="Victron and Heimdall imagery">
+      <figure class="figure">
+        <img src="hero-1.webp" alt="Robot design. QuantumindSSI TEMP v1.0" loading="lazy" width="1376" height="768">
+        <figcaption>Victron Intelligence Unit &middot; Heimdall Humanoid</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="hero-2.webp" alt="QuantumindSSI Technical view" loading="lazy" width="1376" height="768">
+        <figcaption>Systems view &middot; Sovereign stack</figcaption>
+      </figure>
+    </div>
+
+    <!-- SPECS CTA -->
+    <div class="section section--sm">
+      <div class="container">
+        <div class="split">
+          <span class="text-label">Full datasheet &middot; all variants</span>
+          <a class="btn btn--primary" href="/pre-order">Pre-order now &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPECS GRID -->
+    <section class="specs-section" aria-label="Victron hardware specifications">
+      <div class="specs-grid">
+
+        <!-- Cognition Node -->
+        <div class="spec-module">
+          <div class="spec-module-title">Victron Cognition Node</div>
+          <div class="spec-row">
+            <span class="spec-label">NPU</span>
+            <span class="spec-value highlight">6 TOPS</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Bifrost Inference Latency</span>
+            <span class="spec-value">4.2 ms</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Hallucination Rate</span>
+            <span class="spec-value highlight">&lt;0.001%</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Cloud Dependency</span>
+            <span class="spec-value highlight">Zero</span>
+          </div>
+          <div class="mt-6">
+            <div class="spec-value">Bifrost v3</div>
+            <div class="spec-label mt-1">World Models &middot; Not Token Prediction</div>
+          </div>
+        </div>
+
+        <!-- Silicon Platform -->
+        <div class="spec-module">
+          <div class="spec-module-title">Silicon Platform</div>
+          <div class="spec-row">
+            <span class="spec-label">SoC</span>
+            <span class="spec-value">RK3588S</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">CPU</span>
+            <span class="spec-value">Octa-core ARM</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">GPU</span>
+            <span class="spec-value">Mali-G610</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">RAM</span>
+            <span class="spec-value">Up to 32 GB</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">RAM Type</span>
+            <span class="spec-value">LPDDR5</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Idle Power</span>
+            <span class="spec-value">9 W</span>
+          </div>
+        </div>
+
+        <!-- Sovereignty Stack -->
+        <div class="spec-module">
+          <div class="spec-module-title">Sovereignty Stack</div>
+          <div class="spec-row">
+            <span class="spec-label">Boot Security</span>
+            <span class="spec-badge">PQC Secured</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Key Exchange</span>
+            <span class="spec-value">ML-KEM</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Signatures</span>
+            <span class="spec-value">Dilithium</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Hardware Root</span>
+            <span class="spec-value">TPM 2.0</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Air-Gap</span>
+            <span class="spec-badge">Capable</span>
+          </div>
+        </div>
+
+        <!-- Form Factor -->
+        <div class="spec-module">
+          <div class="spec-module-title">Form Factor</div>
+          <div class="spec-row">
+            <span class="spec-label">Size</span>
+            <span class="spec-value">Palm-sized</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Cooling</span>
+            <span class="spec-value">Fanless</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Min Op Temp</span>
+            <span class="spec-value">-20 &deg;C</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Storage</span>
+            <span class="spec-value">Up to 128 GB</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Connectivity</span>
+            <span class="spec-value">GbE &middot; WiFi &middot; BT</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Platform Variants Note -->
+    <section class="section section--sm">
+      <div class="container">
+        <div class="notice">
+          <div>
+            <span class="notice__title">Victron Platform Expansion</span>
+            <p class="copy copy--relaxed">The Victron line now extends beyond the RK3588S reference design to include certified variants on Radxa motherboards (ROCK 5C) and the Radxa Cubie line (A5E). Every variant ships with the same QSSI Edge Intelligence Runtime, PQC-secured boot chain, and sovereign AI stack; ensuring identical security and software guarantees regardless of form factor or silicon vendor.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13 CORE PILLARS -->
+    <section class="section" id="pillars" aria-label="13 QSSI Core Pillars">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">QuantumindSSI &middot; Master Architecture</p>
+          <h2>13 Core Pillars</h2>
+        </div>
+      </div>
+      <div class="scroller scroller--stop-lg" aria-label="13 core pillars">
+        <article class="card" data-light data-pillar="1">
+          <span class="index-marker">01</span>
+          <h3 class="card__title">VLA Foundation</h3>
+          <p class="card__body">Vision-Language-Action grounding for physical AI and embodied robotics</p>
+        </article>
+        <article class="card" data-light data-pillar="2">
+          <span class="index-marker">02</span>
+          <h3 class="card__title">Neuro-Symbolic Reasoning</h3>
+          <p class="card__body">Hybrid neural-symbolic cognition with verifiable causal justification chains</p>
+        </article>
+        <article class="card" data-light data-pillar="3">
+          <span class="index-marker">03</span>
+          <h3 class="card__title">Quantum-Resilient Intelligence</h3>
+          <p class="card__body">ML-KEM, Dilithium, and PQC boot chain; immune to harvest-now-decrypt-later</p>
+        </article>
+        <article class="card" data-light data-pillar="4">
+          <span class="index-marker">04</span>
+          <h3 class="card__title">Embodied Physical Intelligence</h3>
+          <p class="card__body">Software intelligence crystallised in silicon. Victron units and Heimdall humanoids</p>
+        </article>
+        <article class="card" data-light data-pillar="5">
+          <span class="index-marker">05</span>
+          <h3 class="card__title">Multi-Domain Synthesis</h3>
+          <p class="card__body">Cross-domain intelligence fusion; climate, logistics, defence, healthcare, on one node</p>
+        </article>
+        <article class="card" data-light data-pillar="6">
+          <span class="index-marker">06</span>
+          <h3 class="card__title">Agentic Autonomy</h3>
+          <p class="card__body">Goal-directed agents that plan, delegate, and act under uncertainty with no uplink</p>
+        </article>
+        <article class="card" data-light data-pillar="7">
+          <span class="index-marker">07</span>
+          <h3 class="card__title">Digital Twin Synchronicity</h3>
+          <p class="card__body">Continuously-updating causal world models mirroring physical assets in real time</p>
+        </article>
+        <article class="card" data-light data-pillar="8">
+          <span class="index-marker">08</span>
+          <h3 class="card__title">Sovereign AI Cloud</h3>
+          <p class="card__body">National AI nodes on Victron hardware. FHE inference, air-gapped LLMs, zero hyperscaler dependency</p>
+        </article>
+        <article class="card" data-light data-pillar="9">
+          <span class="index-marker">09</span>
+          <h3 class="card__title">Bio-Inspired Robotics</h3>
+          <p class="card__body">Neuromorphic architectures; 500 million years of biological optimisation in silicon</p>
+        </article>
+        <article class="card" data-light data-pillar="10">
+          <span class="index-marker">10</span>
+          <h3 class="card__title">Ethical Verifiable Autonomy</h3>
+          <p class="card__body">Hardware-enforced ethics; decisions bounded, logged, and verifiable before action</p>
+        </article>
+        <article class="card" data-light data-pillar="11">
+          <span class="index-marker">11</span>
+          <h3 class="card__title">Frontier Research Synthesis</h3>
+          <p class="card__body">On-device sovereign research synthesis; local LLM, zero external API dependency</p>
+        </article>
+        <article class="card" data-light data-pillar="12">
+          <span class="index-marker">12</span>
+          <h3 class="card__title">Digital Recycling</h3>
+          <p class="card__body">AI-optimised material circularity: the intelligence that powers hardware closes the loop</p>
+        </article>
+        <article class="card" data-light data-pillar="13">
+          <span class="index-marker">13</span>
+          <h3 class="card__title">Green Energy Intelligence</h3>
+          <p class="card__body">Grid-edge AI for renewable stabilisation: the energy transition that powers all AI</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- DESIGN & STRUCTURE -->
+    <section class="section" aria-label="Heimdall design and structure">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Heimdall &middot; Design and Structure</p>
+          <h2>Built for the Physical World</h2>
+          <p>The Heimdall humanoid line is engineered for durability, balance, and task performance in unstructured real-world environments.</p>
+        </div>
+      </div>
+
+      <!-- Design sub-section -->
+      <div class="sub-section">
+        <div class="sub-section-header">
+          <span class="sub-section-title">Design</span>
+          <span class="sub-section-rule">&middot;</span>
+        </div>
+        <div class="design-grid">
+          <div>
+            <img src="robot-head.webp" alt="QuantumindSSI head" loading="lazy" width="1400" height="781">
+          </div>
+          <div>
+            <img src="robot-back.webp" alt="QuantumindSSI Back" loading="lazy" width="1400" height="781">
+          </div>
+          <div>
+            <img src="robot-legs.webp" alt="QuantumindSSI Legs" loading="lazy" width="1400" height="781">
+          </div>
+        </div>
+      </div>
+
+      <!-- Structure sub-section -->
+      <div class="sub-section">
+        <div class="sub-section-header">
+          <span class="sub-section-title">Structure</span>
+          <span class="sub-section-rule">&middot;</span>
+        </div>
+        <div class="structure-img">
+          <img src="robot-body.webp" alt="Robot body structure" loading="lazy" width="1400" height="781">
+        </div>
+      </div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section class="section section--surface" aria-label="QSSI design philosophy">
+      <div class="container">
+        <blockquote class="manifesto-quote">
+          &ldquo;Intelligence is the only moat that compounds: in silicon, in photons, in code, and in the energy that powers them all.&rdquo;
+          <cite>Design Philosophy &middot; Intelligence Mandate</cite>
+        </blockquote>
+        <div class="grid grid--auto-sm grid--tight mt-12">
+          <div class="panel panel--tight">
+            <div class="text-label mb-2">01 &middot; Recursive Error Elimination</div>
+            <p class="copy">Every subsystem is iteratively stripped of false assumptions, circular reasoning, and transient dependencies: until only first-principles architecture remains.</p>
+          </div>
+          <div class="panel panel--tight">
+            <div class="text-label mb-2">02 &middot; Latent Space Maximisation</div>
+            <p class="copy">The Victron stack is architectured to extract maximum representational density from every TOPS of compute: no wasted inference, no redundant parameters.</p>
+          </div>
+          <div class="panel panel--tight">
+            <div class="text-label mb-2">03 &middot; 100-Year Time-Test</div>
+            <p class="copy">Every product addresses an invariant human need that predates and will outlast any specific technology generation. We do not architect for trends.</p>
+          </div>
+          <div class="panel panel--tight">
+            <div class="text-label mb-2">04 &middot; Physical Intelligence Mandate</div>
+            <p class="copy">Software intelligence without physical grounding is incomplete. Every QSSI product progresses from software-first conception to hardware crystallisation in the Victron and Heimdall lines.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRE-ORDER CTA -->
+    <section class="preorder-section" aria-label="Pre-order Victron and Heimdall">
+      <div class="preorder-content">
+        <div class="stack">
+          <p class="eyebrow">Production slots open</p>
+          <h2 class="fs-h3">Pre-Order Victron &amp; Heimdall</h2>
+          <p class="copy copy--relaxed">Units are manufactured sequentially, tested individually, and assigned a unique serial ID. Claim your production slot for Victron edge computing hardware: or join the Heimdall humanoid robotics waitlist.</p>
+        </div>
+        <div class="cluster">
+          <a href="/pre-order" class="btn btn--primary">Victron pre-order &rarr;</a>
+          <a href="/contact" class="btn btn--secondary">Heimdall waitlist &rarr;</a>
+        </div>
+      </div>
+      <div class="preorder-img">
+        <img src="robot-portrait.webp" alt="Robot Headshot portrait" loading="lazy" width="1100" height="1044">
+      </div>
+    </section>
+
+    <!-- QMX SPEC CALLOUT -->
+    <section class="section">
+      <div class="container">
+        <div class="qmx-callout stack">
+          <p class="kicker">ARCHITECTURE SPEC &middot; DRAFT v0.1 &middot; JUNE 2026</p>
+          <h2 class="fs-h2">QMX. Quantumind Modular eXpert Interconnect</h2>
+          <p class="copy copy--relaxed">An open specification for connecting heterogeneous ASIC and FPGA inference modules into a sovereign, on-premise Mixture of Experts backbone: using CXL 3.x, PCIe 5.0, and 400GbE. No vendor lock-in. No cloud dependency. The first open physical module standard for local MoE at any scale.</p>
+          <div class="cluster">
+            <a href="/qmx-spec" class="btn btn--primary">Read the spec &rarr;</a>
+            <a href="/local-ai" class="btn btn--accent">Local AI instance</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

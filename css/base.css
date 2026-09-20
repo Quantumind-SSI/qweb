@@ -1,0 +1,394 @@
+/* ============================================================================
+   QUANTUMINDSSI — BASE
+   Reset, document defaults, typography, focus, motion, print.
+   Depends on: tokens.css
+   ========================================================================= */
+
+/* ── RESET ──────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Offset anchor targets so sticky nav + HUD bar never cover the heading */
+  scroll-padding-top: calc(var(--hud-bar) + 96px);
+  tab-size: 2;
+  /* The document itself never scrolls sideways. Nested scroll containers
+     (scroller, arch-diagram, table-wrap) scroll internally; without this,
+     their content overflow extends the root scroller on every page. */
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: var(--text-secondary);
+  background-color: var(--bg-void);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis-weight: none;
+  overflow-x: clip;
+}
+
+/* Lock scroll when a drawer or modal owns the viewport */
+body[data-scroll-locked] {
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* ── MEDIA ──────────────────────────────────────────────────────────────── */
+img,
+svg,
+video,
+canvas,
+picture {
+  display: block;
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+/* Images that declare width/height keep their ratio when scaled down */
+img[width][height] {
+  height: auto;
+}
+
+svg {
+  fill: currentColor;
+}
+
+/* ── TYPOGRAPHY ─────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-heading);
+  text-wrap: balance;
+}
+
+h1 { font-family: var(--font-display); font-size: var(--fs-h1); font-weight: var(--fw-semibold); letter-spacing: var(--ls-display); }
+h2 { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-semibold); letter-spacing: var(--ls-display); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+h5 { font-size: var(--fs-h5); }
+h6 { font-size: var(--fs-body); }
+
+p {
+  text-wrap: pretty;
+}
+
+/* Vertical rhythm inside prose flows only — never global margins */
+.prose > * + *      { margin-top: var(--space-4); }
+.prose > * + h2     { margin-top: var(--space-12); }
+.prose > * + h3     { margin-top: var(--space-8); }
+.prose > * + h4     { margin-top: var(--space-6); }
+.prose h2 + *,
+.prose h3 + *,
+.prose h4 + *       { margin-top: var(--space-3); }
+.prose             { max-width: var(--container-text); }
+.prose p            { color: var(--text-secondary); }
+.prose strong       { color: var(--text-primary); font-weight: var(--fw-semibold); }
+.prose ul,
+.prose ol           { padding-left: var(--space-5); }
+.prose li + li      { margin-top: var(--space-2); }
+
+strong, b { font-weight: var(--fw-semibold); color: var(--text-primary); }
+em, i     { font-style: italic; }
+small     { font-size: var(--fs-small); }
+
+/* ── LINKS ──────────────────────────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* Inline links inside prose get an underline — they must be distinguishable
+   by more than colour alone. */
+.prose a,
+a.link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-a45);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.prose a:hover,
+a.link:hover {
+  color: var(--accent-bright);
+  text-decoration-color: currentColor;
+}
+
+/* ── LISTS ──────────────────────────────────────────────────────────────── */
+ul[role='list'],
+ol[role='list'],
+.list-reset {
+  list-style: none;
+}
+
+/* ── FORM ELEMENT INHERITANCE ───────────────────────────────────────────── */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+::placeholder {
+  /* 5.1:1 — the previous build shipped 2.7:1 placeholders that doubled as
+     the only field label. Both problems are fixed: real labels exist now,
+     and the placeholder is legible. */
+  color: var(--text-faint);
+  opacity: 1;
+}
+
+/* ── TABLES ─────────────────────────────────────────────────────────────── */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+caption {
+  text-align: left;
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  padding-bottom: var(--space-3);
+}
+
+/* ── HORIZONTAL RULE ────────────────────────────────────────────────────── */
+hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin-block: var(--space-8);
+}
+
+/* ── QUOTES ─────────────────────────────────────────────────────────────── */
+blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: var(--space-5);
+  color: var(--text-primary);
+  font-size: var(--fs-lead);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-snug);
+}
+
+blockquote cite {
+  display: block;
+  margin-top: var(--space-4);
+  font-size: var(--fs-small);
+  font-family: var(--font-mono);
+  font-style: normal;
+  letter-spacing: var(--ls-label);
+  color: var(--text-muted);
+}
+
+/* ── CODE ───────────────────────────────────────────────────────────────── */
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+code {
+  background: var(--surface-2);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.4em;
+  color: var(--accent-bright);
+}
+
+pre {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-secondary);
+}
+
+/* ── FOCUS ───────────────────────────────────────────────────────────────
+   One rule, applied everywhere, that nothing is permitted to remove.
+   The previous build stripped outlines on every modal input and replaced
+   them with a border tint — not a valid indicator.                     */
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* Only suppress the ring for pointer interaction, never for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── SELECTION ──────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--accent-a45);
+  color: var(--text-primary);
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-4) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-4);
+  border: 2px solid var(--bg-void);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-deep);
+}
+
+/* ── SCREEN-READER UTILITY ──────────────────────────────────────────────── */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── SKIP LINK ──────────────────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-tooltip);
+  transform: translateY(calc(-100% - var(--space-4)));
+  background: var(--accent);
+  color: var(--text-inverse);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ── MOTION PREFERENCES ─────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── PRINT ──────────────────────────────────────────────────────────────── */
+@media print {
+  .hud,
+  .site-nav,
+  .ticker,
+  .skip-link,
+  .no-print,
+  [data-hud] {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+    padding: 0 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  strong {
+    color: #000 !important;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    /* Literal ink value: the token ramp is tuned for a dark UI and would
+       print as pale grey on white. */
+    color: #444;
+  }
+
+  section,
+  .panel,
+  .card {
+    break-inside: avoid;
+    background: none !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}

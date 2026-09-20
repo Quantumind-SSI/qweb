@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /img-orig/
+
+Sitemap: https://quantumindssi.com/sitemap.xml

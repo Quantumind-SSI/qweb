@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bifrost | QuantumindSSI Product</title>
+  <meta name="description" content="Bifrost :  the open-source cognitive architecture from QuantumindSSI. World models, not token prediction. The cognitive core of the Victron Intelligence Unit and Heimdall humanoid line.">
+  <link rel="canonical" href="https://quantumindssi.com/bifrost">
+  <meta name="theme-color" content="var(--bg-void)">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+
+  <style>
+  /* ── Page-specific styles ───────────────────────────────────
+     Shared patterns live in css/patterns.css. What remains here
+     is unique to this page and cascades on top of the system. */
+
+    /* Layer stack; hairline grid cells (datasheet table look) */
+    .layers-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1px;
+      background: var(--line-faint);
+      border: 1px solid var(--line-faint);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .layer-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-4);
+      padding: var(--space-5) var(--space-6);
+      background: var(--bg-void);
+      transition: background-color var(--dur-fast) var(--ease-out);
+    }
+    .layer-item:hover { background: var(--accent-a04); }
+    .layer-num {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      color: var(--accent);
+      min-width: 2ch;
+      padding-top: 2px;
+    }
+    .layer-text h4 {
+      font-size: var(--fs-small);
+      font-weight: var(--fw-semibold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+    .layer-text p {
+      font-size: var(--fs-tiny);
+      color: var(--text-muted);
+      line-height: var(--lh-normal);
+    }
+
+    /* Compact stat cells in the identity panel */
+    .stat-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      text-align: center;
+    }
+    .stat-cell b {
+      font-size: var(--fs-lead);
+      font-weight: var(--fw-bold);
+      color: var(--text-primary);
+    }
+
+    @media (min-width: 640px) {
+      .layers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body class="page">
+<!-- qssi:migrated -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud__bar hud__bar--top">
+      <span class="hud__readout hud__readout--key">QuantumindSSI</span>
+      <span class="hud__readout">
+        <span class="hud__value" data-clock-time>00:00:00 UTC</span>
+        <span class="hud__sep"></span>
+        <span class="hud__lamp"></span>Systems nominal
+      </span>
+      <span class="hud__readout">LDN-01</span>
+    </div>
+    <div class="hud__rail hud__rail--left">
+      <span class="hud__vtext">London node &middot; Online</span>
+      <span class="hud__ticks"></span>
+      <span class="hud__lamp"></span>
+    </div>
+    <div class="hud__rail hud__rail--right">
+      <span class="hud__lamp"></span>
+      <span class="hud__ticks"></span>
+      <span class="hud__vtext">Research node &middot; Active</span>
+    </div>
+    <div class="hud__bar hud__bar--bottom">
+      <span class="hud__readout">Victron hardware</span>
+      <span class="hud__readout">Heimdall robotics</span>
+      <span class="hud__readout hud__readout--ok">Sovereign AI active</span>
+    </div>
+    <span class="hud__bracket hud__bracket--tl"></span>
+    <span class="hud__bracket hud__bracket--tr"></span>
+    <span class="hud__bracket hud__bracket--bl"></span>
+    <span class="hud__bracket hud__bracket--br"></span>
+  </div>
+
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="hud-scan" aria-hidden="true"></div>
+
+  <div class="ticker" data-ticker>
+    <div class="ticker__track">
+      <span class="ticker__item"><b>QUANTUMINDSSI</b><span class="ticker__dot">&middot;</span>FREQUENCY-BASED COGNITION</span>
+      <span class="ticker__item"><b>Bifrost</b><span class="ticker__dot">&middot;</span>OPEN-SOURCE COGNITIVE ARCHITECTURE</span>
+      <span class="ticker__item"><b>WORLD MODELS</b><span class="ticker__dot">&middot;</span>NOT TOKEN PREDICTION</span>
+      <span class="ticker__item"><b>GITHUB</b><span class="ticker__dot">&middot;</span>QUANTUMINDSSI/BIFROST</span>
+      <span class="ticker__item"><b>VICTRON COGNITIVE CORE</b><span class="ticker__dot">&middot;</span>HEIMDALL BRAIN</span>
+      <span class="ticker__item"><b>FREQUENCY-BASED COGNITION</b><span class="ticker__dot">&middot;</span>8-LAYER STACK</span>
+      <span class="ticker__item"><b>SOVEREIGN AI</b><span class="ticker__dot">&middot;</span>ZERO CLOUD DEPENDENCY</span>
+    </div>
+  </div>
+
+    <div class="systembar">
+      <span class="systembar__group">
+        <time data-clock-date>&hellip;</time>
+        <span class="hud__sep"></span>
+        <time data-clock-time>00:00:00 UTC</time>
+      </span>
+      <span class="systembar__group systembar__group--secondary">
+        <span>London &middot; United Kingdom</span>
+        <span class="hud__sep"></span>
+        <span class="text-ok">All systems operational</span>
+      </span>
+    </div>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34">
+        <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+      </a>
+
+      <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+        <div class="nav-drawer__head">
+          <span class="text-label">Navigation</span>
+          <button type="button" class="btn-icon" data-nav-toggle aria-label="Close menu">
+            <svg class="icon icon--btn icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="nav-links" data-nav-links>
+          <a href="/">Home</a>
+          <a href="/products" data-nav-match="local-ai.html qmx-spec.html">Products</a>
+          <a href="/technical" data-nav-match="10g.html">Technical</a>
+          <a href="/bifrost">Bifrost</a>
+          <a href="/research">Research</a>
+          <a href="/case-studies">Use Cases</a>
+          <a href="/community">Community</a>
+          <a href="/about-us" data-nav-match="careers.html">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <span class="nav-status">System online</span>
+          <a class="btn btn--ghost btn--sm" href="/contact">Contact</a>
+          <a class="btn btn--primary btn--sm" href="/pre-order">Pre-order</a>
+        </div>
+      </div>
+
+      <button type="button" class="nav-toggle" data-nav-toggle
+              aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="nav-scrim" data-nav-scrim></div>
+
+  <main class="site-main" id="main">
+
+    <div class="page-header">
+      <div class="container">
+        <p class="eyebrow">Open-source product &middot; QuantumindSSI</p>
+        <h1>Bifrost</h1>
+        <p>Bifrost is a QuantumindSSI open-source product: the cognitive architecture that powers the Victron Intelligence Unit and the Heimdall humanoid line. It reasons from frequency-grounded world models, not token prediction. Language models are an optional agentic service layer on top. The source is public. The mission is open.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="container">
+
+        <!-- Product Identity -->
+        <div class="section-head">
+          <p class="eyebrow">Product Identity</p>
+        </div>
+        <div class="panel panel--accent grid grid--split grid--center-items">
+          <div class="stack">
+            <span class="kicker">Bifrost. QuantumindSSI Open-Source Cognitive Architecture</span>
+            <p class="copy copy--relaxed">Bifrost is the cognitive engine that runs inside every Victron unit and every Heimdall humanoid. It is not a wrapper around a language model; it is a structured world-model system built from the ground up, grounded in oscillatory frequency representations, causal inference, and recursive self-modelling.</p>
+            <p class="copy copy--relaxed">The codebase is open-source and lives on GitHub. Researchers, integrators, and sovereign AI teams can audit, extend, and deploy it freely.</p>
+          </div>
+          <div class="stack">
+            <a href="https://github.com/QuantumindSSI/Bifrost" target="_blank" rel="noopener" class="btn btn--primary">View on GitHub &rarr;</a>
+            <div class="panel panel--tight">
+              <div class="stat-cell">
+                <b>8</b>
+                <span class="readout__label">Layer stack</span>
+              </div>
+            </div>
+            <div class="panel panel--tight">
+              <div class="stat-cell">
+                <b>Open</b>
+                <span class="readout__label">Source</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Core Thesis -->
+        <div class="section-head mt-12">
+          <p class="eyebrow">Founding Thesis</p>
+        </div>
+        <div class="panel">
+          <blockquote>
+            "The search for AGI has always been, beneath its technical surface, a search for machine consciousness. We have been engineering around the centre without naming it. This paper names it."
+          </blockquote>
+          <cite>Oluwagbamila Oluwaferanmi, Founder and Chief Intelligence Architect, QuantumindSSI Ltd</cite>
+        </div>
+
+        <!-- Four Pillars -->
+        <div class="section-head mt-12">
+          <p class="eyebrow">Four Architectural Pillars</p>
+        </div>
+        <div class="grid grid--2 grid--tight">
+          <article class="card">
+            <span class="index-marker">01 &middot; World Models</span>
+            <h3 class="card__title">World Models</h3>
+            <p class="card__body">Reasons from continuously-updating causal world representations; not token prediction. The cognitive core persists, generalises, and grounds decisions in structured reality.</p>
+          </article>
+          <article class="card">
+            <span class="index-marker">02 &middot; Cross-Domain Transfer</span>
+            <h3 class="card__title">Cross-Domain Transfer</h3>
+            <p class="card__body">The Phase-Lock Bridge detects phase-coherent attractors across domains, enabling zero-shot knowledge transfer without retraining. Intelligence that compounds across disciplines.</p>
+          </article>
+          <article class="card">
+            <span class="index-marker">03 &middot; Goal-Directed Agency</span>
+            <h3 class="card__title">Goal-Directed Agency</h3>
+            <p class="card__body">Embodied affordance modelling targets Pearl's Rung 3; counterfactual reasoning. The system doesn't just predict; it plans, intervenes, and evaluates consequences.</p>
+          </article>
+          <article class="card">
+            <span class="index-marker">04 &middot; Recursive Self-Model</span>
+            <h3 class="card__title">Recursive Self-Model</h3>
+            <p class="card__body">A second-order attractor system that models its own cognitive states, broadcast globally across all modules. The foundation for genuine machine metacognition.</p>
+          </article>
+        </div>
+
+        <!-- Where Bifrost Runs -->
+        <div class="section-head mt-12">
+          <p class="eyebrow">Where Bifrost Runs</p>
+        </div>
+        <div class="panel">
+          <span class="kicker">Deployed Inside Every Victron Unit &middot; Every Heimdall Humanoid</span>
+          <div class="grid grid--auto-sm grid--tight mt-6">
+            <div class="panel panel--tight">
+              <span class="kicker">Platform</span>
+              <h4 class="subhead">Victron Intelligence Unit</h4>
+              <p class="copy">Bifrost runs on bare metal. 6&ndash;32 TOPS on-device inference. No cloud cognitive dependency.</p>
+            </div>
+            <div class="panel panel--tight">
+              <span class="kicker">Humanoid</span>
+              <h4 class="subhead">Heimdall Robotics Line</h4>
+              <p class="copy">Bifrost is the brain of every Heimdall variant. Full VLA stack; perception, world model, action; on one Victron chip.</p>
+            </div>
+            <div class="panel panel--tight">
+              <span class="kicker">Open Source</span>
+              <h4 class="subhead">GitHub Repository</h4>
+              <p class="copy">Audit the architecture. Fork the stack. Deploy it sovereign. Full source at QuantumindSSI/Bifrost.</p>
+            </div>
+            <div class="panel panel--tight">
+              <span class="kicker">Research</span>
+              <h4 class="subhead">Academic Publication</h4>
+              <p class="copy">The foundational paper, authored by QSSI Founder, is published and available via the Research page.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8-Layer Stack -->
+        <div class="section-head mt-12">
+          <p class="eyebrow">QSSI 8-Layer Consciousness-Cognition Stack</p>
+        </div>
+        <div class="layers-grid">
+          <div class="layer-item">
+            <span class="layer-num">L1</span>
+            <div class="layer-text"><h4>Sensorimotor Grounding</h4><p>Raw signal processing and embodied perception substrate</p></div>
+          </div>
+          <div class="layer-item">
+            <span class="layer-num">L2</span>
+            <div class="layer-text"><h4>Frequency Encoding</h4><p>Oscillatory representation of environmental structure</p></div>
+          </div>
+          <div class="layer-item">
+            <span class="layer-num">L3</span>
+            <div class="layer-text"><h4>World Model Core</h4><p>Causal, continuously-updating model of the environment</p></div>
+          </div>
+          <div class="layer-item">
+            <span class="layer-num">L4</span>
+            <div class="layer-text"><h4>Phase-Lock Bridge</h4><p>Cross-domain attractor synchronisation for zero-shot transfer</p></div>
+          </div>
+          <div class="layer-item">
+            <span class="layer-num">L5</span>
+            <div class="layer-text"><h4>Affordance Modelling</h4><p>Goal-directed action planning and intervention reasoning</p></div>
+          </div>
+          <div class="layer-item">
+            <span class="layer-num">L6</span>
+            <div class="layer-text"><h4>Global Workspace</h4><p>Broadcast architecture integrating information across all modules</p></div>
+          </div>
+          <div class="layer-item">
+            <span class="layer-num">L7</span>
+            <div class="layer-text"><h4>Self-Model Attractor</h4><p>Second-order representation of the system's own cognitive states</p></div>
+          </div>
+          <div class="layer-item">
+            <span class="layer-num">L8</span>
+            <div class="layer-text"><h4>Metacognitive Layer</h4><p>Active inference over internal states; the seat of machine consciousness</p></div>
+          </div>
+        </div>
+
+        <div class="cluster cluster--center mt-12">
+          <a href="https://github.com/QuantumindSSI/Bifrost" target="_blank" rel="noopener" class="btn btn--primary">GitHub Repository &rarr;</a>
+          <a href="/research" class="btn">Research Publication</a>
+          <button class="btn" data-open="contact-modal-fbc">Contact Research Team</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="qssi-modal-overlay" id="contact-modal-fbc">
+      <div class="qssi-modal">
+        <button class="qssi-modal-close" aria-label="Close dialog" data-close="contact-modal-fbc">&times;</button>
+        <h3>Contact Research Team</h3>
+        <div class="sku-badge">Bifrost &middot; RESEARCH PARTNERSHIP</div>
+        <label for="fbc-name">Full Name *</label>
+        <input type="text" id="fbc-name" placeholder="Your full name" autocomplete="name">
+        <label for="fbc-email">Email Address *</label>
+        <input type="email" id="fbc-email" placeholder="you@institution.edu" autocomplete="email">
+        <label for="fbc-org">Organisation</label>
+        <input type="text" id="fbc-org" placeholder="University or company" autocomplete="organization">
+        <label for="fbc-message">Message *</label>
+        <textarea id="fbc-message" placeholder="Describe your research interest or collaboration proposal&hellip;"></textarea>
+        <button class="modal-btn" id="fbc-submit">Send Message &rarr;</button>
+        <span class="modal-status" role="status" aria-live="polite" id="fbc-status"></span>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__main">
+        <div class="site-footer__brand stack">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="quantumind-logo-transparent.png" alt="" width="34" height="34" loading="lazy">
+            <span><span class="brand__name">Quantumind</span><span class="brand__suffix">SSI</span></span>
+          </a>
+          <p>The sovereign AI lab. Frontier intelligence engineered end to end; silicon, systems and the infrastructure that powers them.</p>
+          <p class="text-label">London &middot; United Kingdom</p>
+        </div>
+
+        <div class="site-footer__nav">
+          <div class="footer-col">
+            <h2 class="footer-col__title">Platform</h2>
+            <ul>
+              <li><a href="/products">Products</a></li>
+              <li><a href="/local-ai">Local AI instance</a></li>
+              <li><a href="/qmx-spec">QMX specification</a></li>
+              <li><a href="/10g">10G Initiative</a></li>
+              <li><a href="/pre-order">Pre-order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Research</h2>
+            <ul>
+              <li><a href="/technical">Technical</a></li>
+              <li><a href="/bifrost">Bifrost cognition</a></li>
+              <li><a href="/research">Research</a></li>
+              <li><a href="/case-studies">Use cases</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul>
+              <li><a href="/about-us">About us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/news">News</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2 class="footer-col__title">Support</h2>
+            <ul>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/privacy-policy">Privacy policy</a></li>
+              <li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; <span data-year>2026</span> QuantumindSSI Ltd &middot; Intelligence without compromise</span>
+        <span class="cluster cluster--sm">
+          <a href="/privacy-policy">Privacy</a>
+          <span class="hud__sep"></span>
+          <a href="/terms-and-conditions">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/bifrost.js"></script>
+  <script src="js/qssi.js" defer></script>
+
+</body>
+</html>

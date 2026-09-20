@@ -1,0 +1,609 @@
+/* ============================================================================
+   QUANTUMINDSSI — HUD / COCKPIT CHROME
+
+   Design intent: instrumentation, not science fiction.
+
+   The frame is a precision bezel around the document. It reads as a piece of
+   engineered equipment because its lines are hairline-consistent, its labels
+   are tracked-out monospace, and its motion is minimal and purposeful.
+   It does NOT glow, pulse, flicker or slide images behind the copy.
+
+   Structural rules this file obeys:
+     1. The frame is fixed, but the document reserves exactly its size
+        (see layout.css). Chrome never covers content.
+     2. The frame sits at --z-hud (200), BELOW the nav (300) and below every
+        overlay. It can never trap a click: pointer-events are off except on
+        genuinely interactive controls.
+     3. All chrome is hidden below 900px, where --hud-rail/--hud-bar are 0.
+
+   Depends on: tokens.css, base.css, layout.css
+   ========================================================================= */
+
+/* ── FRAME ──────────────────────────────────────────────────────────────── */
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-hud);
+  pointer-events: none;
+  /* Isolate the frame so it never triggers document layout on scroll.
+     Deliberately NOT `contain: strict` — size containment would collapse
+     an element sized purely by `inset`. */
+  contain: layout paint style;
+}
+
+.hud * {
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .hud { display: none; }
+}
+
+/* ── RAILS ──────────────────────────────────────────────────────────────── */
+.hud__rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--hud-rail);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: calc(var(--hud-bar) + var(--space-4));
+  background: var(--bg-void);
+}
+
+/* Rails sit UNDER the bars. Painting order matters: if the rails covered the
+   bars' ends, each horizontal hairline would stop 34px short of the corner
+   and the bezel would read as four detached strips instead of one frame. */
+.hud__rail  { z-index: 1; }
+.hud__bar   { z-index: 2; }
+
+.hud__rail--left  { left: 0;  border-right: 1px solid var(--line-accent); }
+.hud__rail--right { right: 0; border-left:  1px solid var(--line-accent); }
+
+/* ── BARS ───────────────────────────────────────────────────────────────── */
+.hud__bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--hud-bar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-inline: calc(var(--hud-rail) + var(--space-4));
+  background: var(--bg-void);
+}
+
+.hud__bar--top    { top: 0;    border-bottom: 1px solid var(--line-accent); }
+.hud__bar--bottom { bottom: 0; border-top:    1px solid var(--line-accent); }
+
+/* ── READOUTS ────────────────────────────────────────────────────────────
+   The typographic signature of the whole system: 11px mono, tracked to
+   0.14em, uppercase, at 5.1:1 contrast. Legible instrumentation.       */
+.hud__readout {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.hud__readout--key { color: var(--text-muted); }
+.hud__readout--ok  { color: var(--signal-ok); }
+
+/* Tabular figures stop the clock from jittering as digits change */
+.hud__value {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.hud__sep {
+  width: 1px;
+  height: 10px;
+  background: var(--line-strong);
+  flex-shrink: 0;
+}
+
+/* ── STATUS LAMP ─────────────────────────────────────────────────────────
+   A lamp, not a strobe. It holds steady and breathes once every 4s at low
+   amplitude. The previous build pulsed 1 -> 0.3 opacity every 2s, which
+   pulls the eye away from the content permanently.                     */
+.hud__lamp {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--signal-ok);
+  box-shadow: 0 0 6px var(--signal-ok);
+  flex-shrink: 0;
+  animation: hud-breathe 4s var(--ease-in-out) infinite;
+}
+
+.hud__lamp--idle {
+  background: var(--text-faint);
+  box-shadow: none;
+  animation: none;
+}
+
+.hud__lamp--warn { background: var(--signal-warn); box-shadow: 0 0 6px var(--signal-warn); }
+
+@keyframes hud-breathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* ── VERTICAL RAIL TEXT ─────────────────────────────────────────────────── */
+.hud__vtext {
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.hud__rail--left .hud__vtext { transform: rotate(180deg); }
+
+/* ── TICK MARKS ──────────────────────────────────────────────────────────
+   Ruler graduations. Drawn with a repeating gradient rather than a dozen
+   empty <span> elements — fewer nodes, perfectly even spacing.        */
+.hud__ticks {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: var(--space-16);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--line-strong) 0 1px,
+    transparent 1px 12px
+  );
+  background-position: center;
+  background-size: 7px 100%;
+  background-repeat: repeat-y;
+  margin-block: var(--space-4);
+  opacity: 0.7;
+}
+
+/* ── CORNER BRACKETS ─────────────────────────────────────────────────────
+   Drawn in CSS. The previous build shipped 56 inline SVGs for these, none
+   of which were hidden from screen readers.                            */
+/* Brackets mark the four corners of the CONTENT area — the inner edge of the
+   bezel — rather than floating in the middle of the bars. They read as
+   registration marks on an instrument face. */
+.hud__bracket {
+  position: absolute;
+  z-index: 3;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--accent);
+  opacity: 0.55;
+}
+
+.hud__bracket--tl { top: calc(var(--hud-bar) + var(--hud-inset));    left: calc(var(--hud-rail) + var(--hud-inset));  border-right: none; border-bottom: none; }
+.hud__bracket--tr { top: calc(var(--hud-bar) + var(--hud-inset));    right: calc(var(--hud-rail) + var(--hud-inset)); border-left: none;  border-bottom: none; }
+.hud__bracket--bl { bottom: calc(var(--hud-bar) + var(--hud-inset)); left: calc(var(--hud-rail) + var(--hud-inset));  border-right: none; border-top: none; }
+.hud__bracket--br { bottom: calc(var(--hud-bar) + var(--hud-inset)); right: calc(var(--hud-rail) + var(--hud-inset)); border-left: none;  border-top: none; }
+
+/* ── CROSSHAIRS ─────────────────────────────────────────────────────────── */
+.hud__crosshair {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.hud__crosshair::before,
+.hud__crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--accent);
+}
+
+.hud__crosshair::before { top: 50%; left: 0; right: 0; height: 1px; }
+.hud__crosshair::after  { left: 50%; top: 0; bottom: 0; width: 1px; }
+
+/* ============================================================================
+   BACKDROP LAYERS
+   ========================================================================= */
+
+/* ── MEASUREMENT GRID ────────────────────────────────────────────────────
+   Fixed, non-animated, and very low contrast. It should be felt, not seen.
+   The previous build animated grid opacity on a 4s loop across the whole
+   viewport, which is both distracting and a continuous compositor cost. */
+.hud-grid {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-below);
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--accent-a04) 1px, transparent 1px),
+    linear-gradient(90deg, var(--accent-a04) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  /* Fade the grid out toward the centre so it never fights body copy */
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, transparent 20%, #000 100%);
+          mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, transparent 20%, #000 100%);
+}
+
+/* ── IMAGE BACKDROP ──────────────────────────────────────────────────────
+   Previously seven full-bleed product photographs cross-faded behind every
+   page at 0.15 opacity with a 20s Ken Burns zoom — permanently moving
+   texture underneath every paragraph on the site.
+
+   Now: a single static image, heavily vignetted, anchored to the top of the
+   page only, so it frames the hero and is gone by the time body copy
+   starts. Motion is opt-in via [data-backdrop-cycle] and is disabled
+   entirely under prefers-reduced-motion.                              */
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: min(88vh, 900px);
+  z-index: var(--z-below);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.backdrop__layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 22%;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-in-out);
+}
+
+.backdrop__layer.is-active { opacity: 0.22; }
+
+/* Two-stage scrim: a directional wash for depth, then a hard fade to the
+   page colour at the bottom edge so there is never a visible seam. */
+.backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(6, 8, 10, 0.55) 0%,
+      rgba(6, 8, 10, 0.78) 45%,
+      var(--bg-void) 100%),
+    linear-gradient(100deg,
+      rgba(13, 61, 60, 0.35) 0%,
+      transparent 55%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop__layer { transition: none; }
+}
+
+/* ── SCAN LINE ───────────────────────────────────────────────────────────
+   Kept, but reduced to a single 1px sweep every 12s at low opacity, and
+   confined to the region between the rails. Off under reduced motion. */
+.hud-scan {
+  position: fixed;
+  top: 0;
+  left: var(--hud-rail);
+  right: var(--hud-rail);
+  height: 1px;
+  z-index: var(--z-hud);
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--accent-a28), transparent);
+  animation: hud-sweep 12s linear infinite;
+}
+
+@keyframes hud-sweep {
+  0%   { transform: translateY(0);      opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { transform: translateY(100vh);  opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-scan { display: none; }
+}
+
+@media (max-width: 900px) {
+  .hud-scan { display: none; }
+}
+
+/* ============================================================================
+   TICKER
+   ========================================================================= */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--line-faint);
+  /* Feather both ends so items enter and leave instead of being clipped */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  gap: var(--space-12);
+  padding-block: var(--space-2);
+  animation: ticker-scroll 60s linear infinite;
+}
+
+.ticker__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.ticker__item b {
+  color: var(--text-muted);
+  font-weight: var(--fw-regular);
+}
+
+.ticker__dot {
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* WCAG 2.2.2 — moving content must be pausable. Three ways to stop it. */
+.ticker:hover .ticker__track,
+.ticker:focus-within .ticker__track,
+.ticker[data-paused='true'] .ticker__track {
+  animation-play-state: paused;
+}
+
+.ticker__pause {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  transform: translateY(-50%);
+  z-index: var(--z-raised);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  background: var(--bg-base);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.ticker__pause:hover { color: var(--accent); }
+.ticker__pause svg   { width: 10px; height: 10px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track { animation: none; }
+  .ticker        { -webkit-mask-image: none; mask-image: none; }
+  .ticker__track { overflow-x: auto; width: 100%; }
+}
+
+/* ============================================================================
+   CONTENT-LEVEL HUD ELEMENTS
+   Reusable pieces that carry the cockpit language into the page body.
+   ========================================================================= */
+
+/* ── SYSTEM BAR ─────────────────────────────────────────────────────────
+   The in-flow strip under the nav (date / time / status).              */
+.systembar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 26px;
+  padding-inline: var(--gutter);
+  border-bottom: 1px solid var(--line-faint);
+  background: color-mix(in srgb, var(--bg-void) 88%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+          backdrop-filter: blur(14px);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Shown only where the HUD frame is not.
+
+   Above 900px the fixed HUD top bar already carries the clock and status, so
+   repeating them here would be redundant chrome. Below 900px the HUD is
+   hidden entirely, and this strip becomes the only telemetry — sitting above
+   the sticky header so it scrolls away and leaves a single sticky row. */
+@media (min-width: 901px) {
+  .systembar { display: none; }
+}
+
+.systembar__group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.systembar time,
+.systembar__value {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 639px) {
+  .systembar__group--secondary { display: none; }
+}
+
+/* ── EYEBROW / SECTION MARKER ────────────────────────────────────────────
+   The tracked-out mono label that precedes headings. Used consistently,
+   this is what makes the whole site read as one instrument.           */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.eyebrow--plain::before { display: none; }
+.eyebrow--muted { color: var(--text-faint); }
+
+/* Numbered index marker, e.g. pillar 07 */
+.index-marker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── BRACKETED PANEL ────────────────────────────────────────────────────
+   A content panel with machined corners. The bracket is drawn with two
+   pseudo-elements and does not affect layout.                          */
+.bracketed {
+  position: relative;
+}
+
+.bracketed::before,
+.bracketed::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--accent);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.bracketed::before { top: -1px; left: -1px;  border-right: none; border-bottom: none; }
+.bracketed::after  { bottom: -1px; right: -1px; border-left: none;  border-top: none; }
+
+.bracketed:hover::before,
+.bracketed:hover::after { opacity: 1; }
+
+/* ── DATA READOUT ────────────────────────────────────────────────────────
+   Statistic display: large tabular figure over a tracked mono label.  */
+.readout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.readout__value {
+  font-size: var(--fs-readout);
+  font-weight: var(--fw-light);
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.readout__value--accent { color: var(--accent); }
+
+.readout__unit {
+  font-size: 0.5em;
+  color: var(--text-muted);
+  margin-left: 0.15em;
+  letter-spacing: var(--ls-label);
+}
+
+.readout__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.readout--sm .readout__value { font-size: var(--fs-readout-sm); }
+
+/* ── SPEC LIST ───────────────────────────────────────────────────────────
+   Key/value rows with leader rules — the densest, most "datasheet" way to
+   present hardware specifications.                                     */
+.speclist {
+  display: flex;
+  flex-direction: column;
+}
+
+.speclist__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--line-faint);
+}
+
+.speclist__row:last-child { border-bottom: none; }
+
+.speclist__key {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.speclist__leader {
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: var(--space-4);
+  background: var(--line-faint);
+  transform: translateY(-3px);
+}
+
+.speclist__value {
+  color: var(--text-primary);
+  font-size: var(--fs-small);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── RULE WITH LABEL ─────────────────────────────────────────────────────
+   A horizontal divider carrying a mono caption.                        */
+.rule {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-hud);
+  text-transform: uppercase;
+}
+
+.rule::before,
+.rule::after {
+  content: '';
+  height: 1px;
+  background: var(--line);
+  flex: 1 1 auto;
+}
+
+.rule--start::before { flex: 0 0 var(--space-8); }
