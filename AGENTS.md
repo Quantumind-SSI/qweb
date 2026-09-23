@@ -133,7 +133,7 @@ Azure Portal → storage account → Storage browser → Tables, or:
 ```bash
 az storage entity query --table-name SalesEnquiries \
   --connection-string "$(az storage account show-connection-string \
-    -n <account> -g rg-quantumindssi-web --query connectionString -o tsv)"
+    -n <account> -g rg-oluwaferanmi-9431 --query connectionString -o tsv)"
 ```
 
 ## Deployment — Azure Static Web Apps
@@ -156,14 +156,14 @@ Static Web App → **Configuration → Application settings** (server-side only)
 | `ATHENOIR_API_KEY` | optional bearer token for the inference deployment |
 | `ATHENOIR_MODEL` | model id for the proxy (default `unsloth/Llama-3.2-3B-Instruct`) |
 
-Provisioned resources (resource group `rg-quantumindssi-web`, West Europe):
+Provisioned resources (resource group `rg-oluwaferanmi-9431`):
 
 | Resource | Name |
 |---|---|
 | Static Web App (Standard) | `swa-quantumindssi` |
 | Storage account | `stqssiweb…` |
-| Communication Services | `acs-quantumindssi` |
-| Email Communication Services | `ecs-quantumindssi` |
+| Communication Services | `acs-qssi-web` |
+| Email Communication Services | `ecs-quantumindssi` (Azure US data location, custom domain `quantumindssi.com`) |
 
 GitHub repository → **Settings → Secrets and variables**:
 
