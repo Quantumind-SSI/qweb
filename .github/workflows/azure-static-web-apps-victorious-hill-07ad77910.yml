@@ -20,6 +20,28 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Generate js/config.js
+        env:
+          ATHENOIR_ENABLED: ${{ vars.ATHENOIR_ENABLED }}
+          SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
+        run: |
+          {
+            echo "/* Generated at deploy time by Azure Static Web Apps CI/CD. Do not edit. */"
+            echo "window.QSSI_CONFIG = {"
+            echo "  apiBase: '/api',"
+            echo "  athenoir: {"
+            echo "    enabled: ${ATHENOIR_ENABLED:-false},"
+            echo "    model: 'unsloth/Llama-3.2-3B-Instruct'"
+            echo "  },"
+            echo "  supportEmail: '${SUPPORT_EMAIL:-hello@quantumindssi.com}'"
+            echo "};"
+          } > js/config.js
+      - name: Block build if a JWT is found in tracked source
+        run: |
+          if git grep -InE 'eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}' -- '*.js' '*.html' '*.css'; then
+            echo "::error::JWT-like token found in tracked source"
+            exit 1
+          fi
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
