@@ -17,6 +17,11 @@
      ATHENOIR_ENDPOINT   HTTPS URL of the inference deployment
      ATHENOIR_API_KEY    optional bearer token for the deployment
      ATHENOIR_MODEL      model id forwarded when the client sends none
+   Optional:
+     ATHENOIR_THINKING   'false' disables the enable_thinking template
+                         kwarg; anything else (or unset) sends it, which
+                         thinking-capable NIM models require to produce
+                         visible content.
    ========================================================================= */
 const { app } = require('@azure/functions');
 
@@ -122,11 +127,20 @@ app.http('chat', {
     const key = process.env.ATHENOIR_API_KEY;
     if (key) headers.Authorization = `Bearer ${key}`;
 
+    const thinkEnabled = process.env.ATHENOIR_THINKING !== 'false';
+    const payload = {
+      model,
+      messages,
+      max_tokens: 2048,
+      temperature: 0.4
+    };
+    if (thinkEnabled) payload.chat_template_kwargs = { enable_thinking: true };
+
     try {
       const upstreamRes = await fetch(upstream, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ model, messages, max_tokens: 800, temperature: 0.4 }),
+        body: JSON.stringify(payload),
         signal: AbortSignal.timeout(TIMEOUT_MS)
       });
 
