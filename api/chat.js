@@ -119,7 +119,7 @@ async function handleChat(request, env, ctx) {
     return json(422, { message: 'No usable messages in the request.' });
   }
 
-  const model = String(body.model || 'unsloth/Llama-3.2-3B-Instruct').slice(0, 200);
+  const model = String(body.model || process.env.ATHENOIR_MODEL).slice(0, 200);
 
   /* The upstream URL is built from configuration only — client input
      never selects a host, so there is no SSRF surface. */
