@@ -50,7 +50,7 @@ const IDLE_TIMEOUT_MS = 45_000; /* kill a stalled stream, not a slow one */
    not a guarantee. */
 const hits = new Map();
 const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 10;
+const MAX_PER_WINDOW = 20;
 
 function throttled(key) {
   const now = Date.now();

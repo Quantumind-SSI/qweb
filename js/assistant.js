@@ -32,6 +32,11 @@
   var log = root.querySelector('[data-assistant-log]');
   var history = [];
 
+  /* Client-side pacing: the server throttles per IP; spacing sends keeps a
+     normal back-and-forth well clear of it. */
+  var SEND_INTERVAL_MS = 2500;
+  var lastSendAt = 0;
+
   function append(role, text) {
     var el = document.createElement('div');
     el.className = 'assistant__msg assistant__msg--' + role;
@@ -70,8 +75,27 @@
     var question = input.value.trim();
     if (!question) return;
 
-    append('user', question);
+    /* Pace sends: if the user fires faster than SEND_INTERVAL_MS, wait the
+       remainder before going to the network. */
+    var sinceLast = Date.now() - lastSendAt;
+    if (lastSendAt && sinceLast < SEND_INTERVAL_MS) {
+      var waitMs = SEND_INTERVAL_MS - sinceLast;
+      input.disabled = true;
+      append('bot', 'One moment…');
+      setTimeout(function () {
+        input.disabled = false;
+        submitQuestion(question);
+      }, waitMs);
+      input.value = '';
+      return;
+    }
     input.value = '';
+    submitQuestion(question);
+  });
+
+  function submitQuestion(question) {
+    lastSendAt = Date.now();
+    append('user', question);
     input.disabled = true;
 
     var pending = append('bot', 'Thinking…');
@@ -93,9 +117,13 @@
         if (!res.ok || ct.indexOf('text/event-stream') === -1) {
           /* JSON error path (4xx/5xx from the proxy itself) or an edge
              error page — read as text, try JSON, else a friendly line. */
+          var status = res.status;
           return res.text().then(function (text) {
             var data = null;
             try { data = JSON.parse(text); } catch (e) { /* non-JSON body */ }
+            if (status === 429) {
+              throw new Error('You are sending messages too quickly — give it a moment and try again.');
+            }
             throw new Error(
               (data && data.message) || 'The assistant is unavailable right now. Please try again.'
             );
@@ -145,5 +173,5 @@
         input.disabled = false;
         input.focus();
       });
-  });
+  }
 })();
