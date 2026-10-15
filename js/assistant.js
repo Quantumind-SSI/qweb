@@ -10,6 +10,7 @@
     root.remove();
     return;
   }
+  root.removeAttribute('hidden');
 
   var apiBase = ((window.QSSI_CONFIG && window.QSSI_CONFIG.apiBase) || '/api').replace(/\/$/, '');
   var model = (window.QSSI_CONFIG && window.QSSI_CONFIG.athenoir && window.QSSI_CONFIG.athenoir.model) || 'unsloth/Llama-3.2-3B-Instruct';
