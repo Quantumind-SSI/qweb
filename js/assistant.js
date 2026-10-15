@@ -1,41 +1,41 @@
-/* ============================================================================
-   QUANTUMINDSSI — ATHENOIR ASSISTANT
-
-   Renders nothing unless QSSI_CONFIG.athenoir.enabled is true AND an endpoint
-   is configured. The previous build shipped the endpoint as an editable text
-   input in the page, pre-filled with an ephemeral trycloudflare.com tunnel.
-   ========================================================================= */
+/* eslint-disable */
 (function () {
   'use strict';
 
-  var cfg = (window.QSSI_CONFIG && window.QSSI_CONFIG.athenoir) || {};
-  var apiBase = ((window.QSSI_CONFIG && window.QSSI_CONFIG.apiBase) || '/api').replace(/\/$/, '');
   var root = document.querySelector('[data-assistant]');
-
   if (!root) return;
 
+  var cfg = (window.QSSI_CONFIG && window.QSSI_CONFIG.athenoir) || { enabled: false };
   if (!cfg.enabled) {
     root.remove();
     return;
   }
 
-  root.hidden = false;
-
-  /* The client never sees the inference endpoint: /api/chat (server-side
-     proxy, api/src/functions/chat.js) forwards to it, so connect-src stays
-     'self' and the endpoint URL and key stay in application settings. */
-  var model = cfg.model || 'unsloth/Llama-3.2-3B-Instruct';
+  var apiBase = ((window.QSSI_CONFIG && window.QSSI_CONFIG.apiBase) || '/api').replace(/\/$/, '');
+  var model = (window.QSSI_CONFIG && window.QSSI_CONFIG.athenoir && window.QSSI_CONFIG.athenoir.model) || 'unsloth/Llama-3.2-3B-Instruct';
+  var supportEmail = (window.QSSI_CONFIG && window.QSSI_CONFIG.supportEmail) || 'hello@quantumindssi.com';
 
   var toggle = root.querySelector('[data-assistant-toggle]');
   var form = root.querySelector('[data-assistant-form]');
   var input = root.querySelector('[data-assistant-input]');
   var log = root.querySelector('[data-assistant-log]');
-  var history = [];
+  var state = root.getAttribute('data-open') === 'true';
 
-  /* Client-side pacing: the server throttles per IP; spacing sends keeps a
-     normal back-and-forth well clear of it. */
-  var SEND_INTERVAL_MS = 2500;
+  function togglePanel() {
+    state = !state;
+    root.setAttribute('data-open', state);
+    if (state) {
+      input && input.focus();
+    }
+  }
+
+  toggle && toggle.addEventListener('click', function () {
+    togglePanel();
+  });
+
+  var history = [{ role: 'system', content: 'You are Athenoir, the sovereign edge AI assistant by QuantumindSSI. Be concise, precise, and helpful.' }];
   var lastSendAt = 0;
+  var SEND_INTERVAL_MS = 20000;
 
   function append(role, text) {
     var el = document.createElement('div');
@@ -46,47 +46,15 @@
     return el;
   }
 
-  toggle.addEventListener('click', function () {
-    var open = root.getAttribute('data-open') === 'true';
-    root.setAttribute('data-open', String(!open));
-    toggle.setAttribute('aria-expanded', String(!open));
-    if (!open) input.focus();
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && root.getAttribute('data-open') === 'true') {
-      root.setAttribute('data-open', 'false');
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.focus();
-    }
-  });
-
-  // Enter sends, Shift+Enter inserts a newline
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      form.requestSubmit();
-    }
-  });
-
-  form.addEventListener('submit', function (e) {
+  form && form.addEventListener('submit', function (e) {
     e.preventDefault();
-
-    var question = input.value.trim();
+    var question = (input.value || '').trim();
     if (!question) return;
 
-    /* Pace sends: if the user fires faster than SEND_INTERVAL_MS, wait the
-       remainder before going to the network. */
     var sinceLast = Date.now() - lastSendAt;
     if (lastSendAt && sinceLast < SEND_INTERVAL_MS) {
-      var waitMs = SEND_INTERVAL_MS - sinceLast;
-      input.disabled = true;
-      append('bot', 'One moment…');
-      setTimeout(function () {
-        input.disabled = false;
-        submitQuestion(question);
-      }, waitMs);
-      input.value = '';
+      var wait = Math.ceil((SEND_INTERVAL_MS - sinceLast) / 1000);
+      append('bot', 'You are sending messages too quickly — please wait ' + wait + ' seconds.');
       return;
     }
     input.value = '';
@@ -104,25 +72,30 @@
     var reply = '';
     var gotAny = false;
 
-    fetch(apiBase + '/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: model,
-        messages: history.slice(-10)
+    function doFetch(attempt) {
+      return fetch(apiBase + '/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: model,
+          messages: history.slice(-10)
+        })
       })
-    })
       .then(function (res) {
         var ct = res.headers.get('content-type') || '';
         if (!res.ok || ct.indexOf('text/event-stream') === -1) {
-          /* JSON error path (4xx/5xx from the proxy itself) or an edge
-             error page — read as text, try JSON, else a friendly line. */
           var status = res.status;
           return res.text().then(function (text) {
             var data = null;
             try { data = JSON.parse(text); } catch (e) { /* non-JSON body */ }
             if (status === 429) {
               throw new Error('You are sending messages too quickly — give it a moment and try again.');
+            }
+            var isTransient = status >= 500 && status < 600;
+            if (isTransient && attempt === 0) {
+              return new Promise(function (resolve) {
+                setTimeout(function () { resolve(doFetch(1)); }, 500);
+              });
             }
             throw new Error(
               (data && data.message) || 'The assistant is unavailable right now. Please try again.'
@@ -173,5 +146,8 @@
         input.disabled = false;
         input.focus();
       });
+    }
+    doFetch(0);
   }
+
 })();
