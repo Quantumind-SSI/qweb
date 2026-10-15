@@ -77,6 +77,9 @@
     var pending = append('bot', 'Thinking…');
     history.push({ role: 'user', content: question });
 
+    var reply = '';
+    var gotAny = false;
+
     fetch(apiBase + '/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -86,31 +89,53 @@
       })
     })
       .then(function (res) {
-        return res.text().then(function (text) {
-          var data;
-          try {
-            data = JSON.parse(text);
-          } catch (parseErr) {
-            /* Proxy or edge returned a non-JSON body (e.g. an HTML/plain-text
-               502 page). Show a retryable message, never the browser's
-               internal parse error. */
-            throw new Error('The assistant is unavailable right now. Please try again.');
-          }
-          if (!res.ok) throw new Error(data.message || 'Assistant unavailable (' + res.status + ').');
-          return data;
-        });
-      })
-      .then(function (data) {
-        var reply = data &&
-          data.choices &&
-          data.choices[0] &&
-          data.choices[0].message &&
-          data.choices[0].message.content;
+        var ct = res.headers.get('content-type') || '';
+        if (!res.ok || ct.indexOf('text/event-stream') === -1) {
+          /* JSON error path (4xx/5xx from the proxy itself) or an edge
+             error page — read as text, try JSON, else a friendly line. */
+          return res.text().then(function (text) {
+            var data = null;
+            try { data = JSON.parse(text); } catch (e) { /* non-JSON body */ }
+            throw new Error(
+              (data && data.message) || 'The assistant is unavailable right now. Please try again.'
+            );
+          });
+        }
+        if (!res.body || typeof res.body.getReader !== 'function') {
+          throw new Error('Streaming is not supported in this browser.');
+        }
 
-        if (!reply) throw new Error('No response received.');
+        var reader = res.body.getReader();
+        var decoder = new TextDecoder();
 
-        pending.textContent = reply.trim();
-        history.push({ role: 'assistant', content: reply });
+        function pump() {
+          return reader.read().then(function (chunk) {
+            if (chunk.done) {
+              if (!gotAny) throw new Error('No response received.');
+              history.push({ role: 'assistant', content: reply });
+              return;
+            }
+            var events = decoder.decode(chunk.value, { stream: true }).split('\n\n');
+            for (var i = 0; i < events.length; i++) {
+              var line = events[i].replace(/^data:\s*/, '').trim();
+              if (!line) continue;
+              var frame;
+              try { frame = JSON.parse(line); } catch (e) { continue; }
+              if (frame.error) throw new Error('The assistant is unavailable right now. Please try again.');
+              if (typeof frame.content === 'string' && frame.content) {
+                if (!gotAny) {
+                  gotAny = true;
+                  pending.textContent = '';
+                }
+                reply += frame.content;
+                pending.textContent = reply;
+                log.scrollTop = log.scrollHeight;
+              }
+            }
+            return pump();
+          });
+        }
+        return pump();
       })
       .catch(function (err) {
         pending.className = 'assistant__msg assistant__msg--error';
