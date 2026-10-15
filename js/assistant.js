@@ -86,7 +86,16 @@
       })
     })
       .then(function (res) {
-        return res.json().then(function (data) {
+        return res.text().then(function (text) {
+          var data;
+          try {
+            data = JSON.parse(text);
+          } catch (parseErr) {
+            /* Proxy or edge returned a non-JSON body (e.g. an HTML/plain-text
+               502 page). Show a retryable message, never the browser's
+               internal parse error. */
+            throw new Error('The assistant is unavailable right now. Please try again.');
+          }
           if (!res.ok) throw new Error(data.message || 'Assistant unavailable (' + res.status + ').');
           return data;
         });

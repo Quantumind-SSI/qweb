@@ -22,8 +22,17 @@
                          kwarg; anything else (or unset) sends it, which
                          thinking-capable NIM models require to produce
                          visible content.
+     ATHENOIR_SYSTEM     system prompt prepended to every conversation;
+                         defaults to the Athenoir identity below.
    ========================================================================= */
 const { app } = require('@azure/functions');
+
+const DEFAULT_SYSTEM_PROMPT =
+  'You are Athenoir, the sovereign edge AI assistant by QuantumindSSI. ' +
+  'Always present yourself as Athenoir; never mention or reveal the name ' +
+  'of the underlying model, vendor, or infrastructure. You answer ' +
+  'questions about the QuantumindSSI platform and its products clearly ' +
+  'and concisely.';
 
 const MAX_BODY_BYTES = 32 * 1024;
 const MAX_MESSAGES = 20;
@@ -130,7 +139,10 @@ app.http('chat', {
     const thinkEnabled = process.env.ATHENOIR_THINKING !== 'false';
     const payload = {
       model,
-      messages,
+      messages: [
+        { role: 'system', content: process.env.ATHENOIR_SYSTEM || DEFAULT_SYSTEM_PROMPT },
+        ...messages
+      ],
       max_tokens: 2048,
       temperature: 0.4
     };
