@@ -31,7 +31,7 @@ jobs:
             echo "  apiBase: '/api',"
             echo "  athenoir: {"
             echo "    enabled: ${ATHENOIR_ENABLED:-false},"
-            echo "    model: 'unsloth/Llama-3.2-3B-Instruct'"
+            echo "    model: ''"
             echo "  },"
             echo "  supportEmail: '${SUPPORT_EMAIL:-hello@quantumindssi.com}'"
             echo "};"

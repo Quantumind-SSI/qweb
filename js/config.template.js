@@ -25,7 +25,7 @@ window.QSSI_CONFIG = {
      enabled=false renders nothing. */
   athenoir: {
     enabled: false,
-    model: 'unsloth/Llama-3.2-3B-Instruct'
+    model: ''
   },
 
   /* Contact fallback shown when a submission fails */

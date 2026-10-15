@@ -13,7 +13,7 @@
   root.removeAttribute('hidden');
 
   var apiBase = ((window.QSSI_CONFIG && window.QSSI_CONFIG.apiBase) || '/api').replace(/\/$/, '');
-  var model = (window.QSSI_CONFIG && window.QSSI_CONFIG.athenoir && window.QSSI_CONFIG.athenoir.model) || 'unsloth/Llama-3.2-3B-Instruct';
+  var model = (window.QSSI_CONFIG && window.QSSI_CONFIG.athenoir && window.QSSI_CONFIG.athenoir.model) || '';
   var supportEmail = (window.QSSI_CONFIG && window.QSSI_CONFIG.supportEmail) || 'hello@quantumindssi.com';
 
   var toggle = root.querySelector('[data-assistant-toggle]');
