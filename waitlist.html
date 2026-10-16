@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Waitlist | OthrysAI • Forth AI • Troy AI | QuantumindSSI</title>
+  <meta name="description" content="Join the waitlist for OthrysAI, Forth AI Box and Troy AI Box — sovereign edge AI hardware from QuantumindSSI.">
+  <link rel="canonical" href="https://quantumindssi.com/waitlist">
+  <link rel="icon" type="image/png" href="quantumind-logo-transparent.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Chakra+Petch:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/compat.css">
+  <style>
+    .waitlist-hero {
+      background: linear-gradient(135deg, var(--accent-a08) 0%, var(--surface-a20) 100%);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10);
+      margin-bottom: var(--space-8);
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-6);
+    }
+    .product-card {
+      background: var(--accent-a08);
+      border: 1px solid var(--accent-a28);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .product-card .kicker {
+      font-family: var(--font-mono);
+      font-size: var(--fs-micro);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .product-card img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+    }
+    .waitlist-form {
+      background: var(--surface-1);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-top: var(--space-8);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-4);
+    }
+    .form-grid label {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      font-size: var(--fs-small);
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="QuantumindSSI home">
+        <img src="quantumind-logo-transparent.png" alt="" class="brand-mark">
+        <span class="brand-name">QuantumindSSI</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-drawer">Menu</button>
+        <div class="nav-drawer" data-nav-drawer id="nav-drawer">
+          <a href="products.html">Products</a>
+          <a href="waitlist.html" aria-current="page">Waitlist</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="container">
+      <div class="waitlist-hero">
+        <h1>AI Box Waitlist</h1>
+        <p class="lede">Secure priority access to the next generation of sovereign edge AI hardware. Select your configuration and join the waitlist.</p>
+      </div>
+
+      <div class="product-grid">
+        <article class="product-card" data-product="othrys">
+          <span class="kicker">OthrysAI Box</span>
+          <h2>AMD Ryzen 5 4600H</h2>
+          <img src="img-orig/hero-2.jpg" alt="OthrysAI Box placeholder" data-product-img="othrys">
+          <p>Compact sovereign edge compute for local inference, model fine-tuning and secure data processing at the edge.</p>
+          <ul>
+            <li>AMD Ryzen 5 4600H</li>
+            <li>Edge-optimized I/O</li>
+            <li>QuantumindSSI hardening</li>
+          </ul>
+          <button class="btn btn-primary" data-waitlist-select="othrys">Join Waitlist</button>
+        </article>
+
+        <article class="product-card" data-product="forth">
+          <span class="kicker">Forth AI Box</span>
+          <h2>AMD Ryzen 7 6800H</h2>
+          <img src="img-orig/hero-1.webp" alt="Forth AI Box placeholder" data-product-img="forth">
+          <p>Balanced performance for multi-model workloads, developer labs and on-prem AI pipelines.</p>
+          <ul>
+            <li>AMD Ryzen 7 6800H</li>
+            <li>Enhanced memory bandwidth</li>
+            <li>Sovereign firmware</li>
+          </ul>
+          <button class="btn btn-primary" data-waitlist-select="forth">Join Waitlist</button>
+        </article>
+
+        <article class="product-card" data-product="troy">
+          <span class="kicker">Troy AI Box</span>
+          <h2>AMD Ryzen 9 5900HX</h2>
+          <img src="img-orig/radxa-rock-5c.webp" alt="Troy AI Box placeholder" data-product-img="troy">
+          <p>Flagship edge workstation class for high-throughput inference, training and research.</p>
+          <ul>
+            <li>AMD Ryzen 9 5900HX</li>
+            <li>Maximum core count</li>
+            <li>Enterprise-grade security</li>
+          </ul>
+          <button class="btn btn-primary" data-waitlist-select="troy">Join Waitlist</button>
+        </article>
+      </div>
+
+      <form class="waitlist-form" id="waitlist-form" data-form="waitlist" method="post" action="/api/enquiry">
+        <h2>Reserve your unit</h2>
+        <input type="hidden" name="form" value="waitlist">
+        <input type="hidden" name="product" id="waitlist-product" value="">
+        <div class="form-grid">
+          <label>
+            Full Name
+            <input type="text" name="name" required>
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required>
+          </label>
+          <label>
+            Company / Organization
+            <input type="text" name="company">
+          </label>
+          <label>
+            Use Case
+            <select name="use_case">
+              <option>Research</option>
+              <option>Production Edge</option>
+              <option>Development</option>
+              <option>Other</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-actions" style="margin-top: var(--space-6);">
+          <button type="submit" class="btn btn-primary">Join Waitlist</button>
+          <p id="waitlist-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; QuantumindSSI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/qssi.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script>
+    const form = document.getElementById('waitlist-form');
+    const productInput = document.getElementById('waitlist-product');
+    const statusEl = document.getElementById('waitlist-status');
+
+    document.querySelectorAll('[data-waitlist-select]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        productInput.value = btn.dataset.waitlistSelect;
+        document.getElementById('waitlist-product').scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      statusEl.textContent = 'Submitting...';
+      try {
+        const res = await fetch('/api/enquiry', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('Submission failed');
+        statusEl.textContent = 'Thank you – you are on the waitlist.';
+        form.reset();
+      } catch (err) {
+        statusEl.textContent = 'Error submitting. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>
